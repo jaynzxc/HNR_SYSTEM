@@ -49,7 +49,7 @@ $currentUser = $sessionManager->getCurrentUser();
 // Get request method and path
 $method = $_SERVER['REQUEST_METHOD'];
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$pathParts = explode('/', trim($path, '/');
+$pathParts = explode('/', trim($path, '/'));
 
 // Get endpoint from query parameter or URL path
 $endpoint = $_GET['endpoint'] ?? end($pathParts);
