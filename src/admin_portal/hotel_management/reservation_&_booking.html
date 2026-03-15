@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · Reservations & Booking</title>
+  <!-- Tailwind via CDN + Font Awesome 6 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* exact same dropdown styles from index2.html */
+    .transition-side { transition: all 0.2s ease; }
+    .dropdown-arrow { transition: transform 0.2s; }
+    details[open] .dropdown-arrow { transform: rotate(90deg); }
+    details > summary { list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
+  </style>
+</head>
+<body class="bg-white font-sans antialiased">
+
+  <!-- APP CONTAINER: flex row (sidebar + main) -->
+  <div class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- ========== SIDEBAR (exact copy from index2.html) ========== -->
+    <aside class="lg:w-80 bg-white border-r border-slate-200 shadow-sm lg:min-h-screen shrink-0 overflow-y-auto">
+      <!-- brand -->
+      <div class="px-5 py-6 border-b border-slate-100 flex items-center gap-2">
+        <i class="fa-solid fa-utensils text-amber-600 text-xl"></i>
+        <i class="fa-solid fa-bed text-amber-600 text-xl"></i>
+        <span class="font-semibold text-lg tracking-tight text-slate-800">Lùcas<span class="text-amber-600">.admin</span></span>
+      </div>
+
+      <!-- admin badge -->
+      <div class="flex items-center gap-3 px-5 py-4 border-b border-slate-100 bg-slate-50/60">
+        <div class="h-9 w-9 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold">A</div>
+        <div>
+          <p class="font-medium text-sm">Andreo Reyes</p>
+          <p class="text-xs text-slate-500">general manager</p>
+        </div>
+      </div>
+
+      <!-- ===== SIDEBAR MENU (grouped with dropdowns) ===== -->
+      <nav class="p-4 space-y-2 text-sm">
+
+        <!-- Dashboard -->
+        <a href="../dashboard.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition">
+          <i class="fa-solid fa-table-cells-large w-5 text-slate-400"></i>
+          <span>Dashboard</span>
+        </a>
+
+        <!-- HOTEL MANAGEMENT GROUP (dropdown) - open with Reservations highlighted -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-amber-800 bg-amber-50 cursor-pointer transition-side">
+            <i class="fa-solid fa-hotel w-5 text-amber-600"></i>
+            <span class="font-medium">HOTEL MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-amber-600"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-200">
+            <a href="../hotel_management/front_desk_reception.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-reception w-4 text-slate-400"></i> Front Desk / Reception</a>
+            <a href="../hotel_management/room_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-bed w-4 text-slate-400"></i> Room Management</a>
+            <a href="../hotel_management/reservation_&_booking.html" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-100/50 text-amber-700 font-medium"><i class="fa-regular fa-calendar-check w-4 text-amber-600"></i> Reservations & Booking</a>
+            <a href="../hotel_management/housekeeping_&_maintenance.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-broom w-4 text-slate-400"></i> Housekeeping & Maintenance</a>
+            <a href="../hotel_management/event_&_conference.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar w-4 text-slate-400"></i> Events & Conference</a>
+          </div>
+        </details>
+
+        <!-- RESTAURANT MANAGEMENT GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-utensils w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">RESTAURANT MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../restaurant_management/table_reservation.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-clock w-4"></i> Table Reservation</a>
+            <a href="../restaurant_management/menu_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-bars w-4"></i> Menu Management</a>
+            <a href="../restaurant_management/orders_pos.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-cash-register w-4"></i> Orders / POS</a>
+            <a href="../restaurant_management/kitchen_orders.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-fire w-4"></i> Kitchen Orders (KOT)</a>
+            <a href="../restaurant_management/wait_staff_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-user w-4"></i> Wait Staff Management</a>
+          </div>
+        </details>
+
+        <!-- CUSTOMER MANAGEMENT -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-regular fa-address-book w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">CUSTOMER MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../customer_management/customer_relationship.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-handshake w-4"></i> Guest Relationship (CRM)</a>
+            <a href="../customer_management/loyalty_rewards.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-star w-4"></i> Loyalty & Rewards</a>
+            <a href="../customer_management/customer_feedback_&_reviews.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-pen-to-square w-4"></i> Customer Feedback & Reviews</a>
+          </div>
+        </details>
+
+        <!-- OPERATIONS -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-gears w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">OPERATIONS</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../operations/inventory_&_stocks.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-boxes w-4"></i> Inventory & Stock</a>
+            <a href="../operations/billing_&_payment.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-credit-card w-4"></i> Billing & Payments</a>
+            <a href="../operations/payment_gateway.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-wifi w-4"></i> Payment Gateway</a>
+          </div>
+        </details>
+
+        <!-- MARKETING -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-megaphone w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">MARKETING</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../marketing/hotelmarketing_&_promotions.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-gem w-4"></i> Hotel Marketing & Promotions</a>
+            <a href="../marketing/online_ordering_integration.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-cart-shopping w-4"></i> Online Ordering Integration</a>
+          </div>
+        </details>
+
+        <!-- REPORTS & ANALYTICS -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-chart-simple w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">REPORTS & ANALYTICS</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../reports_&_analytics/sales_report.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-chart-line w-4"></i> Sales Reports</a>
+            <a href="../reports_&_analytics/booking_reports.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar w-4"></i> Booking Reports</a>
+            <a href="../reports_&_analytics/analytics_dashboard.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-chart-pie w-4"></i> Analytics Dashboard</a>
+          </div>
+        </details>
+
+        <!-- SYSTEM -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-computer w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">SYSTEM</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../system/channel_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-code-branch w-4"></i> Channel Management</a>
+            <a href="../system/door_lock_integration.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-lock w-4"></i> Door Lock Integration</a>
+            <a href="../system/settings.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-sliders w-4"></i> Settings</a>
+          </div>
+        </details>
+
+        <!-- logout -->
+        <div class="border-t border-slate-200 pt-3 mt-3">
+          <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-700">
+            <i class="fa-solid fa-arrow-right-from-bracket w-5"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- ========== MAIN CONTENT (RESERVATIONS & BOOKING) ========== -->
+    <main class="flex-1 p-5 lg:p-8 overflow-y-auto bg-white">
+
+      <!-- header with title and date -->
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h1 class="text-2xl lg:text-3xl font-light text-slate-800">Reservations & Booking</h1>
+          <p class="text-sm text-slate-500 mt-0.5">manage all hotel reservations, modify, confirm, or cancel bookings</p>
+        </div>
+        <div class="flex gap-3 text-sm">
+          <span class="bg-white border rounded-full px-4 py-2 flex items-center gap-2 shadow-sm"><i class="fa-regular fa-calendar text-slate-400"></i> May 21, 2025</span>
+          <span class="bg-white border rounded-full px-4 py-2 shadow-sm"><i class="fa-regular fa-bell"></i></span>
+        </div>
+      </div>
+
+      <!-- ===== STATS CARDS ===== -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Total reservations</p>
+          <p class="text-2xl font-semibold">124</p>
+          <span class="text-xs text-green-600">↑ 12 vs last month</span>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Confirmed</p>
+          <p class="text-2xl font-semibold text-green-600">86</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Pending</p>
+          <p class="text-2xl font-semibold text-amber-600">21</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Checked-in</p>
+          <p class="text-2xl font-semibold text-blue-600">32</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Cancelled</p>
+          <p class="text-2xl font-semibold text-rose-600">17</p>
+        </div>
+      </div>
+
+      <!-- ===== FILTER AND SEARCH BAR ===== -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 mb-6 flex flex-wrap gap-3 items-center justify-between">
+        <div class="flex gap-2 flex-wrap">
+          <button class="bg-amber-600 text-white px-4 py-2 rounded-xl text-sm">all</button>
+          <button class="border border-slate-200 px-4 py-2 rounded-xl text-sm hover:bg-slate-50">confirmed</button>
+          <button class="border border-slate-200 px-4 py-2 rounded-xl text-sm hover:bg-slate-50">pending</button>
+          <button class="border border-slate-200 px-4 py-2 rounded-xl text-sm hover:bg-slate-50">checked-in</button>
+          <button class="border border-slate-200 px-4 py-2 rounded-xl text-sm hover:bg-slate-50">cancelled</button>
+          <button class="border border-slate-200 px-4 py-2 rounded-xl text-sm hover:bg-slate-50">today</button>
+        </div>
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input type="text" placeholder="search by guest or booking #..." class="border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-sm w-64 focus:ring-1 focus:ring-amber-500 outline-none">
+        </div>
+      </div>
+
+      <!-- ===== TODAY'S ARRIVALS & DEPARTURES (quick summary) ===== -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+        <div class="bg-green-50 border border-green-200 rounded-2xl p-4 flex items-center gap-4">
+          <div class="h-12 w-12 rounded-full bg-green-200 flex items-center justify-center text-green-700"><i class="fa-regular fa-calendar-check text-xl"></i></div>
+          <div>
+            <p class="text-sm text-green-700 font-medium">Today's arrivals</p>
+            <p class="text-2xl font-bold">8 guests</p>
+            <p class="text-xs text-green-600">3 pending check-in</p>
+          </div>
+          <button class="ml-auto bg-green-600 text-white px-4 py-2 rounded-xl text-sm hover:bg-green-700">view</button>
+        </div>
+        <div class="bg-orange-50 border border-orange-200 rounded-2xl p-4 flex items-center gap-4">
+          <div class="h-12 w-12 rounded-full bg-orange-200 flex items-center justify-center text-orange-700"><i class="fa-regular fa-calendar-xmark text-xl"></i></div>
+          <div>
+            <p class="text-sm text-orange-700 font-medium">Today's departures</p>
+            <p class="text-2xl font-bold">5 guests</p>
+            <p class="text-xs text-orange-600">2 pending check-out</p>
+          </div>
+          <button class="ml-auto bg-orange-600 text-white px-4 py-2 rounded-xl text-sm hover:bg-orange-700">view</button>
+        </div>
+      </div>
+
+      <!-- ===== RESERVATIONS TABLE ===== -->
+      <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden mb-8">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="bg-slate-50 text-slate-500 text-xs border-b">
+              <tr>
+                <td class="p-4">Booking #</td>
+                <td class="p-4">Guest</td>
+                <td class="p-4">Room</td>
+                <td class="p-4">Check-in</td>
+                <td class="p-4">Check-out</td>
+                <td class="p-4">Nights</td>
+                <td class="p-4">Status</td>
+                <td class="p-4">Actions</td>
+              </tr>
+            </thead>
+            <tbody class="divide-y">
+              <tr>
+                <td class="p-4 font-medium">#HR382</td>
+                <td class="p-4">Mia Cruz</td>
+                <td class="p-4">Deluxe Twin</td>
+                <td class="p-4">Jun 12, 2025</td>
+                <td class="p-4">Jun 15, 2025</td>
+                <td class="p-4">3</td>
+                <td class="p-4"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">confirmed</span></td>
+                <td class="p-4">
+                  <button class="text-amber-700 hover:underline text-xs mr-2">edit</button>
+                  <button class="text-rose-600 hover:underline text-xs">cancel</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="p-4 font-medium">#HR401</td>
+                <td class="p-4">John Doe</td>
+                <td class="p-4">Ocean Suite</td>
+                <td class="p-4">Jun 14, 2025</td>
+                <td class="p-4">Jun 17, 2025</td>
+                <td class="p-4">3</td>
+                <td class="p-4"><span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full text-xs">pending</span></td>
+                <td class="p-4">
+                  <button class="text-amber-700 hover:underline text-xs mr-2">edit</button>
+                  <button class="text-rose-600 hover:underline text-xs">cancel</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="p-4 font-medium">#HR455</td>
+                <td class="p-4">Anna Santos</td>
+                <td class="p-4">Superior</td>
+                <td class="p-4">Jun 15, 2025</td>
+                <td class="p-4">Jun 18, 2025</td>
+                <td class="p-4">3</td>
+                <td class="p-4"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">confirmed</span></td>
+                <td class="p-4">
+                  <button class="text-amber-700 hover:underline text-xs mr-2">edit</button>
+                  <button class="text-rose-600 hover:underline text-xs">cancel</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="p-4 font-medium">#HR466</td>
+                <td class="p-4">Robert Chen</td>
+                <td class="p-4">Deluxe Twin</td>
+                <td class="p-4">Jun 16, 2025</td>
+                <td class="p-4">Jun 19, 2025</td>
+                <td class="p-4">3</td>
+                <td class="p-4"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">confirmed</span></td>
+                <td class="p-4">
+                  <button class="text-amber-700 hover:underline text-xs mr-2">edit</button>
+                  <button class="text-rose-600 hover:underline text-xs">cancel</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="p-4 font-medium">#HR477</td>
+                <td class="p-4">Lisa Kim</td>
+                <td class="p-4">Suite</td>
+                <td class="p-4">Jun 18, 2025</td>
+                <td class="p-4">Jun 21, 2025</td>
+                <td class="p-4">3</td>
+                <td class="p-4"><span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full text-xs">pending</span></td>
+                <td class="p-4">
+                  <button class="text-amber-700 hover:underline text-xs mr-2">edit</button>
+                  <button class="text-rose-600 hover:underline text-xs">cancel</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="p-4 font-medium">#HR488</td>
+                <td class="p-4">Michael Cruz</td>
+                <td class="p-4">Deluxe</td>
+                <td class="p-4">today, 2:00 PM</td>
+                <td class="p-4">Jun 24, 2025</td>
+                <td class="p-4">3</td>
+                <td class="p-4"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full text-xs">checked-in</span></td>
+                <td class="p-4">
+                  <button class="text-amber-700 hover:underline text-xs mr-2">view</button>
+                  <button class="text-rose-600 hover:underline text-xs">cancel</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="p-4 font-medium">#HR499</td>
+                <td class="p-4">Patricia Reyes</td>
+                <td class="p-4">Twin</td>
+                <td class="p-4">May 21, 2025</td>
+                <td class="p-4">May 24, 2025</td>
+                <td class="p-4">3</td>
+                <td class="p-4"><span class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full text-xs">cancelled</span></td>
+                <td class="p-4">
+                  <button class="text-amber-700 hover:underline text-xs mr-2">edit</button>
+                  <button class="text-slate-400 text-xs">archive</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="p-4 border-t border-slate-200 flex items-center justify-between">
+          <span class="text-xs text-slate-500">Showing 1-7 of 124 reservations</span>
+          <div class="flex gap-2">
+            <button class="border border-slate-200 px-3 py-1 rounded-lg text-sm">Previous</button>
+            <button class="bg-amber-600 text-white px-3 py-1 rounded-lg text-sm">1</button>
+            <button class="border border-slate-200 px-3 py-1 rounded-lg text-sm">2</button>
+            <button class="border border-slate-200 px-3 py-1 rounded-lg text-sm">3</button>
+            <button class="border border-slate-200 px-3 py-1 rounded-lg text-sm">4</button>
+            <button class="border border-slate-200 px-3 py-1 rounded-lg text-sm">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== BOTTOM: NEW BOOKING & RECENT ACTIVITY ===== -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- new booking quick form -->
+        <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-5">
+          <h2 class="font-semibold text-lg flex items-center gap-2 mb-3"><i class="fa-regular fa-plus text-amber-600"></i> quick new booking</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs text-slate-500 mb-1">guest name</label>
+              <input type="text" placeholder="full name" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1">room type</label>
+              <select class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm">
+                <option>Deluxe Twin</option>
+                <option>Ocean Suite</option>
+                <option>Superior</option>
+                <option>Family Suite</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1">check-in</label>
+              <input type="date" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1">check-out</label>
+              <input type="date" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm">
+            </div>
+          </div>
+          <div class="flex gap-3 mt-4">
+            <button class="bg-amber-600 hover:bg-amber-700 text-white px-5 py-2 rounded-xl text-sm">create booking</button>
+            <button class="border border-slate-300 px-5 py-2 rounded-xl text-sm">check availability</button>
+          </div>
+        </div>
+
+        <!-- recent activity -->
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+          <h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fa-regular fa-clock-rotate-left text-amber-600"></i> recent activity</h3>
+          <ul class="space-y-3 text-sm">
+            <li class="flex gap-2"><span class="text-green-600">✓</span> <span class="text-xs">#HR382 confirmed by Mia Cruz</span></li>
+            <li class="flex gap-2"><span class="text-amber-600">⏳</span> <span class="text-xs">#HR401 pending payment</span></li>
+            <li class="flex gap-2"><span class="text-blue-600">🔄</span> <span class="text-xs">#HR388 modified to Suite</span></li>
+            <li class="flex gap-2"><span class="text-rose-600">✗</span> <span class="text-xs">#HR399 cancelled by guest</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- footer note -->
+      <div class="mt-8 text-center text-xs text-slate-400 border-t pt-5">
+        ✅ Reservations & Booking — full list with status, filters, quick new booking, recent activity
+      </div>
+    </main>
+  </div>
+</body>
+</html>

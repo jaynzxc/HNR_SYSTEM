@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile · Lùcas Customer Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .toast { 
+      animation: slideIn 0.3s ease-out; 
+      background: white !important;
+      border: 1px solid #e5e7eb !important;
+      border-radius: 0.5rem !important;
+      padding: 1rem !important;
+      margin-bottom: 0.5rem !important;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+      min-width: 300px !important;
+      max-width: 400px !important;
+    }
+    .toast.success {
+      border-left: 4px solid #10b981 !important;
+      background: #f0fdf4 !important;
+    }
+    .toast.error {
+      border-left: 4px solid #ef4444 !important;
+      background: #fef2f2 !important;
+    }
+    .toast.info {
+      border-left: 4px solid #3b82f6 !important;
+      background: #eff6ff !important;
+    }
+    .toast-content {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .toast-icon {
+      flex-shrink: 0;
+      font-size: 1.25rem;
+    }
+    .toast.success .toast-icon {
+      color: #10b981;
+    }
+    .toast.error .toast-icon {
+      color: #ef4444;
+    }
+    .toast.info .toast-icon {
+      color: #3b82f6;
+    }
+    .toast-message {
+      flex: 1;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #1f2937;
+    }
+    .input-error { border-color: #ef4444 !important; }
+  </style>
+</head>
+<body class="bg-slate-50 font-sans antialiased">
+  <div class="min-h-screen flex flex-col lg:flex-row">
+    <!-- Sidebar -->
+    <aside class="lg:w-80 bg-white border-r border-slate-200 shadow-sm shrink-0">
+      <div class="px-6 py-7 border-b border-slate-100">
+        <div class="flex items-center gap-2 text-amber-700">
+          <i class="fa-solid fa-utensils text-xl"></i>
+          <i class="fa-solid fa-bed text-xl"></i>
+          <span class="font-semibold text-xl tracking-tight text-slate-800">Lùcas<span class="text-amber-600">.stay</span></span>
+        </div>
+        <p class="text-xs text-slate-500 mt-1">customer portal · my profile</p>
+      </div>
+      <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-100 bg-slate-50/80" id="userSummary">
+        <div class="h-12 w-12 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold text-lg" id="userInitials">—</div>
+        <div>
+          <p class="font-medium text-slate-800" id="userName">Loading...</p>
+          <p class="text-xs text-slate-500 flex items-center gap-1"><i class="fa-regular fa-gem text-[11px]"></i> <span id="membershipTier">member</span> · <span id="userPoints">0</span> pts</p>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="p-4 space-y-1.5 text-sm">
+      <a href="./index.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-table-cells-large w-5 text-slate-400"></i>Dashboard</a>
+      <a href="./my_profile.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-amber-50 text-amber-800 font-medium"><i class="fa-regular fa-user w-5 text-amber-600"></i>My Profile</a>
+      <a href="./hotel_booking.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-hotel w-5 text-slate-400"></i>Hotel Booking</a>
+      <a href="./my_reservation.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-calendar-check w-5 text-slate-400"></i>My Reservations</a>
+      <a href="./restaurant_reservation.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-clock w-5 text-slate-400"></i>Restaurant Reservation</a>
+      <a href="./order_food.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-bag-shopping w-5 text-slate-400"></i>Menu / Order Food</a>
+      <a href="./payments.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-credit-card w-5 text-slate-400"></i>Payments</a>
+      <a href="./loyalty_rewards.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-star w-5 text-slate-400"></i>Loyalty Rewards</a>
+      <a href="./Notifications.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition relative"><i class="fa-regular fa-bell w-5 text-slate-400"></i>Notifications<span class="ml-auto bg-amber-100 text-amber-800 text-xs px-1.5 py-0.5 rounded-full" id="notificationCount">0</span></a>
+      <div class="border-t border-slate-200 pt-3 mt-3">
+        <a href="#" onclick="handleLogout()" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-700 transition"><i class="fa-solid fa-arrow-right-from-bracket w-5"></i>Logout</a>
+      </div>
+     </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-5 lg:p-8 overflow-y-auto">
+      <!-- Header -->
+      <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 class="text-2xl lg:text-3xl font-light text-slate-800">My Profile</h1>
+          <p class="text-sm text-slate-500 mt-0.5">manage your personal information and preferences</p>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-full px-4 py-2 text-sm flex items-center gap-2 shadow-sm">
+          <i class="fa-regular fa-calendar text-slate-400"></i> <span id="currentDateTime"></span>
+        </div>
+      </div>
+
+      <!-- Profile Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Left Column -->
+        <div class="lg:col-span-1 space-y-5">
+          <!-- Avatar Card -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-6 text-center">
+            <div class="relative inline-block">
+              <div class="h-28 w-28 rounded-full bg-amber-200 mx-auto flex items-center justify-center text-amber-800 font-bold text-4xl border-4 border-white shadow-md" id="userInitialsLarge">—</div>
+              <button onclick="changePhoto()" class="absolute bottom-1 right-1 bg-white rounded-full p-2 shadow-md border border-slate-200 hover:bg-slate-50 transition" title="change photo">
+                <i class="fa-solid fa-camera text-slate-600 text-sm"></i>
+              </button>
+            </div>
+            <h2 class="font-semibold text-xl mt-3" id="profileName">Loading...</h2>
+            <p class="text-sm text-slate-500" id="memberSince">member since loading...</p>
+            <div class="flex justify-center gap-2 mt-3">
+              <span class="bg-amber-100 text-amber-800 text-xs px-3 py-1 rounded-full flex items-center gap-1"><i class="fa-regular fa-gem"></i> <span id="membershipTierBadge">member</span> tier</span>
+              <span class="bg-slate-100 text-slate-700 text-xs px-3 py-1 rounded-full"><span id="pointsDisplay">0</span> pts</span>
+            </div>
+            <div class="border-t border-slate-100 mt-5 pt-4 text-left">
+              <p class="text-xs text-slate-400 flex items-center gap-2"><i class="fa-regular fa-circle-check text-green-600 w-4"></i> email verified</p>
+              <p class="text-xs text-slate-400 flex items-center gap-2 mt-2"><i class="fa-regular fa-circle-check text-green-600 w-4"></i> phone verified</p>
+              <p class="text-xs text-slate-400 flex items-center gap-2 mt-2"><i class="fa-regular fa-id-card w-4"></i> preferred guest</p>
+            </div>
+          </div>
+
+          <!-- Loyalty Progress -->
+          <div class="bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-2xl border border-amber-200 p-5">
+            <div class="flex items-center gap-3">
+              <i class="fa-regular fa-star text-2xl text-amber-600"></i>
+              <div class="flex-1">
+                <p class="font-medium text-sm">loyalty progress</p>
+                <p class="text-xs text-slate-600"><span id="pointsToNext">0</span> more pts to reach next tier</p>
+                <div class="w-full bg-amber-200 h-1.5 rounded-full mt-2">
+                  <div class="bg-amber-600 h-1.5 rounded-full" id="pointsProgress" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Account Actions -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5">
+            <h3 class="font-semibold text-sm flex items-center gap-2"><i class="fa-regular fa-trash-can text-rose-400"></i> account actions</h3>
+            <button onclick="deactivateAccount()" class="w-full text-left text-sm text-rose-600 hover:bg-rose-50 p-2 rounded-lg mt-2 transition">deactivate account</button>
+            <button onclick="downloadData()" class="w-full text-left text-sm text-slate-600 hover:bg-slate-50 p-2 rounded-lg transition">download my data</button>
+          </div>
+        </div>
+
+        <!-- Right Column - Forms -->
+        <div class="lg:col-span-2 space-y-6">
+          <!-- Personal Information -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-6">
+            <h2 class="font-semibold text-lg flex items-center gap-2 border-b pb-3"><i class="fa-regular fa-user text-amber-600"></i> personal information</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
+              <div>
+                <label class="block text-xs text-slate-500 mb-1">first name <span class="text-red-400">*</span></label>
+                <input type="text" id="firstName" class="w-full border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none" required>
+              </div>
+              <div>
+                <label class="block text-xs text-slate-500 mb-1">last name <span class="text-red-400">*</span></label>
+                <input type="text" id="lastName" class="w-full border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none" required>
+              </div>
+              <div>
+                <label class="block text-xs text-slate-500 mb-1">date of birth</label>
+                <input type="date" id="dob" class="w-full border border-slate-200 rounded-xl p-3 text-sm text-slate-600 focus:ring-2 focus:ring-amber-500 outline-none">
+              </div>
+              <div>
+                <label class="block text-xs text-slate-500 mb-1">gender</label>
+                <select id="gender" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white focus:ring-2 focus:ring-amber-500 outline-none">
+                  <option value="">select gender</option>
+                  <option value="male">male</option>
+                  <option value="female">female</option>
+                  <option value="prefer_not_to_say">prefer not to say</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs text-slate-500 mb-1">nationality</label>
+                <input type="text" id="nationality" class="w-full border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Details -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-6">
+            <h2 class="font-semibold text-lg flex items-center gap-2 border-b pb-3"><i class="fa-regular fa-address-book text-amber-600"></i> contact details</h2>
+            <div class="space-y-4 mt-5">
+              <div>
+                <label class="block text-xs text-slate-500 mb-1">email address <span class="text-red-400">*</span></label>
+                <div class="flex gap-2 items-center">
+                  <input type="email" id="email" class="flex-1 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none" required>
+                  <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full" id="emailVerifiedStatus">verified</span>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs text-slate-500 mb-1">mobile number <span class="text-red-400">*</span></label>
+                <div class="flex gap-2 items-center">
+                  <input type="tel" id="phone" class="flex-1 border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none" required>
+                  <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full" id="phoneVerifiedStatus">verified</span>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs text-slate-500 mb-1">alternative phone (optional)</label>
+                <input type="tel" id="altPhone" placeholder="+63 ..." class="w-full border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- Address & Preferences -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-6">
+            <h2 class="font-semibold text-lg flex items-center gap-2 border-b pb-3"><i class="fa-regular fa-map text-amber-600"></i> address & preferences</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
+              <div class="md:col-span-2">
+                <label class="block text-xs text-slate-500 mb-1">street address</label>
+                <input type="text" id="address" class="w-full border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+              </div>
+              <div>
+                <label class="block text-xs text-slate-500 mb-1">city</label>
+                <input type="text" id="city" class="w-full border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+              </div>
+              <div>
+                <label class="block text-xs text-slate-500 mb-1">postal code</label>
+                <input type="text" id="postalCode" class="w-full border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+              </div>
+              <div>
+                <label class="block text-xs text-slate-500 mb-1">country</label>
+                <input type="text" id="country" class="w-full border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+              </div>
+              <div>
+                <label class="block text-xs text-slate-500 mb-1">preferred language</label>
+                <select id="language" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white focus:ring-2 focus:ring-amber-500 outline-none">
+                  <option value="English">English</option>
+                  <option value="Filipino">Filipino</option>
+                  <option value="Japanese">Japanese</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Change Password -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-6">
+            <h2 class="font-semibold text-lg flex items-center gap-2 border-b pb-3"><i class="fa-solid fa-lock text-amber-600"></i> change password</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
+              <div class="md:col-span-2">
+                <label class="block text-xs text-slate-500 mb-1">current password</label>
+                <input type="password" id="currentPassword" class="w-full border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+              </div>
+              <div>
+                <label class="block text-xs text-slate-500 mb-1">new password</label>
+                <input type="password" id="newPassword" class="w-full border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+              </div>
+              <div>
+                <label class="block text-xs text-slate-500 mb-1">confirm new password</label>
+                <input type="password" id="confirmPassword" class="w-full border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+              </div>
+            </div>
+            <p class="text-xs text-slate-400 mt-2">minimum 8 characters, with uppercase & number</p>
+          </div>
+
+          <!-- Notification Preferences -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-6">
+            <h2 class="font-semibold text-lg flex items-center gap-2 border-b pb-3"><i class="fa-regular fa-bell text-amber-600"></i> notification preferences</h2>
+            <div class="space-y-3 mt-4">
+              <label class="flex items-center gap-3 text-sm cursor-pointer">
+                <input type="checkbox" id="emailNotifications" checked class="rounded text-amber-600 focus:ring-amber-500">
+                email about booking confirmations
+              </label>
+              <label class="flex items-center gap-3 text-sm cursor-pointer">
+                <input type="checkbox" id="smsNotifications" checked class="rounded text-amber-600 focus:ring-amber-500">
+                SMS for reservation reminders
+              </label>
+              <label class="flex items-center gap-3 text-sm cursor-pointer">
+                <input type="checkbox" id="promoNotifications" class="rounded text-amber-600 focus:ring-amber-500">
+                promotional offers & newsletters
+              </label>
+              <label class="flex items-center gap-3 text-sm cursor-pointer">
+                <input type="checkbox" id="loyaltyNotifications" checked class="rounded text-amber-600 focus:ring-amber-500">
+                loyalty reward updates
+              </label>
+            </div>
+          </div>
+
+          <!-- Save Buttons -->
+          <div class="flex flex-wrap items-center gap-4 pt-4">
+            <button onclick="saveProfile()" class="bg-amber-600 hover:bg-amber-700 text-white px-8 py-3 rounded-xl font-medium shadow-sm transition">save changes</button>
+            <button onclick="resetForm()" class="border border-slate-300 bg-white hover:bg-slate-50 px-8 py-3 rounded-xl font-medium text-slate-700 transition">reset</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Hint -->
+      <div class="mt-10 text-center text-xs text-slate-400 border-t pt-6">
+        ✅ My Profile module — connected to database with real-time updates
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+  <!-- Database Integration -->
+  <script src="js/database.js"></script>
+
+  <script>
+    (async function() {
+      // Wait for database API to initialize
+      if (window.dbAPI) {
+        await window.dbAPI.init();
+      }
+      
+      // ==================== PROFILE MANAGEMENT ====================
+      let currentUser = null;
+      
+      // Load user data from database
+      async function loadUserData() {
+        console.log('🔍 Profile page: Starting loadUserData...');
+        try {
+          currentUser = await window.dbAPI.loadCurrentUserSimple();
+          console.log('🔍 Profile page: currentUser loaded:', currentUser);
+          if (currentUser) {
+            console.log('🔍 Profile page: Populating form with user data...');
+            populateForm(currentUser);
+            updateUI(currentUser);
+          } else {
+            console.log('❌ Profile page: No current user, redirecting to login');
+            window.location.href = '../login-register/login_form.html';
+          }
+        } catch (error) {
+          console.error('❌ Profile page: Failed to load user data:', error);
+          window.dbAPI.showToast('Failed to load profile data', 'error');
+        }
+      }
+      
+      // Populate form with user data
+      function populateForm(user) {
+        console.log('🔍 populateForm called with:', user);
+        
+        // Check each field
+        const firstNameField = document.getElementById('firstName');
+        const lastNameField = document.getElementById('lastName');
+        const emailField = document.getElementById('email');
+        const phoneField = document.getElementById('phone');
+        const dobField = document.getElementById('dob');
+        const genderField = document.getElementById('gender');
+        const nationalityField = document.getElementById('nationality');
+        const altPhoneField = document.getElementById('altPhone');
+        const addressField = document.getElementById('address');
+        const cityField = document.getElementById('city');
+        const postalCodeField = document.getElementById('postalCode');
+        const countryField = document.getElementById('country');
+        const languageField = document.getElementById('language');
+        
+        console.log('🔍 Form fields found:', {
+          firstName: !!firstNameField,
+          lastName: !!lastNameField,
+          email: !!emailField,
+          phone: !!phoneField,
+          dob: !!dobField,
+          gender: !!genderField,
+          nationality: !!nationalityField,
+          altPhone: !!altPhoneField,
+          address: !!addressField,
+          city: !!cityField,
+          postalCode: !!postalCodeField,
+          country: !!countryField,
+          language: !!languageField
+        });
+        
+        if (user && firstNameField) {
+          console.log('🔍 Setting basic fields...');
+          firstNameField.value = user.first_name || '';
+          lastNameField.value = user.last_name || '';
+          emailField.value = user.email || '';
+          phoneField.value = user.phone || '';
+          
+          console.log(' Setting additional fields with null checks');
+          if (dobField) {
+            // Handle invalid date format from database
+            const dob = user.date_of_birth;
+            if (dob && dob !== '0000-00-00' && dob !== '1970-01-01') {
+              dobField.value = dob;
+            } else {
+              dobField.value = ''; // Set to empty for invalid dates
+            }
+          }
+          genderField.value = user.gender || '';
+          nationalityField.value = user.nationality || '';
+          altPhoneField.value = user.alternative_phone || '';
+          addressField.value = user.street_address || '';
+          cityField.value = user.city || '';
+          postalCodeField.value = user.postal_code || '';
+          countryField.value = user.country || '';
+          languageField.value = user.preferred_language || 'English';
+          
+          console.log('✅ Form populated successfully');
+        } else {
+          console.log('❌ populateForm: No user or fields not found');
+          console.log('❌ User data:', user);
+          console.log('❌ Main field found:', !!firstNameField);
+        }
+      }
+      
+      // Update UI elements
+      function updateUI(user) {
+        const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Guest';
+        const initials = window.dbAPI.getUserInitials(user.first_name, user.last_name);
+        
+        // Update sidebar user info
+        document.getElementById('userInitials').textContent = initials;
+        document.getElementById('userName').textContent = fullName;
+        document.getElementById('membershipTier').textContent = user.membership_tier || 'member';
+        document.getElementById('userPoints').textContent = user.loyalty_points?.toLocaleString() || '0';
+        
+        // Update profile section
+        document.getElementById('userInitialsLarge').textContent = initials;
+        document.getElementById('profileName').textContent = fullName;
+        document.getElementById('membershipTierBadge').textContent = user.membership_tier || 'member';
+        document.getElementById('pointsDisplay').textContent = user.loyalty_points?.toLocaleString() || '0';
+        document.getElementById('memberSince').textContent = `member since ${window.dbAPI.formatDate(user.join_date)}`;
+        
+        // Update verification status
+        document.getElementById('emailVerifiedStatus').textContent = user.email_verified ? 'verified' : 'not verified';
+        document.getElementById('emailVerifiedStatus').className = user.email_verified ? 
+          'bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full' : 
+          'bg-amber-100 text-amber-700 text-xs px-2 py-1 rounded-full';
+          
+        document.getElementById('phoneVerifiedStatus').textContent = user.phone_verified ? 'verified' : 'not verified';
+        document.getElementById('phoneVerifiedStatus').className = user.phone_verified ? 
+          'bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full' : 
+          'bg-amber-100 text-amber-700 text-xs px-2 py-1 rounded-full';
+        
+        // Update points progress
+        const pointsToNext = window.dbAPI.getPointsToNextTier(user.loyalty_points);
+        document.getElementById('pointsToNext').textContent = pointsToNext;
+        
+        const progress = (user.loyalty_points / 5000) * 100; // Platinum is max tier
+        const progressBar = document.getElementById('pointsProgress');
+        if(progressBar) progressBar.style.width = `${Math.min(progress, 100)}%`;
+      }
+      
+      // Save profile to database
+      async function saveProfile() {
+        if (!currentUser) return;
+        
+        try {
+          const profileData = {
+            first_name: document.getElementById('firstName').value.trim(),
+            last_name: document.getElementById('lastName').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            phone: document.getElementById('phone').value.trim(),
+            date_of_birth: document.getElementById('dob').value,
+            gender: document.getElementById('gender').value,
+            nationality: document.getElementById('nationality').value,
+            alternative_phone: document.getElementById('altPhone').value.trim(),
+            street_address: document.getElementById('address').value,
+            city: document.getElementById('city').value,
+            postal_code: document.getElementById('postalCode').value,
+            country: document.getElementById('country').value,
+            preferred_language: document.getElementById('language').value
+          };
+          
+          // Validate required fields
+          if (!profileData.first_name || !profileData.last_name) {
+            window.dbAPI.showToast('First name and last name are required', 'error');
+            return;
+          }
+          
+          if (!profileData.email) {
+            window.dbAPI.showToast('Email is required', 'error');
+            return;
+          }
+          
+          if (!profileData.phone) {
+            window.dbAPI.showToast('Phone number is required', 'error');
+            return;
+          }
+          
+          // Update profile in database
+          await window.dbAPI.updateProfile(profileData);
+          
+          // Reload user data
+          await loadUserData();
+          
+          window.dbAPI.showToast('Profile updated successfully', 'success');
+          
+        } catch (error) {
+          console.error('Failed to save profile:', error);
+          window.dbAPI.showToast('Failed to update profile', 'error');
+        }
+      }
+      
+      // Reset form to original values
+      function resetForm() {
+        if (currentUser) {
+          populateForm(currentUser);
+          window.dbAPI.showToast('Form reset to original values', 'info');
+        }
+      }
+      
+      // Update date/time
+      function updateDateTime() {
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const dateStr = now.toLocaleDateString('en-US', options);
+        const dateElement = document.getElementById('currentDateTime');
+        if(dateElement) dateElement.textContent = dateStr;
+      }
+      
+      // Initialize notification preferences
+      async function loadNotificationPreferences() {
+        if (!currentUser) return;
+        
+        try {
+          const preferences = await window.dbAPI.getNotificationPreferences();
+          if (preferences) {
+            console.log('🔍 Notification preferences loaded:', preferences);
+            
+            // Update UI with preferences
+            Object.keys(preferences).forEach(key => {
+              const checkbox = document.getElementById(key);
+              if (checkbox) {
+                checkbox.checked = preferences[key];
+                console.log('🔍 Set', key, 'to', preferences[key]);
+              } else {
+                console.log('❌ Checkbox not found for:', key);
+              }
+            });
+          } else {
+            console.log('❌ No notification preferences returned');
+          }
+        } catch (error) {
+          console.error('❌ Failed to load notification preferences:', error);
+          // Don't show error toast for this, just log it
+        }
+      }
+      
+      // Save notification preferences
+      async function saveNotificationPreferences() {
+        if (!currentUser) return;
+        
+        try {
+          const preferences = {
+            booking_confirmations: {
+              email_enabled: document.getElementById('emailNotifications').checked,
+              sms_enabled: document.getElementById('smsNotifications').checked,
+              in_app_enabled: true,
+              frequency_preference: 'immediate'
+            },
+            reservation_reminders: {
+              email_enabled: document.getElementById('emailNotifications').checked,
+              sms_enabled: document.getElementById('smsNotifications').checked,
+              in_app_enabled: true,
+              frequency_preference: 'immediate'
+            },
+            promotional_offers: {
+              email_enabled: document.getElementById('promoNotifications').checked,
+              sms_enabled: false,
+              in_app_enabled: true,
+              frequency_preference: 'daily_digest'
+            },
+            loyalty_updates: {
+              email_enabled: document.getElementById('loyaltyNotifications').checked,
+              sms_enabled: false,
+              in_app_enabled: true,
+              frequency_preference: 'immediate'
+            }
+          };
+          
+          await window.dbAPI.updateNotificationPreferences(preferences);
+          window.dbAPI.showToast('Notification preferences updated', 'success');
+          
+        } catch (error) {
+          console.error('Failed to save notification preferences:', error);
+          window.dbAPI.showToast('Failed to update notification preferences', 'error');
+        }
+      }
+      
+      // Change password function
+      async function changePassword() {
+        if (!currentUser) return;
+        
+        try {
+          const currentPassword = document.getElementById('currentPassword').value;
+          const newPassword = document.getElementById('newPassword').value;
+          const confirmPassword = document.getElementById('confirmPassword').value;
+          
+          // Validate inputs
+          if (!currentPassword || !newPassword || !confirmPassword) {
+            window.dbAPI.showToast('All password fields are required', 'error');
+            return;
+          }
+          
+          if (newPassword !== confirmPassword) {
+            window.dbAPI.showToast('New passwords do not match', 'error');
+            return;
+          }
+          
+          if (newPassword.length < 8) {
+            window.dbAPI.showToast('Password must be at least 8 characters long', 'error');
+            return;
+          }
+          
+          if (!/(?=.*[A-Z])(?=.*\d)/.test(newPassword)) {
+            window.dbAPI.showToast('Password must contain uppercase letter and number', 'error');
+            return;
+          }
+          
+          // Call password change API
+          const passwordData = {
+            current_password: currentPassword,
+            new_password: newPassword
+          };
+          
+          await window.dbAPI.changePassword(passwordData);
+          
+          // Clear password fields
+          document.getElementById('currentPassword').value = '';
+          document.getElementById('newPassword').value = '';
+          document.getElementById('confirmPassword').value = '';
+          
+          window.dbAPI.showToast('Password changed successfully', 'success');
+          
+        } catch (error) {
+          console.error('Failed to change password:', error);
+          window.dbAPI.showToast('Failed to change password. Please check your current password.', 'error');
+        }
+      }
+      
+      // Enhanced save profile function that includes password change
+      async function saveProfile() {
+        if (!currentUser) return;
+        
+        try {
+          // Save profile information
+          const profileData = {
+            first_name: document.getElementById('firstName').value.trim(),
+            last_name: document.getElementById('lastName').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            phone: document.getElementById('phone').value.trim(),
+            date_of_birth: document.getElementById('dob').value,
+            gender: document.getElementById('gender').value,
+            nationality: document.getElementById('nationality').value,
+            alternative_phone: document.getElementById('altPhone').value.trim(),
+            street_address: document.getElementById('address').value,
+            city: document.getElementById('city').value,
+            postal_code: document.getElementById('postalCode').value,
+            country: document.getElementById('country').value,
+            preferred_language: document.getElementById('language').value
+          };
+          
+          // Validate required fields
+          if (!profileData.first_name || !profileData.last_name) {
+            window.dbAPI.showToast('First name and last name are required', 'error');
+            return;
+          }
+          
+          if (!profileData.email) {
+            window.dbAPI.showToast('Email is required', 'error');
+            return;
+          }
+          
+          if (!profileData.phone) {
+            window.dbAPI.showToast('Phone number is required', 'error');
+            return;
+          }
+          
+          // Update profile in database
+          await window.dbAPI.updateProfile(profileData);
+          
+          // Save notification preferences
+          await saveNotificationPreferences();
+          
+          // Check if password change is requested
+          const currentPassword = document.getElementById('currentPassword').value;
+          const newPassword = document.getElementById('newPassword').value;
+          const confirmPassword = document.getElementById('confirmPassword').value;
+          
+          if (currentPassword || newPassword || confirmPassword) {
+            await changePassword();
+          }
+          
+          // Reload user data
+          await loadUserData();
+          
+          window.dbAPI.showToast('Profile updated successfully', 'success');
+          
+        } catch (error) {
+          console.error('Failed to save profile:', error);
+          window.dbAPI.showToast('Failed to update profile', 'error');
+        }
+      }
+      
+      // Action functions
+      async function handleLogout() {
+        try {
+          await window.dbAPI.logout();
+        } catch (error) {
+          console.error('Logout error:', error);
+          window.dbAPI.showToast('Failed to logout', 'error');
+        }
+      }
+      
+      function changePhoto() {
+        window.dbAPI.showToast('Photo upload feature coming soon', 'info');
+      }
+      
+      function deactivateAccount() {
+        if (confirm('Are you sure you want to deactivate your account? This action cannot be undone.')) {
+          window.dbAPI.showToast('Account deactivation feature coming soon', 'info');
+        }
+      }
+      
+      function downloadData() {
+        window.dbAPI.showToast('Data download feature coming soon', 'info');
+      }
+      
+      // Make functions global
+      window.saveProfile = saveProfile;
+      window.resetForm = resetForm;
+      window.changePhoto = changePhoto;
+      window.deactivateAccount = deactivateAccount;
+      window.downloadData = downloadData;
+      window.handleLogout = handleLogout;
+      
+      // Initialize
+      await loadUserData();
+      await loadNotificationPreferences();
+      updateDateTime();
+      setInterval(updateDateTime, 60000);
+      
+    })();
+  </script>
+</body>
+</html>

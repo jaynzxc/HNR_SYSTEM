@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Profile API</title>
+</head>
+<body>
+    <h1>Debug Profile API</h1>
+    <button onclick="testUpdateProfile()">Test Update Profile</button>
+    <button onclick="testChangePassword()">Test Change Password</button>
+    <div id="result"></div>
+    
+    <script>
+        async function testUpdateProfile() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Testing update profile API...</p>';
+            
+            try {
+                const profileData = {
+                    first_name: 'Test',
+                    last_name: 'User',
+                    email: 'test@test.com',
+                    phone: '1234567890',
+                    date_of_birth: '1990-01-01',
+                    gender: 'prefer_not_to_say',
+                    nationality: 'Filipino',
+                    alternative_phone: '',
+                    street_address: 'Test Address',
+                    city: 'Test City',
+                    postal_code: '1234',
+                    country: 'Philippines',
+                    preferred_language: 'English'
+                };
+                
+                const response = await fetch('./api/auth/user.php?endpoint=update-profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(profileData)
+                });
+                
+                const data = await response.json();
+                
+                console.log('Update Profile Response:', data);
+                
+                resultDiv.innerHTML = `
+                    <h2>Update Profile Test Results:</h2>
+                    <p><strong>HTTP Status:</strong> ${response.status}</p>
+                    <p><strong>Response:</strong></p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+        
+        async function testChangePassword() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Testing change password API...</p>';
+            
+            try {
+                const passwordData = {
+                    current_password: 'customer123',
+                    new_password: 'NewPassword123'
+                };
+                
+                const response = await fetch('./api/auth/user.php?endpoint=change-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(passwordData)
+                });
+                
+                const data = await response.json();
+                
+                console.log('Change Password Response:', data);
+                
+                resultDiv.innerHTML = `
+                    <h2>Change Password Test Results:</h2>
+                    <p><strong>HTTP Status:</strong> ${response.status}</p>
+                    <p><strong>Response:</strong></p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

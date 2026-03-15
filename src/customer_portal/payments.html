@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payments · Customer Portal</title>
+  <!-- Tailwind via CDN + Font Awesome 6 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    .receipt-print {
+      font-family: monospace;
+    }
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #receiptModal, #receiptModal * {
+        visibility: visible;
+      }
+      #receiptModal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white;
+        padding: 20px;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+    .payment-highlight {
+      border-left: 4px solid #f59e0b;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 font-sans antialiased">
+
+  <!-- main flex wrapper (sidebar + content) -->
+  <div class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- ========== SIDEBAR ========== -->
+    <aside class="lg:w-80 bg-white border-r border-slate-200 shadow-sm flex-shrink-0">
+      <div class="px-6 py-7 border-b border-slate-100">
+        <div class="flex items-center gap-2 text-amber-700">
+          <i class="fa-solid fa-utensils text-xl"></i>
+          <i class="fa-solid fa-bed text-xl"></i>
+          <span class="font-semibold text-xl tracking-tight text-slate-800">Lùcas<span class="text-amber-600">.stay</span></span>
+        </div>
+        <p class="text-xs text-slate-500 mt-1">customer portal · payments</p>
+      </div>
+
+      <!-- user summary (blank) -->
+      <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-100 bg-slate-50/80">
+        <div class="h-12 w-12 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold text-lg" id="userInitials">—</div>
+        <div>
+          <p class="font-medium text-slate-800" id="displayName">Guest</p>
+          <p class="text-xs text-slate-500 flex items-center gap-1"><i class="fa-regular fa-gem text-[11px]"></i> <span id="loyaltyTier">—</span> · <span id="loyaltyPoints">0</span> pts</p>
+        </div>
+      </div>
+
+      <!-- navigation -->
+      <nav class="p-4 space-y-1.5 text-sm">
+        <a href="./index.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-table-cells-large w-5 text-slate-400"></i>Dashboard</a>
+        <a href="./my_profile.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-user w-5 text-slate-400"></i>My Profile</a>
+        <a href="./hotel_booking.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-hotel w-5 text-slate-400"></i>Hotel Booking</a>
+        <a href="./my_reservation.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-calendar-check w-5 text-slate-400"></i>My Reservations</a>
+        <a href="./restaurant_reservation.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-clock w-5 text-slate-400"></i>Restaurant Reservation</a>
+        <a href="./order_food.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-bag-shopping w-5 text-slate-400"></i>Menu / Order Food</a>
+        <a href="./payments.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-amber-50 text-amber-800 font-medium"><i class="fa-regular fa-credit-card w-5 text-amber-600"></i>Payments</a>
+        <a href="./loyalty_rewards.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-star w-5 text-slate-400"></i>Loyalty Rewards</a>
+        <a href="./Notifications.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition relative"><i class="fa-regular fa-bell w-5 text-slate-400"></i>Notifications<span class="ml-auto bg-amber-100 text-amber-800 text-xs px-1.5 py-0.5 rounded-full">3</span></a>
+        <div class="border-t border-slate-200 pt-3 mt-3">
+          <a href="#" onclick="handleLogout()" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-700 transition"><i class="fa-solid fa-arrow-right-from-bracket w-5"></i>Logout</a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="flex-1 p-5 lg:p-8 overflow-y-auto">
+
+      <!-- header -->
+      <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 class="text-2xl lg:text-3xl font-light text-slate-800">Payments</h1>
+          <p class="text-sm text-slate-500 mt-0.5">manage your transactions and payment methods</p>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-full px-4 py-2 text-sm flex items-center gap-2 shadow-sm">
+          <i class="fa-regular fa-calendar text-slate-400"></i> 
+          <span id="currentDate"></span>
+        </div>
+      </div>
+
+      <!-- Pending Restaurant Down Payment Alert (shown when redirected) -->
+      <div id="pendingRestaurantPaymentAlert" class="mb-6 bg-amber-50 border border-amber-200 rounded-2xl p-4 hidden">
+        <div class="flex items-start gap-3">
+          <div class="bg-amber-100 rounded-full p-2">
+            <i class="fa-solid fa-utensils text-amber-600"></i>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-amber-800">Restaurant Reservation Down Payment Required</h3>
+            <p class="text-sm text-amber-700 mt-1" id="pendingPaymentDetails"></p>
+            <div class="flex gap-3 mt-3">
+              <button onclick="processRestaurantDownPayment()" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition">
+                <i class="fa-regular fa-credit-card mr-2"></i>Pay Now
+              </button>
+              <button onclick="dismissRestaurantPayment()" class="border border-amber-300 text-amber-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-amber-100 transition">
+                Later
+              </button>
+            </div>
+          </div>
+          <button onclick="dismissRestaurantPayment()" class="text-amber-400 hover:text-amber-600">
+            <i class="fa-solid fa-xmark text-xl"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Pending Hotel Booking Alert (shown when redirected) -->
+      <div id="pendingHotelPaymentAlert" class="mb-6 bg-blue-50 border border-blue-200 rounded-2xl p-4 hidden">
+        <div class="flex items-start gap-3">
+          <div class="bg-blue-100 rounded-full p-2">
+            <i class="fa-solid fa-hotel text-blue-600"></i>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-blue-800">Hotel Booking Payment Required</h3>
+            <p class="text-sm text-blue-700 mt-1" id="pendingHotelDetails"></p>
+            <div class="flex gap-3 mt-3">
+              <button onclick="processHotelPayment()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-medium transition">
+                <i class="fa-regular fa-credit-card mr-2"></i>Pay Now
+              </button>
+              <button onclick="dismissHotelPayment()" class="border border-blue-300 text-blue-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-100 transition">
+                Later
+              </button>
+            </div>
+          </div>
+          <button onclick="dismissHotelPayment()" class="text-blue-400 hover:text-blue-600">
+            <i class="fa-solid fa-xmark text-xl"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== BALANCE & QUICK ACTIONS ===== -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+        <!-- current balance card -->
+        <div class="bg-gradient-to-br from-amber-600 to-amber-700 text-white rounded-2xl p-6 shadow-md">
+          <p class="text-sm opacity-90 flex items-center gap-1"><i class="fa-regular fa-credit-card"></i> current balance</p>
+          <p class="text-3xl font-bold mt-2" id="currentBalance">₱0.00</p>
+          <p class="text-xs opacity-80 mt-1" id="balanceMessage">no outstanding balance</p>
+          <button id="payNowBtn" class="mt-4 bg-white text-amber-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-amber-50 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>pay now</button>
+        </div>
+        <!-- payment methods summary -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5">
+          <h3 class="font-semibold flex items-center gap-2"><i class="fa-regular fa-credit-card text-amber-600"></i> payment methods</h3>
+          <div class="mt-3 space-y-2" id="paymentMethodsSummary">
+            <p class="text-sm text-slate-500 italic">no payment methods added</p>
+          </div>
+          <button onclick="openAddPaymentModal()" class="text-amber-700 text-sm mt-3 flex items-center gap-1 hover:underline"><i class="fa-regular fa-plus"></i> add new</button>
+        </div>
+        <!-- recent transaction summary -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5">
+          <h3 class="font-semibold flex items-center gap-2"><i class="fa-regular fa-clock-rotate-left text-amber-600"></i> this month</h3>
+          <p class="text-2xl font-bold mt-2" id="monthlyTotal">₱0</p>
+          <p class="text-xs text-slate-500" id="monthlyCount">total spent · 0 transactions</p>
+          <p class="text-xs text-slate-400 mt-2" id="monthlyComparison">no transactions this month</p>
+        </div>
+      </div>
+
+      <!-- ===== PAYMENT METHODS DETAILED ===== -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 mb-8">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-semibold text-lg flex items-center gap-2"><i class="fa-regular fa-credit-card text-amber-600"></i> your payment methods</h2>
+          <button onclick="openAddPaymentModal()" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl text-sm">+ add method</button>
+        </div>
+        <div id="paymentMethodsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Payment methods will be inserted here dynamically -->
+          <div class="col-span-full text-center py-8 text-slate-500">
+            <i class="fa-regular fa-credit-card text-4xl mb-3 text-slate-300"></i>
+            <p class="text-sm">No payment methods added yet</p>
+            <p class="text-xs text-slate-400 mt-1">Add a payment method to get started</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== RECENT TRANSACTIONS ===== -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-semibold text-lg flex items-center gap-2"><i class="fa-regular fa-rectangle-list text-amber-600"></i> recent transactions</h2>
+          <button onclick="viewAllTransactions()" class="text-sm text-amber-700 hover:underline">view all</button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="text-slate-400 text-xs border-b">
+              <tr><td class="pb-2">date</td><td>description</td><td>amount</td><td>status</td><td></td></tr>
+            </thead>
+            <tbody id="transactionsTable" class="divide-y">
+              <!-- Transactions will be inserted here dynamically -->
+              <tr>
+                <td colspan="5" class="py-12 text-center text-slate-500">
+                  <i class="fa-regular fa-clock text-3xl mb-2 text-slate-300"></i>
+                  <p class="text-sm">No recent transactions</p>
+                  <p class="text-xs text-slate-400 mt-1">Your transactions will appear here</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ===== PROMO / PAYMENT INFO ===== -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex items-center gap-4">
+          <i class="fa-regular fa-circle-question text-3xl text-amber-600"></i>
+          <div>
+            <p class="font-medium">payment support</p>
+            <p class="text-xs text-slate-600">contact billing@lucas.stay or +63 2 1234 5678</p>
+          </div>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-2xl p-5 flex items-center gap-4">
+          <i class="fa-regular fa-gem text-2xl text-amber-600"></i>
+          <div>
+            <p class="font-medium">earn points with every payment</p>
+            <p class="text-xs text-slate-500">5 pts per ₱100 spent</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Payment Method Modal -->
+      <div id="addPaymentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-semibold">Add Payment Method</h3>
+            <button onclick="closeAddPaymentModal()" class="text-slate-400 hover:text-slate-600">
+              <i class="fa-solid fa-xmark text-2xl"></i>
+            </button>
+          </div>
+          <form id="paymentMethodForm" onsubmit="addPaymentMethod(event)">
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-slate-700 mb-2">Payment Type</label>
+              <select id="paymentType" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-amber-600" required>
+                <option value="">Select type</option>
+                <option value="gcash">GCash</option>
+                <option value="visa">Visa</option>
+                <option value="mastercard">Mastercard</option>
+                <option value="cash">Cash on arrival</option>
+              </select>
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-slate-700 mb-2">Account Name</label>
+              <input type="text" id="accountName" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-amber-600" required>
+            </div>
+            <div class="mb-4" id="cardNumberField">
+              <label class="block text-sm font-medium text-slate-700 mb-2">Card Number / Account</label>
+              <input type="text" id="accountNumber" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-amber-600">
+            </div>
+            <div class="mb-4" id="expiryField">
+              <label class="block text-sm font-medium text-slate-700 mb-2">Expiry Date</label>
+              <input type="month" id="expiryDate" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-amber-600">
+            </div>
+            <div class="flex gap-3">
+              <button type="button" onclick="closeAddPaymentModal()" class="flex-1 border border-slate-200 text-slate-700 px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-50 transition">Cancel</button>
+              <button type="submit" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white px-4 py-2.5 rounded-xl text-sm font-medium transition">Add Method</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Make Payment Modal -->
+      <div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-semibold">Make Payment</h3>
+            <button onclick="closePaymentModal()" class="text-slate-400 hover:text-slate-600">
+              <i class="fa-solid fa-xmark text-2xl"></i>
+            </button>
+          </div>
+          <form id="paymentForm" onsubmit="processPayment(event)">
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-slate-700 mb-2">Amount (₱)</label>
+              <input type="number" id="paymentAmount" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-amber-600" required min="1" step="0.01">
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-slate-700 mb-2">Description</label>
+              <input type="text" id="paymentDescription" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-amber-600" required>
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-slate-700 mb-2">Payment Method</label>
+              <select id="paymentMethod" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-amber-600" required>
+                <option value="">Select method</option>
+                <!-- Payment methods will be inserted here dynamically -->
+              </select>
+            </div>
+            <div class="flex gap-3">
+              <button type="button" onclick="closePaymentModal()" class="flex-1 border border-slate-200 text-slate-700 px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-50 transition">Cancel</button>
+              <button type="submit" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white px-4 py-2.5 rounded-xl text-sm font-medium transition">Pay Now</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Receipt Modal -->
+      <div id="receiptModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-semibold">Payment Receipt</h3>
+            <button onclick="closeReceiptModal()" class="text-slate-400 hover:text-slate-600">
+              <i class="fa-solid fa-xmark text-2xl"></i>
+            </button>
+          </div>
+          <div id="receiptContent" class="space-y-3">
+            <!-- Receipt content will be inserted here -->
+          </div>
+          <div class="mt-6 flex gap-3">
+            <button onclick="printReceipt()" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white px-4 py-2.5 rounded-xl text-sm font-medium transition">
+              <i class="fa-solid fa-print mr-2"></i>Print
+            </button>
+            <button onclick="closeReceiptModal()" class="flex-1 border border-slate-200 text-slate-700 px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-slate-50 transition">Close</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Database API -->
+  <script src="./js/database.js"></script>
+
+  <script>
+    // State management - initialized with empty arrays (NO SAMPLE DATA)
+    let paymentMethods = [];
+    let transactions = [];
+    let currentBalance = 0;
+    let loyaltyPoints = 0;
+    
+    // Store pending payments
+    let pendingRestaurantPayment = null;
+    let pendingRestaurantReservation = null;
+    let pendingHotelPayment = null;
+    let pendingHotelReservation = null;
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      updateDate();
+      loadFromStorage();
+      updateUI();
+      updateUserInfo();
+      
+      // Check for pending payments from various sources
+      checkForPendingHotelBooking();
+      checkForPendingRestaurantPayment();
+      
+      // Set up payment type change handler
+      document.getElementById('paymentType').addEventListener('change', handlePaymentTypeChange);
+    });
+
+    // Load user data and initialize
+    async function updateUserInfo() {
+      try {
+        const currentUser = await window.dbAPI.loadCurrentUserSimple();
+        
+        if (currentUser) {
+          // Update UI with actual user data
+          document.getElementById('userInitials').innerText = window.dbAPI.getUserInitials(currentUser.first_name, currentUser.last_name);
+          document.getElementById('displayName').innerText = `${currentUser.first_name} ${currentUser.last_name}`;
+          document.getElementById('loyaltyTier').innerText = currentUser.membership_tier || 'member';
+          document.getElementById('loyaltyPoints').innerText = currentUser.loyalty_points || 0;
+        } else {
+          window.location.href = '../login-register/login_form.html';
+          return;
+        }
+      } catch (error) {
+        console.error('Failed to load user data:', error);
+        document.getElementById('userInitials').innerText = '—';
+        document.getElementById('displayName').innerText = 'Guest';
+        document.getElementById('loyaltyTier').innerText = '—';
+        document.getElementById('loyaltyPoints').innerText = 0;
+      }
+    }
+
+    // Check for pending restaurant payment from sessionStorage
+    function checkForPendingRestaurantPayment() {
+      const pendingDownPayment = sessionStorage.getItem('pendingDownPayment');
+      if (pendingDownPayment) {
+        try {
+          const paymentData = JSON.parse(pendingDownPayment);
+          
+          // Store both payment and reservation data
+          pendingRestaurantPayment = {
+            amount: paymentData.amount,
+            description: paymentData.description,
+            customerName: paymentData.customerName,
+            customerEmail: paymentData.customerEmail,
+            customerPhone: paymentData.customerPhone
+          };
+          
+          // Store reservation data for later use
+          pendingRestaurantReservation = {
+            id: `REST${Date.now()}`,
+            type: 'restaurant',
+            status: 'confirmed',
+            title: 'Restaurant Table',
+            details: {
+              guests: paymentData.guests || 2,
+              date: paymentData.date || new Date().toISOString().split('T')[0],
+              time: paymentData.time || '7:00 PM',
+              table: paymentData.table || 'TBD',
+              downPayment: paymentData.amount,
+              customerName: paymentData.customerName,
+              customerEmail: paymentData.customerEmail,
+              customerPhone: paymentData.customerPhone
+            },
+            category: 'upcoming'
+          };
+          
+          // Show the alert
+          showRestaurantPaymentAlert(pendingRestaurantPayment);
+          
+          // Clear from sessionStorage after loading
+          sessionStorage.removeItem('pendingDownPayment');
+        } catch (e) {
+          console.error('Error parsing pending restaurant payment', e);
+        }
+      }
+    }
+
+    // Check for pending hotel booking from sessionStorage
+    function checkForPendingHotelBooking() {
+      const pendingBooking = sessionStorage.getItem('pendingBooking');
+      if (pendingBooking) {
+        try {
+          const bookingData = JSON.parse(pendingBooking);
+          
+          // Store both payment and reservation data
+          pendingHotelPayment = {
+            amount: bookingData.amount || 5000,
+            description: bookingData.description || 'Hotel booking',
+            roomName: bookingData.roomName,
+            checkIn: bookingData.checkin,
+            checkOut: bookingData.checkout,
+            adults: bookingData.adults || 2
+          };
+          
+          // Store reservation data for later use
+          pendingHotelReservation = {
+            id: `HOTEL${Date.now()}`,
+            type: 'hotel',
+            status: 'confirmed',
+            title: bookingData.roomName || 'Hotel Room',
+            details: {
+              room: bookingData.roomName || 'Deluxe Room',
+              checkIn: bookingData.checkin || new Date().toISOString().split('T')[0],
+              checkOut: bookingData.checkout || new Date(Date.now() + 86400000 * 3).toISOString().split('T')[0],
+              adults: bookingData.adults || 2,
+              total: bookingData.amount || 5000
+            },
+            category: 'upcoming'
+          };
+          
+          // Show the alert
+          showHotelPaymentAlert(pendingHotelPayment);
+          
+          // Clear from sessionStorage after loading
+          sessionStorage.removeItem('pendingBooking');
+        } catch (e) {
+          console.error('Error parsing pending hotel booking', e);
+        }
+      }
+      
+      // Check for booking after adding payment method
+      const pendingAfterMethod = sessionStorage.getItem('pendingBookingAfterMethod');
+      if (pendingAfterMethod) {
+        try {
+          const bookingData = JSON.parse(pendingAfterMethod);
+          
+          // Check if payment methods now exist
+          setTimeout(() => {
+            if (paymentMethods.length > 0) {
+              pendingHotelPayment = {
+                amount: bookingData.amount || 5000,
+                description: bookingData.description || 'Hotel booking',
+                roomName: bookingData.roomName,
+                checkIn: bookingData.checkin,
+                checkOut: bookingData.checkout,
+                adults: bookingData.adults || 2
+              };
+              
+              pendingHotelReservation = {
+                id: `HOTEL${Date.now()}`,
+                type: 'hotel',
+                status: 'confirmed',
+                title: bookingData.roomName || 'Hotel Room',
+                details: {
+                  room: bookingData.roomName || 'Deluxe Room',
+                  checkIn: bookingData.checkin || new Date().toISOString().split('T')[0],
+                  checkOut: bookingData.checkout || new Date(Date.now() + 86400000 * 3).toISOString().split('T')[0],
+                  adults: bookingData.adults || 2,
+                  total: bookingData.amount || 5000
+                },
+                category: 'upcoming'
+              };
+              
+              processHotelPayment();
+              sessionStorage.removeItem('pendingBookingAfterMethod');
+            }
+          }, 500);
+        } catch (e) {
+          console.error('Error parsing pending booking after method', e);
+        }
+      }
+    }
+
+    // Show restaurant payment alert
+    function showRestaurantPaymentAlert(payment) {
+      const alert = document.getElementById('pendingRestaurantPaymentAlert');
+      const details = document.getElementById('pendingPaymentDetails');
+      
+      const formattedAmount = new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency: 'PHP'
+      }).format(payment.amount);
+      
+      details.innerHTML = `
+        <span class="font-bold">${formattedAmount}</span> for ${payment.description}<br>
+        <span class="text-xs">Customer: ${payment.customerName || 'Guest'}</span>
+      `;
+      
+      alert.classList.remove('hidden');
+    }
+
+    // Show hotel payment alert
+    function showHotelPaymentAlert(payment) {
+      const alert = document.getElementById('pendingHotelPaymentAlert');
+      const details = document.getElementById('pendingHotelDetails');
+      
+      const formattedAmount = new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency: 'PHP'
+      }).format(payment.amount);
+      
+      details.innerHTML = `
+        <span class="font-bold">${formattedAmount}</span> for ${payment.description}<br>
+        <span class="text-xs">Room: ${payment.roomName || 'Standard Room'} · ${payment.adults} guests</span><br>
+        <span class="text-xs">Check-in: ${payment.checkIn || 'Today'} · Check-out: ${payment.checkOut || 'Later'}</span>
+      `;
+      
+      alert.classList.remove('hidden');
+    }
+
+    // Dismiss restaurant payment alert
+    window.dismissRestaurantPayment = function() {
+      document.getElementById('pendingRestaurantPaymentAlert').classList.add('hidden');
+      pendingRestaurantPayment = null;
+      pendingRestaurantReservation = null;
+    };
+
+    // Dismiss hotel payment alert
+    window.dismissHotelPayment = function() {
+      document.getElementById('pendingHotelPaymentAlert').classList.add('hidden');
+      pendingHotelPayment = null;
+      pendingHotelReservation = null;
+    };
+
+    // Process restaurant down payment
+    window.processRestaurantDownPayment = function() {
+      if (!pendingRestaurantPayment) {
+        dismissRestaurantPayment();
+        return;
+      }
+
+      // Check if payment methods exist
+      if (paymentMethods.length === 0) {
+        alert('Please add a payment method first');
+        openAddPaymentModal();
+        
+        // Store payment data to use after adding payment method
+        sessionStorage.setItem('pendingRestaurantAfterMethod', JSON.stringify({
+          payment: pendingRestaurantPayment,
+          reservation: pendingRestaurantReservation
+        }));
+        return;
+      }
+
+      // Open payment modal with restaurant payment details
+      openPaymentModal();
+      document.getElementById('paymentAmount').value = pendingRestaurantPayment.amount;
+      document.getElementById('paymentDescription').value = pendingRestaurantPayment.description;
+      
+      // Mark as restaurant payment for special handling
+      document.getElementById('paymentForm').dataset.isRestaurantPayment = 'true';
+      document.getElementById('paymentForm').dataset.restaurantReservation = JSON.stringify(pendingRestaurantReservation);
+      
+      // Dismiss the alert
+      dismissRestaurantPayment();
+    };
+
+    // Process hotel payment
+    window.processHotelPayment = function() {
+      if (!pendingHotelPayment) {
+        dismissHotelPayment();
+        return;
+      }
+
+      // Check if payment methods exist
+      if (paymentMethods.length === 0) {
+        alert('Please add a payment method first');
+        openAddPaymentModal();
+        
+        // Store payment data to use after adding payment method
+        sessionStorage.setItem('pendingHotelAfterMethod', JSON.stringify({
+          payment: pendingHotelPayment,
+          reservation: pendingHotelReservation
+        }));
+        return;
+      }
+
+      // Open payment modal with hotel payment details
+      openPaymentModal();
+      document.getElementById('paymentAmount').value = pendingHotelPayment.amount;
+      document.getElementById('paymentDescription').value = pendingHotelPayment.description;
+      
+      // Mark as hotel payment for special handling
+      document.getElementById('paymentForm').dataset.isHotelPayment = 'true';
+      document.getElementById('paymentForm').dataset.hotelReservation = JSON.stringify(pendingHotelReservation);
+      
+      // Dismiss the alert
+      dismissHotelPayment();
+    };
+
+    // Update current date
+    function updateDate() {
+      const date = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('currentDate').textContent = date.toLocaleDateString('en-US', options).toLowerCase();
+    }
+
+    // Local storage functions
+    function saveToStorage() {
+      localStorage.setItem('paymentMethods', JSON.stringify(paymentMethods));
+      localStorage.setItem('transactions', JSON.stringify(transactions));
+      localStorage.setItem('currentBalance', currentBalance);
+      localStorage.setItem('loyaltyPoints', loyaltyPoints);
+    }
+
+    function loadFromStorage() {
+      const savedMethods = localStorage.getItem('paymentMethods');
+      const savedTransactions = localStorage.getItem('transactions');
+      const savedBalance = localStorage.getItem('currentBalance');
+      const savedPoints = localStorage.getItem('loyaltyPoints');
+
+      if (savedMethods) paymentMethods = JSON.parse(savedMethods);
+      if (savedTransactions) transactions = JSON.parse(savedTransactions);
+      if (savedBalance) currentBalance = parseFloat(savedBalance);
+      if (savedPoints) loyaltyPoints = parseInt(savedPoints);
+    }
+
+    // Clear all data (utility function - not automatically called)
+    window.clearAllData = function() {
+      if (confirm('Clear all payment data? This cannot be undone.')) {
+        localStorage.clear();
+        paymentMethods = [];
+        transactions = [];
+        currentBalance = 0;
+        loyaltyPoints = 0;
+        updateUI();
+      }
+    };
+
+    // Update all UI elements
+    function updateUI() {
+      updatePaymentMethodsSummary();
+      updatePaymentMethodsGrid();
+      updateTransactionsTable();
+      updateBalanceCard();
+      updateMonthlySummary();
+      updateLoyaltyPoints();
+      updatePaymentMethodOptions();
+    }
+
+    function updateLoyaltyPoints() {
+      document.getElementById('loyaltyPoints').textContent = loyaltyPoints.toLocaleString();
+    }
+
+    function updateBalanceCard() {
+      const balanceElement = document.getElementById('currentBalance');
+      const balanceMessage = document.getElementById('balanceMessage');
+      const payNowBtn = document.getElementById('payNowBtn');
+
+      balanceElement.textContent = `₱${currentBalance.toFixed(2)}`;
+      
+      if (currentBalance > 0) {
+        balanceMessage.textContent = `due for payment`;
+        payNowBtn.disabled = false;
+        payNowBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      } else {
+        balanceMessage.textContent = 'no outstanding balance';
+        payNowBtn.disabled = true;
+        payNowBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    function updateMonthlySummary() {
+      const now = new Date();
+      const currentMonth = now.getMonth();
+      const currentYear = now.getFullYear();
+
+      const monthlyTransactions = transactions.filter(t => {
+        const tDate = new Date(t.date);
+        return tDate.getMonth() === currentMonth && tDate.getFullYear() === currentYear && t.status === 'completed';
+      });
+
+      const total = monthlyTransactions.reduce((sum, t) => sum + t.amount, 0);
+      const count = monthlyTransactions.length;
+
+      document.getElementById('monthlyTotal').textContent = `₱${total.toFixed(2)}`;
+      document.getElementById('monthlyCount').textContent = `total spent · ${count} transaction${count !== 1 ? 's' : ''}`;
+
+      // Calculate comparison with last month
+      const lastMonth = new Date(now);
+      lastMonth.setMonth(lastMonth.getMonth() - 1);
+      const lastMonthTransactions = transactions.filter(t => {
+        const tDate = new Date(t.date);
+        return tDate.getMonth() === lastMonth.getMonth() && tDate.getFullYear() === lastMonth.getFullYear() && t.status === 'completed';
+      });
+      const lastMonthTotal = lastMonthTransactions.reduce((sum, t) => sum + t.amount, 0);
+
+      if (lastMonthTotal > 0) {
+        const percentChange = ((total - lastMonthTotal) / lastMonthTotal * 100).toFixed(1);
+        const symbol = percentChange >= 0 ? '↑' : '↓';
+        const color = percentChange >= 0 ? 'text-green-600' : 'text-red-600';
+        document.getElementById('monthlyComparison').innerHTML = `<span class="${color}">${symbol} ${Math.abs(percentChange)}% from last month</span>`;
+      } else if (total > 0) {
+        document.getElementById('monthlyComparison').innerHTML = `<span class="text-green-600">↑ new spending this month</span>`;
+      } else {
+        document.getElementById('monthlyComparison').textContent = 'no transactions this month';
+      }
+    }
+
+    function updatePaymentMethodsSummary() {
+      const summary = document.getElementById('paymentMethodsSummary');
+      summary.innerHTML = '';
+
+      if (paymentMethods.length === 0) {
+        summary.innerHTML = '<p class="text-sm text-slate-500 italic">no payment methods added</p>';
+        return;
+      }
+
+      paymentMethods.slice(0, 3).forEach(method => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center gap-2 text-sm';
+        
+        let icon = '';
+        switch(method.type) {
+          case 'gcash': icon = '<i class="fa-brands fa-gcash text-blue-500 text-lg"></i>'; break;
+          case 'visa': icon = '<i class="fa-brands fa-cc-visa text-slate-400"></i>'; break;
+          case 'mastercard': icon = '<i class="fa-brands fa-cc-mastercard text-slate-400"></i>'; break;
+          case 'cash': icon = '<i class="fa-solid fa-money-bill-wave text-amber-600"></i>'; break;
+        }
+        
+        div.innerHTML = `${icon} <span>${method.name}</span>${method.isDefault ? ' <span class="text-xs bg-green-100 text-green-700 px-2 rounded-full">default</span>' : ''}`;
+        summary.appendChild(div);
+      });
+
+      if (paymentMethods.length > 3) {
+        const more = document.createElement('p');
+        more.className = 'text-xs text-slate-400 mt-1';
+        more.textContent = `+${paymentMethods.length - 3} more`;
+        summary.appendChild(more);
+      }
+    }
+
+    function updatePaymentMethodsGrid() {
+      const grid = document.getElementById('paymentMethodsGrid');
+      grid.innerHTML = '';
+
+      if (paymentMethods.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-8 text-slate-500">
+            <i class="fa-regular fa-credit-card text-4xl mb-3 text-slate-300"></i>
+            <p class="text-sm">No payment methods added yet</p>
+            <p class="text-xs text-slate-400 mt-1">Add a payment method to get started</p>
+          </div>
+        `;
+        return;
+      }
+
+      paymentMethods.forEach((method, index) => {
+        const card = document.createElement('div');
+        card.className = 'border border-slate-200 rounded-xl p-4 flex items-center justify-between';
+        
+        let icon = '';
+        let bgColor = '';
+        let textColor = '';
+        
+        switch(method.type) {
+          case 'gcash':
+            icon = '<i class="fa-brands fa-gcash text-xl"></i>';
+            bgColor = 'bg-blue-100';
+            textColor = 'text-blue-600';
+            break;
+          case 'visa':
+            icon = '<i class="fa-brands fa-cc-visa text-xl"></i>';
+            bgColor = 'bg-slate-100';
+            textColor = 'text-slate-600';
+            break;
+          case 'mastercard':
+            icon = '<i class="fa-brands fa-cc-mastercard text-xl"></i>';
+            bgColor = 'bg-slate-100';
+            textColor = 'text-slate-600';
+            break;
+          case 'cash':
+            icon = '<i class="fa-solid fa-money-bill-wave text-xl"></i>';
+            bgColor = 'bg-amber-100';
+            textColor = 'text-amber-600';
+            break;
+        }
+
+        const expiryHtml = method.expiry ? ` · ${method.expiry}` : '';
+        
+        card.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="h-10 w-10 ${bgColor} rounded-full flex items-center justify-center ${textColor}">
+              ${icon}
+            </div>
+            <div>
+              <p class="font-medium">${method.displayName}</p>
+              <p class="text-xs text-slate-500">${method.name}${expiryHtml}</p>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            ${method.isDefault ? '<span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">default</span>' : ''}
+            <button onclick="setDefaultPayment(${index})" class="text-slate-400 hover:text-amber-600" title="Set as default">
+              <i class="fa-regular fa-star"></i>
+            </button>
+            <button onclick="deletePaymentMethod(${index})" class="text-slate-400 hover:text-red-600">
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
+          </div>
+        `;
+        
+        grid.appendChild(card);
+      });
+    }
+
+    function updateTransactionsTable() {
+      const table = document.getElementById('transactionsTable');
+      table.innerHTML = '';
+
+      if (transactions.length === 0) {
+        table.innerHTML = `
+          <tr>
+            <td colspan="5" class="py-12 text-center text-slate-500">
+              <i class="fa-regular fa-clock text-3xl mb-2 text-slate-300"></i>
+              <p class="text-sm">No recent transactions</p>
+              <p class="text-xs text-slate-400 mt-1">Your transactions will appear here</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      // Show last 5 transactions
+      const recentTransactions = [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+
+      recentTransactions.forEach((transaction) => {
+        const row = document.createElement('tr');
+        
+        let statusClass = '';
+        switch(transaction.status) {
+          case 'completed':
+            statusClass = 'bg-green-100 text-green-700';
+            break;
+          case 'pending':
+            statusClass = 'bg-yellow-100 text-yellow-700';
+            break;
+          case 'failed':
+            statusClass = 'bg-red-100 text-red-700';
+            break;
+        }
+
+        // Find the actual index in the full transactions array
+        const fullIndex = transactions.findIndex(t => t.id === transaction.id);
+        
+        const actionButton = transaction.status === 'pending' 
+          ? '<button onclick="openPaymentModal()" class="text-amber-700 text-xs">pay now</button>'
+          : transaction.receipt ? `<button onclick="viewReceipt(${fullIndex})" class="text-amber-700 text-xs">receipt</button>` : '';
+
+        row.innerHTML = `
+          <td class="py-3">${new Date(transaction.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+          <td>${transaction.description}</td>
+          <td class="font-medium">₱${transaction.amount.toFixed(2)}</td>
+          <td><span class="${statusClass} px-2 py-0.5 rounded-full text-xs">${transaction.status}</span></td>
+          <td>${actionButton}</td>
+        `;
+        
+        table.appendChild(row);
+      });
+    }
+
+    function updatePaymentMethodOptions() {
+      const select = document.getElementById('paymentMethod');
+      if (!select) return;
+      
+      select.innerHTML = '<option value="">Select method</option>';
+      
+      paymentMethods.forEach((method, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `${method.displayName} - ${method.name}`;
+        if (method.isDefault) option.selected = true;
+        select.appendChild(option);
+      });
+    }
+
+    // Handle payment type change in modal
+    function handlePaymentTypeChange(e) {
+      const type = e.target.value;
+      const expiryField = document.getElementById('expiryField');
+      const cardNumberField = document.getElementById('cardNumberField');
+      const cardNumberLabel = cardNumberField.querySelector('label');
+      const accountNumber = document.getElementById('accountNumber');
+
+      if (type === 'cash') {
+        expiryField.style.display = 'none';
+        cardNumberLabel.textContent = 'Reference (optional)';
+        accountNumber.required = false;
+      } else {
+        expiryField.style.display = 'block';
+        cardNumberLabel.textContent = type === 'gcash' ? 'GCash Number' : 'Card Number';
+        accountNumber.required = true;
+      }
+    }
+
+    // Modal functions
+    window.openAddPaymentModal = function() {
+      document.getElementById('addPaymentModal').classList.remove('hidden');
+      document.getElementById('addPaymentModal').classList.add('flex');
+    };
+
+    window.closeAddPaymentModal = function() {
+      document.getElementById('addPaymentModal').classList.add('hidden');
+      document.getElementById('addPaymentModal').classList.remove('flex');
+      document.getElementById('paymentMethodForm').reset();
+      
+      // Check for pending payments after adding method
+      const pendingAfterMethod = sessionStorage.getItem('pendingBookingAfterMethod');
+      if (pendingAfterMethod) {
+        try {
+          const bookingData = JSON.parse(pendingAfterMethod);
+          if (paymentMethods.length > 0) {
+            setTimeout(() => {
+              pendingHotelPayment = {
+                amount: bookingData.amount || 5000,
+                description: bookingData.description || 'Hotel booking',
+                roomName: bookingData.roomName,
+                checkIn: bookingData.checkin,
+                checkOut: bookingData.checkout,
+                adults: bookingData.adults || 2
+              };
+              
+              pendingHotelReservation = {
+                id: `HOTEL${Date.now()}`,
+                type: 'hotel',
+                status: 'confirmed',
+                title: bookingData.roomName || 'Hotel Room',
+                details: {
+                  room: bookingData.roomName || 'Deluxe Room',
+                  checkIn: bookingData.checkin || new Date().toISOString().split('T')[0],
+                  checkOut: bookingData.checkout || new Date(Date.now() + 86400000 * 3).toISOString().split('T')[0],
+                  adults: bookingData.adults || 2,
+                  total: bookingData.amount || 5000
+                },
+                category: 'upcoming'
+              };
+              
+              processHotelPayment();
+              sessionStorage.removeItem('pendingBookingAfterMethod');
+            }, 500);
+          }
+        } catch (e) {
+          console.error('Error parsing pending booking after method', e);
+        }
+      }
+      
+      // Check for restaurant payment after adding method
+      const pendingRestaurantAfterMethod = sessionStorage.getItem('pendingRestaurantAfterMethod');
+      if (pendingRestaurantAfterMethod) {
+        try {
+          const data = JSON.parse(pendingRestaurantAfterMethod);
+          if (paymentMethods.length > 0) {
+            setTimeout(() => {
+              pendingRestaurantPayment = data.payment;
+              pendingRestaurantReservation = data.reservation;
+              processRestaurantDownPayment();
+              sessionStorage.removeItem('pendingRestaurantAfterMethod');
+            }, 500);
+          }
+        } catch (e) {
+          console.error('Error parsing pending restaurant after method', e);
+        }
+      }
+      
+      // Check for hotel payment after adding method
+      const pendingHotelAfterMethod = sessionStorage.getItem('pendingHotelAfterMethod');
+      if (pendingHotelAfterMethod) {
+        try {
+          const data = JSON.parse(pendingHotelAfterMethod);
+          if (paymentMethods.length > 0) {
+            setTimeout(() => {
+              pendingHotelPayment = data.payment;
+              pendingHotelReservation = data.reservation;
+              processHotelPayment();
+              sessionStorage.removeItem('pendingHotelAfterMethod');
+            }, 500);
+          }
+        } catch (e) {
+          console.error('Error parsing pending hotel after method', e);
+        }
+      }
+    };
+
+    window.openPaymentModal = function() {
+      if (paymentMethods.length === 0) {
+        alert('Please add a payment method first');
+        openAddPaymentModal();
+        return;
+      }
+      
+      document.getElementById('paymentModal').classList.remove('hidden');
+      document.getElementById('paymentModal').classList.add('flex');
+      
+      // Set suggested amount if there's a balance
+      if (currentBalance > 0 && !document.getElementById('paymentAmount').value) {
+        document.getElementById('paymentAmount').value = currentBalance;
+        document.getElementById('paymentDescription').value = 'Balance payment';
+      }
+    };
+
+    window.closePaymentModal = function() {
+      document.getElementById('paymentModal').classList.add('hidden');
+      document.getElementById('paymentModal').classList.remove('flex');
+      document.getElementById('paymentForm').reset();
+      delete document.getElementById('paymentForm').dataset.isRestaurantPayment;
+      delete document.getElementById('paymentForm').dataset.restaurantReservation;
+      delete document.getElementById('paymentForm').dataset.isHotelPayment;
+      delete document.getElementById('paymentForm').dataset.hotelReservation;
+    };
+
+    window.openReceiptModal = function() {
+      document.getElementById('receiptModal').classList.remove('hidden');
+      document.getElementById('receiptModal').classList.add('flex');
+    };
+
+    window.closeReceiptModal = function() {
+      document.getElementById('receiptModal').classList.add('hidden');
+      document.getElementById('receiptModal').classList.remove('flex');
+    };
+
+    // Payment method functions
+    window.addPaymentMethod = function(event) {
+      event.preventDefault();
+      
+      const type = document.getElementById('paymentType').value;
+      const name = document.getElementById('accountName').value;
+      const number = document.getElementById('accountNumber').value;
+      const expiry = document.getElementById('expiryDate').value;
+
+      let displayName = '';
+      switch(type) {
+        case 'gcash': displayName = 'GCash'; break;
+        case 'visa': displayName = 'Visa'; break;
+        case 'mastercard': displayName = 'Mastercard'; break;
+        case 'cash': displayName = 'Cash on arrival'; break;
+      }
+
+      const newMethod = {
+        type,
+        displayName,
+        name: type === 'cash' ? 'pay at front desk' : (number ? `**** ${number.slice(-4)}` : ''),
+        fullNumber: number || '',
+        expiry: expiry || '',
+        isDefault: paymentMethods.length === 0 // First method is default
+      };
+
+      paymentMethods.push(newMethod);
+      
+      saveToStorage();
+      updateUI();
+      closeAddPaymentModal();
+      
+      // Show success message
+      alert('Payment method added successfully!');
+    };
+
+    window.setDefaultPayment = function(index) {
+      paymentMethods.forEach((method, i) => {
+        method.isDefault = i === index;
+      });
+      saveToStorage();
+      updateUI();
+    };
+
+    window.deletePaymentMethod = function(index) {
+      if (confirm('Are you sure you want to remove this payment method?')) {
+        paymentMethods.splice(index, 1);
+        
+        // Set new default if needed
+        if (paymentMethods.length > 0 && !paymentMethods.some(m => m.isDefault)) {
+          paymentMethods[0].isDefault = true;
+        }
+        
+        saveToStorage();
+        updateUI();
+      }
+    };
+
+    // Payment processing - COMPLETE FUNCTIONALITY with redirect to My Reservations
+    window.processPayment = function(event) {
+      event.preventDefault();
+      
+      const amount = parseFloat(document.getElementById('paymentAmount').value);
+      const description = document.getElementById('paymentDescription').value;
+      const methodIndex = parseInt(document.getElementById('paymentMethod').value);
+      const isRestaurantPayment = document.getElementById('paymentForm').dataset.isRestaurantPayment === 'true';
+      const isHotelPayment = document.getElementById('paymentForm').dataset.isHotelPayment === 'true';
+      const restaurantReservation = document.getElementById('paymentForm').dataset.restaurantReservation;
+      const hotelReservation = document.getElementById('paymentForm').dataset.hotelReservation;
+      
+      if (isNaN(amount) || amount <= 0) {
+        alert('Please enter a valid amount');
+        return;
+      }
+
+      if (isNaN(methodIndex)) {
+        alert('Please select a payment method');
+        return;
+      }
+
+      const method = paymentMethods[methodIndex];
+      
+      // Create transaction
+      const transaction = {
+        id: Date.now(),
+        date: new Date().toISOString(),
+        description: description,
+        amount: amount,
+        status: 'completed',
+        method: method.displayName,
+        receipt: true
+      };
+      
+      transactions.unshift(transaction);
+      
+      // Update balance if this was for an outstanding balance
+      if (currentBalance >= amount) {
+        currentBalance -= amount;
+      } else {
+        // If amount is greater than current balance, treat as new payment
+        currentBalance = 0;
+      }
+      
+      // Add loyalty points (5 pts per ₱100)
+      const pointsEarned = Math.floor(amount / 100) * 5;
+      loyaltyPoints += pointsEarned;
+      
+      saveToStorage();
+      updateUI();
+      closePaymentModal();
+      
+      // Show success message
+      alert(`Payment successful! You earned ${pointsEarned} loyalty points.`);
+      
+      // Handle restaurant payment redirect
+      if (isRestaurantPayment && restaurantReservation) {
+        try {
+          const reservation = JSON.parse(restaurantReservation);
+          
+          // Save to sessionStorage for My Reservations page
+          sessionStorage.setItem('newReservation', JSON.stringify(reservation));
+          
+          // Redirect to My Reservations page
+          setTimeout(() => {
+            window.location.href = './my_reservation.html';
+          }, 1500);
+          
+          return;
+        } catch (e) {
+          console.error('Error processing restaurant reservation', e);
+        }
+      }
+      
+      // Handle hotel payment redirect
+      if (isHotelPayment && hotelReservation) {
+        try {
+          const reservation = JSON.parse(hotelReservation);
+          
+          // Save to sessionStorage for My Reservations page
+          sessionStorage.setItem('newReservation', JSON.stringify(reservation));
+          
+          // Redirect to My Reservations page
+          setTimeout(() => {
+            window.location.href = './my_reservation.html';
+          }, 1500);
+          
+          return;
+        } catch (e) {
+          console.error('Error processing hotel reservation', e);
+        }
+      }
+      
+      // If no pending booking, just show receipt
+      setTimeout(() => {
+        viewReceipt(0);
+      }, 500);
+    };
+
+    // Pay now button handler
+    document.getElementById('payNowBtn').addEventListener('click', openPaymentModal);
+
+    // Receipt functions
+    window.viewReceipt = function(index) {
+      if (index < 0 || index >= transactions.length) return;
+      
+      const transaction = transactions[index];
+      const receiptContent = document.getElementById('receiptContent');
+      
+      receiptContent.innerHTML = `
+        <div class="text-center border-b pb-3">
+          <p class="font-bold text-lg">Lùcas.stay</p>
+          <p class="text-xs text-slate-500">Payment Receipt</p>
+        </div>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <span class="text-slate-500">Date:</span>
+            <span>${new Date(transaction.date).toLocaleString()}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Transaction ID:</span>
+            <span class="font-mono">#${transaction.id}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Description:</span>
+            <span>${transaction.description}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Payment Method:</span>
+            <span>${transaction.method}</span>
+          </div>
+          <div class="flex justify-between border-t pt-2 mt-2">
+            <span class="font-bold">Amount:</span>
+            <span class="font-bold text-lg">₱${transaction.amount.toFixed(2)}</span>
+          </div>
+          <div class="flex justify-between text-xs text-slate-500">
+            <span>Status:</span>
+            <span class="text-green-600">${transaction.status}</span>
+          </div>
+          <div class="flex justify-between text-xs text-slate-500">
+            <span>Points earned:</span>
+            <span class="text-amber-600">+${Math.floor(transaction.amount / 100) * 5} pts</span>
+          </div>
+        </div>
+      `;
+      
+      openReceiptModal();
+    };
+
+    window.printReceipt = function() {
+      window.print();
+    };
+
+    window.viewAllTransactions = function() {
+      if (transactions.length === 0) {
+        alert('No transactions to display');
+        return;
+      }
+      
+      // In a real app, this would navigate to a full transactions page
+      // For now, show a simple summary
+      let message = 'All Transactions:\n\n';
+      transactions.forEach(t => {
+        message += `${new Date(t.date).toLocaleDateString()}: ${t.description} - ₱${t.amount} (${t.status})\n`;
+      });
+      alert(message);
+    };
+
+    // Add a test transaction function (for testing only - not called automatically)
+    window.addTestTransaction = function() {
+      const transaction = {
+        id: Date.now(),
+        date: new Date().toISOString(),
+        description: 'Test transaction',
+        amount: 100.00,
+        status: 'completed',
+        method: 'GCash',
+        receipt: true
+      };
+      
+      transactions.unshift(transaction);
+      loyaltyPoints += 5;
+      saveToStorage();
+      updateUI();
+      alert('Test transaction added');
+    };
+
+    // Logout function
+    async function handleLogout() {
+      try {
+        await window.dbAPI.logout();
+      } catch (error) {
+        console.error('Logout error:', error);
+        window.dbAPI.showToast('Failed to logout', 'error');
+      }
+    }
+    
+    // Make functions global
+    window.handleLogout = handleLogout;
+  </script>
+</body>
+</html>

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loyalty Rewards · Customer Portal (clean, no data)</title>
+  <!-- Tailwind via CDN + Font Awesome 6 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    .progress-bar { transition: width 0.3s ease; }
+  </style>
+</head>
+<body class="bg-slate-50 font-sans antialiased">
+
+  <!-- main flex wrapper (sidebar + content) -->
+  <div class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- ========== SIDEBAR (customer portal) ========== -->
+    <aside class="lg:w-80 bg-white border-r border-slate-200 shadow-sm shrink-0">
+      <div class="px-6 py-7 border-b border-slate-100">
+        <div class="flex items-center gap-2 text-amber-700">
+          <i class="fa-solid fa-utensils text-xl"></i>
+          <i class="fa-solid fa-bed text-xl"></i>
+          <span class="font-semibold text-xl tracking-tight text-slate-800">Lùcas<span class="text-amber-600">.stay</span></span>
+        </div>
+        <p class="text-xs text-slate-500 mt-1">customer portal · loyalty rewards</p>
+      </div>
+
+      <!-- user summary (empty shell) -->
+      <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-100 bg-slate-50/80">
+        <div class="h-12 w-12 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold text-lg" id="userInitials">—</div>
+        <div>
+          <p class="font-medium text-slate-800" id="displayName">Loading...</p>
+          <p class="text-xs text-slate-500 flex items-center gap-1"><i class="fa-regular fa-gem text-[11px]"></i> <span id="loyaltyTier">member</span> · <span id="sidebarPoints">0</span> pts</p>
+        </div>
+      </div>
+
+      <!-- navigation (loyalty rewards highlighted) -->
+     <nav class="p-4 space-y-1.5 text-sm">
+      <a href="./index.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-table-cells-large w-5 text-slate-400"></i>Dashboard</a>
+      <a href="./my_profile.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-user w-5 text-slate-400"></i>My Profile</a>
+      <a href="./hotel_booking.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-hotel w-5 text-slate-400"></i>Hotel Booking</a>
+      <a href="./my_reservation.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-calendar-check w-5 text-slate-400"></i>My Reservations</a>
+      <a href="./restaurant_reservation.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-clock w-5 text-slate-400"></i>Restaurant Reservation</a>
+      <a href="./order_food.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-bag-shopping w-5 text-slate-400"></i>Menu / Order Food</a>
+      <a href="./payments.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-credit-card w-5 text-slate-400"></i>Payments</a>
+      <a href="./loyalty_rewards.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-amber-50 text-amber-800 font-medium"><i class="fa-regular fa-star w-5 text-amber-600"></i>Loyalty Rewards</a>
+      <a href="./Notifications.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition relative"><i class="fa-regular fa-bell w-5 text-slate-400"></i>Notifications<span class="ml-auto bg-amber-100 text-amber-800 text-xs px-1.5 py-0.5 rounded-full">3</span></a>
+      <div class="border-t border-slate-200 pt-3 mt-3">
+        <a href="#" onclick="handleLogout()" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-700 transition"><i class="fa-solid fa-arrow-right-from-bracket w-5"></i>Logout</a>
+      </div>
+     </nav>
+    </aside>
+
+    <!-- ========== MAIN CONTENT (LOYALTY REWARDS PAGE - CLEAN) ========== -->
+    <main class="flex-1 p-5 lg:p-8 overflow-y-auto">
+
+      <!-- header -->
+      <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 class="text-2xl lg:text-3xl font-light text-slate-800">Loyalty Rewards</h1>
+          <p class="text-sm text-slate-500 mt-0.5">earn points and enjoy exclusive perks</p>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-full px-4 py-2 text-sm flex items-center gap-2 shadow-sm">
+          <i class="fa-regular fa-calendar text-slate-400"></i> <span id="currentDate"></span>
+        </div>
+      </div>
+
+      <!-- ===== TIER & POINTS OVERVIEW (no data) ===== -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <!-- points balance card (empty) -->
+        <div class="bg-linear-to-br from-amber-600 to-amber-700 text-white rounded-2xl p-6 shadow-md lg:col-span-1">
+          <p class="text-sm opacity-90 flex items-center gap-1"><i class="fa-regular fa-star"></i> your points balance</p>
+          <p class="text-4xl font-bold mt-2" id="pointsBalance">0</p>
+          <p class="text-xs opacity-80 mt-1">≈ ₱0 value</p>
+          <div class="mt-4 flex gap-2">
+            <button class="bg-white text-amber-700 px-4 py-2 rounded-xl text-sm font-medium hover:bg-amber-50 transition" id="redeemDummyBtn">redeem</button>
+            <button class="border border-white text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-amber-600 transition">learn how</button>
+          </div>
+        </div>
+
+        <!-- tier status & progress (empty) -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 lg:col-span-2">
+          <div class="flex items-center justify-between">
+            <h3 class="font-semibold flex items-center gap-2"><i class="fa-regular fa-gem text-amber-600"></i> current tier: <span class="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm" id="currentTier">member</span></h3>
+            <p class="text-sm text-slate-500" id="nextTierLabel">next: silver</p>
+          </div>
+          <div class="mt-4">
+            <div class="flex justify-between text-sm mb-1">
+              <span id="progressCurrent">0 pts</span>
+              <span id="progressTarget">1,000 pts</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2.5 rounded-full">
+              <div class="w-0 bg-amber-600 h-2.5 rounded-full progress-bar" id="progressBar"></div>
+            </div>
+            <p class="text-xs text-slate-500 mt-2" id="progressMessage">0 more points to reach silver (unlock basic perks)</p>
+          </div>
+          <div class="grid grid-cols-3 gap-3 mt-5 text-center">
+            <div class="border-r"><span class="font-bold text-lg" id="perk1">0%</span><p class="text-xs text-slate-500">extra discount</p></div>
+            <div class="border-r"><span class="font-bold text-lg" id="perk2">1x</span><p class="text-xs text-slate-500">points on dining</p></div>
+            <div><span class="font-bold text-lg" id="perk3">—</span><p class="text-xs text-slate-500">welcome drink</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== AVAILABLE REWARDS TO REDEEM (static structure) ===== -->
+      <h2 class="font-semibold text-xl mb-4 flex items-center gap-2"><i class="fa-regular fa-gift text-amber-600"></i> rewards you can redeem</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
+
+        <!-- reward 1 -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-md transition reward-card" data-points="240">
+          <div class="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 text-xl mb-3"><i class="fa-regular fa-mug-hot"></i></div>
+          <h3 class="font-semibold">Free Coffee / Tea</h3>
+          <p class="text-xs text-slate-500 mt-1">any hot beverage at Azure Lounge</p>
+          <div class="flex items-center justify-between mt-4">
+            <span class="font-bold text-amber-700">240 pts</span>
+            <button class="redeem-btn bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl text-sm" data-reward="coffee" data-cost="240">redeem</button>
+          </div>
+        </div>
+
+        <!-- reward 2 -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-md transition reward-card" data-points="480">
+          <div class="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 text-xl mb-3"><i class="fa-regular fa-bowl-food"></i></div>
+          <h3 class="font-semibold">Complimentary Breakfast</h3>
+          <p class="text-xs text-slate-500 mt-1">for one person at Azure Restaurant</p>
+          <div class="flex items-center justify-between mt-4">
+            <span class="font-bold text-amber-700">480 pts</span>
+            <button class="redeem-btn bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl text-sm" data-reward="breakfast" data-cost="480">redeem</button>
+          </div>
+        </div>
+
+        <!-- reward 3 -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-md transition reward-card" data-points="600">
+          <div class="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 text-xl mb-3"><i class="fa-regular fa-clock"></i></div>
+          <h3 class="font-semibold">Late Check-out (2pm)</h3>
+          <p class="text-xs text-slate-500 mt-1">subject to availability</p>
+          <div class="flex items-center justify-between mt-4">
+            <span class="font-bold text-amber-700">600 pts</span>
+            <button class="redeem-btn bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl text-sm" data-reward="latecheckout" data-cost="600">redeem</button>
+          </div>
+        </div>
+
+        <!-- reward 4 -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-md transition reward-card" data-points="360">
+          <div class="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 text-xl mb-3"><i class="fa-regular fa-wine-glass"></i></div>
+          <h3 class="font-semibold">Welcome Drink (2 pax)</h3>
+          <p class="text-xs text-slate-500 mt-1">signature cocktail or mocktail</p>
+          <div class="flex items-center justify-between mt-4">
+            <span class="font-bold text-amber-700">360 pts</span>
+            <button class="redeem-btn bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl text-sm" data-reward="welcomeDrink" data-cost="360">redeem</button>
+          </div>
+        </div>
+
+        <!-- reward 5 -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-md transition reward-card" data-points="1200">
+          <div class="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 text-xl mb-3"><i class="fa-regular fa-hotel"></i></div>
+          <h3 class="font-semibold">Room Upgrade (next stay)</h3>
+          <p class="text-xs text-slate-500 mt-1">deluxe to suite (subject to availability)</p>
+          <div class="flex items-center justify-between mt-4">
+            <span class="font-bold text-amber-700">1,200 pts</span>
+            <button class="redeem-btn bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl text-sm" data-reward="upgrade" data-cost="1200">redeem</button>
+          </div>
+        </div>
+
+        <!-- reward 6 -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-md transition reward-card" data-points="800">
+          <div class="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 text-xl mb-3"><i class="fa-regular fa-tag"></i></div>
+          <h3 class="font-semibold">₱500 Discount</h3>
+          <p class="text-xs text-slate-500 mt-1">on any hotel booking</p>
+          <div class="flex items-center justify-between mt-4">
+            <span class="font-bold text-amber-700">800 pts</span>
+            <button class="redeem-btn bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-xl text-sm" data-reward="discount" data-cost="800">redeem</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== POINTS EARNING HISTORY (empty) ===== -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 mb-8">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-semibold text-lg flex items-center gap-2"><i class="fa-regular fa-clock-rotate-left text-amber-600"></i> points history</h2>
+          <a href="#" class="text-sm text-amber-700 hover:underline">view all</a>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="text-slate-400 text-xs border-b">
+              <tr><td class="pb-2">date</td><td>activity</td><td>points</td><td>balance</td></tr>
+            </thead>
+            <tbody id="pointsHistoryBody" class="divide-y">
+              <tr><td colspan="4" class="py-6 text-center text-slate-400">No points history yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ===== HOW TO EARN MORE (static info) ===== -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex items-start gap-3">
+          <i class="fa-regular fa-bed text-2xl text-amber-600"></i>
+          <div><p class="font-medium">hotel stays</p><p class="text-xs text-slate-600">5 pts per ₱100 spent</p></div>
+        </div>
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex items-start gap-3">
+          <i class="fa-regular fa-utensils text-2xl text-amber-600"></i>
+          <div><p class="font-medium">dining</p><p class="text-xs text-slate-600">3 pts per ₱100 (tier bonuses apply)</p></div>
+        </div>
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex items-start gap-3">
+          <i class="fa-regular fa-calendar-check text-2xl text-amber-600"></i>
+          <div><p class="font-medium">events & spa</p><p class="text-xs text-slate-600">2 pts per ₱100</p></div>
+        </div>
+      </div>
+
+      <!-- bottom hint -->
+      <div class="mt-10 text-center text-xs text-slate-400 border-t pt-6">
+        ✅ Loyalty Rewards module — clean state, no data. Redeem buttons functional (deducts demo points).
+      </div>
+    </main>
+  </div>
+
+  <!-- Database API -->
+<script src="./js/database.js"></script>
+
+  <script>
+    (function() {
+      // ----- CLEAN STATE (zero data) -----
+      let points = 0;
+      let tier = 'member';
+      let history = [];
+
+      // DOM elements
+      const pointsBalanceSpan = document.getElementById('pointsBalance');
+      const sidebarPointsSpan = document.getElementById('sidebarPoints');
+      const currentTierSpan = document.getElementById('currentTier');
+      const nextTierLabel = document.getElementById('nextTierLabel');
+      const progressCurrent = document.getElementById('progressCurrent');
+      const progressTarget = document.getElementById('progressTarget');
+      const progressBar = document.getElementById('progressBar');
+      const progressMessage = document.getElementById('progressMessage');
+      const perk1 = document.getElementById('perk1');
+      const perk2 = document.getElementById('perk2');
+      const perk3 = document.getElementById('perk3');
+      const historyBody = document.getElementById('pointsHistoryBody');
+      const dateSpan = document.getElementById('currentDate');
+
+      // Set current date
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      dateSpan.innerText = now.toLocaleDateString('en-US', options).toLowerCase();
+
+      // Load user data and initialize
+      async function initializeUserData() {
+        try {
+          const currentUser = await window.dbAPI.loadCurrentUserSimple();
+          
+          if (currentUser) {
+            // Update UI with actual user data
+            document.getElementById('userInitials').innerText = window.dbAPI.getUserInitials(currentUser.first_name, currentUser.last_name);
+            document.getElementById('displayName').innerText = `${currentUser.first_name} ${currentUser.last_name}`;
+            document.getElementById('loyaltyTier').innerText = currentUser.membership_tier || 'member';
+            
+            // Update points with actual user data
+            points = currentUser.loyalty_points || 0;
+            tier = currentUser.membership_tier || 'member';
+          } else {
+            window.location.href = '../login-register/login_form.html';
+            return;
+          }
+        } catch (error) {
+          console.error('Failed to load user data:', error);
+          document.getElementById('userInitials').innerText = '—';
+          document.getElementById('displayName').innerText = 'Guest';
+          document.getElementById('loyaltyTier').innerText = '—';
+        }
+      }
+
+      // Update UI based on points
+      function updateUI() {
+        pointsBalanceSpan.innerText = points;
+        sidebarPointsSpan.innerText = points;
+
+        // simple tier logic
+        if (points < 1000) {
+          tier = 'member';
+          currentTierSpan.innerText = 'member';
+          nextTierLabel.innerText = 'next: silver';
+          progressTarget.innerText = '1,000 pts';
+          let percent = Math.min(100, (points / 1000) * 100);
+          progressBar.style.width = percent + '%';
+          progressCurrent.innerText = points + ' pts';
+          progressMessage.innerText = (1000 - points) + ' more points to reach silver (unlock basic perks)';
+          perk1.innerText = '0%';
+          perk2.innerText = '1x';
+          perk3.innerText = '—';
+        } else if (points < 2000) {
+          tier = 'silver';
+          currentTierSpan.innerText = 'silver';
+          nextTierLabel.innerText = 'next: gold';
+          progressTarget.innerText = '2,000 pts';
+          let percent = Math.min(100, ((points - 1000) / 1000) * 100);
+          progressBar.style.width = percent + '%';
+          progressCurrent.innerText = points + ' pts';
+          progressMessage.innerText = (2000 - points) + ' more points to reach gold (extra discount)';
+          perk1.innerText = '2%';
+          perk2.innerText = '1.5x';
+          perk3.innerText = 'free coffee';
+        } else {
+          tier = 'gold';
+          currentTierSpan.innerText = 'gold';
+          nextTierLabel.innerText = 'next: platinum';
+          progressTarget.innerText = '3,000 pts';
+          let percent = Math.min(100, ((points - 2000) / 1000) * 100);
+          progressBar.style.width = percent + '%';
+          progressCurrent.innerText = points + ' pts';
+          progressMessage.innerText = (3000 - points) + ' more points to reach platinum (suite upgrades)';
+          perk1.innerText = '5%';
+          perk2.innerText = '2x';
+          perk3.innerText = 'welcome drink';
+        }
+
+        // Render history
+        if (history.length === 0) {
+          historyBody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-slate-400">No points history yet.</td></tr>';
+        } else {
+          let rows = '';
+          history.forEach(entry => {
+            rows += `<tr class="text-sm"><td class="py-2">${entry.date}</td><td>${entry.activity}</td><td class="${entry.points > 0 ? 'text-green-600' : 'text-amber-600'}">${entry.points > 0 ? '+' + entry.points : entry.points}</td><td>${entry.balance}</td></tr>`;
+          });
+          historyBody.innerHTML = rows;
+        }
+      }
+
+      // Add transaction (for demo)
+      function addTransaction(activity, pointsChange) {
+        const date = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        points += pointsChange;
+        history.unshift({
+          date: date,
+          activity: activity,
+          points: pointsChange,
+          balance: points
+        });
+        updateUI();
+      }
+
+      // Redeem buttons
+      document.querySelectorAll('.redeem-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const cost = parseInt(btn.dataset.cost);
+          const reward = btn.dataset.reward;
+          if (points >= cost) {
+            addTransaction('Redeemed: ' + btn.closest('.reward-card')?.querySelector('h3')?.innerText, -cost);
+            alert(`✅ Redeemed! ${cost} points deducted. (demo)`);
+          } else {
+            alert(`❌ Insufficient points. You need ${cost - points} more points.`);
+          }
+        });
+      });
+
+      // Dummy redeem button (top)
+      document.getElementById('redeemDummyBtn').addEventListener('click', () => {
+        alert('Select a reward below to redeem.');
+      });
+
+      // Optionally simulate some activity? No, we keep zero. But for demonstration we can leave it empty.
+      // No initial data.
+
+      // Initialize
+      async function init() {
+        await initializeUserData();
+        updateUI();
+      }
+
+      init();
+
+      // For demo: simulate a tiny earning if user clicks on "learn how" maybe? No, keep clean.
+      // But we add a hidden way to add points for testing (double-click on points)
+      pointsBalanceSpan.addEventListener('dblclick', () => {
+        let extra = prompt('Add test points (simulation)', '100');
+        if (extra && !isNaN(parseInt(extra))) {
+          addTransaction('Test credit', parseInt(extra));
+        }
+      });
+
+      // Logout function
+      async function handleLogout() {
+        try {
+          await window.dbAPI.logout();
+        } catch (error) {
+          console.error('Logout error:', error);
+          window.dbAPI.showToast('Failed to logout', 'error');
+        }
+      }
+      
+      // Make functions global
+      window.handleLogout = handleLogout;
+    })();
+  </script>
+</body>
+</html>

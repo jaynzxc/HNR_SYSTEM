@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · Booking Reports</title>
+  <!-- Tailwind via CDN + Font Awesome 6 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* exact same dropdown styles from index2.html */
+    .transition-side { transition: all 0.2s ease; }
+    .dropdown-arrow { transition: transform 0.2s; }
+    details[open] .dropdown-arrow { transform: rotate(90deg); }
+    details > summary { list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
+  </style>
+</head>
+<body class="bg-white font-sans antialiased">
+
+  <!-- APP CONTAINER: flex row (sidebar + main) -->
+  <div class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- ========== SIDEBAR (exact copy from index2.html) ========== -->
+    <aside class="lg:w-80 bg-white border-r border-slate-200 shadow-sm lg:min-h-screen shrink-0 overflow-y-auto">
+      <!-- brand -->
+      <div class="px-5 py-6 border-b border-slate-100 flex items-center gap-2">
+        <i class="fa-solid fa-utensils text-amber-600 text-xl"></i>
+        <i class="fa-solid fa-bed text-amber-600 text-xl"></i>
+        <span class="font-semibold text-lg tracking-tight text-slate-800">Lùcas<span class="text-amber-600">.admin</span></span>
+      </div>
+
+      <!-- admin badge -->
+      <div class="flex items-center gap-3 px-5 py-4 border-b border-slate-100 bg-slate-50/60">
+        <div class="h-9 w-9 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold">A</div>
+        <div>
+          <p class="font-medium text-sm">Andreo Reyes</p>
+          <p class="text-xs text-slate-500">general manager</p>
+        </div>
+      </div>
+
+      <!-- ===== SIDEBAR MENU (grouped with dropdowns) ===== -->
+      <nav class="p-4 space-y-2 text-sm">
+
+        <!-- Dashboard -->
+        <a href="../Dashboard.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition">
+          <i class="fa-solid fa-table-cells-large w-5 text-slate-400"></i>
+          <span>Dashboard</span>
+        </a>
+
+        <!-- HOTEL MANAGEMENT GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-hotel w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">HOTEL MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../Hotel_management/Front_Desk_Reception.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-reception w-4 text-slate-400"></i> Front Desk / Reception</a>
+            <a href="../Hotel_management/room_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-bed w-4 text-slate-400"></i> Room Management</a>
+            <a href="../Hotel_management/Reservations_n_booking.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar-check w-4 text-slate-400"></i> Reservations & Booking</a>
+            <a href="../Hotel_management/housekeeping_n_maintenance.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-broom w-4 text-slate-400"></i> Housekeeping & Maintenance</a>
+            <a href="../Hotel_management/events_n_conference.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar w-4 text-slate-400"></i> Events & Conference</a>
+          </div>
+        </details>
+
+        <!-- RESTAURANT MANAGEMENT GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-utensils w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">RESTAURANT MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../restaurant_&_management/table_reservation.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-clock w-4"></i> Table Reservation</a>
+            <a href="../restaurant_&_management/menu_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-bars w-4"></i> Menu Management</a>
+            <a href="../restaurant_&_management/orders_POS.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-cash-register w-4"></i> Orders / POS</a>
+            <a href="../restaurant_&_management/kitchen_orders.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-fire w-4"></i> Kitchen Orders (KOT)</a>
+            <a href="../restaurant_&_management/wait_staff_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-user w-4"></i> Wait Staff Management</a>
+          </div>
+        </details>
+
+        <!-- CUSTOMER MANAGEMENT GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-regular fa-address-book w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">CUSTOMER MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../Customer_management/guest_relationship.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-handshake w-4"></i> Guest Relationship (CRM)</a>
+            <a href="../Customer_management/loyalty_rewards.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-star w-4"></i> Loyalty & Rewards</a>
+            <a href="../Customer_management/customer_feedback&reviews.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-pen-to-square w-4"></i> Customer Feedback & Reviews</a>
+          </div>
+        </details>
+
+        <!-- OPERATIONS GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-gears w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">OPERATIONS</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../Operations/inventory_&_stocks.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-boxes w-4"></i> Inventory & Stock</a>
+            <a href="../Operations/billing_&_payments.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-credit-card w-4"></i> Billing & Payments</a>
+            <a href="../Operations/payment_gateway.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-wifi w-4"></i> Payment Gateway</a>
+          </div>
+        </details>
+
+        <!-- MARKETING GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-megaphone w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">MARKETING</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../Marketing/hotelmarketing_&_promotions.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-gem w-4"></i> Hotel Marketing & Promotions</a>
+            <a href="../Marketing/online_ordering_integration.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-cart-shopping w-4"></i> Online Ordering Integration</a>
+          </div>
+        </details>
+
+        <!-- REPORTS & ANALYTICS - open with Booking Reports highlighted -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-amber-800 bg-amber-50 cursor-pointer transition-side">
+            <i class="fa-solid fa-chart-simple w-5 text-amber-600"></i>
+            <span class="font-medium">REPORTS & ANALYTICS</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-amber-600"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-200">
+            <a href="../reports_&_analytics/sales_report.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-chart-line w-4 text-slate-400"></i> Sales Reports</a>
+            <a href="../reports_&_analytics/booking_reports.html" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-100/50 text-amber-700 font-medium"><i class="fa-regular fa-calendar w-4 text-amber-600"></i> Booking Reports</a>
+            <a href="../reports_&_analytics/analytics_dashboard.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-chart-pie w-4 text-slate-400"></i> Analytics Dashboard</a>
+          </div>
+        </details>
+
+        <!-- SYSTEM -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-computer w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">SYSTEM</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../System/channel_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-code-branch w-4"></i> Channel Management</a>
+            <a href="../System/door_lock_integration.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-lock w-4"></i> Door Lock Integration</a>
+            <a href="../System/settings.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-sliders w-4"></i> Settings</a>
+          </div>
+        </details>
+
+        <!-- logout -->
+        <div class="border-t border-slate-200 pt-3 mt-3">
+          <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-700">
+            <i class="fa-solid fa-arrow-right-from-bracket w-5"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- ========== MAIN CONTENT (BOOKING REPORTS) ========== -->
+    <main class="flex-1 p-5 lg:p-8 overflow-y-auto bg-white">
+
+      <!-- header with title and date -->
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h1 class="text-2xl lg:text-3xl font-light text-slate-800">Booking Reports</h1>
+          <p class="text-sm text-slate-500 mt-0.5">analyze booking performance, channel distribution, and occupancy trends</p>
+        </div>
+        <div class="flex gap-3 text-sm">
+          <span class="bg-white border rounded-full px-4 py-2 flex items-center gap-2 shadow-sm"><i class="fa-regular fa-calendar text-slate-400"></i> May 21, 2025</span>
+          <span class="bg-white border rounded-full px-4 py-2 shadow-sm"><i class="fa-regular fa-bell"></i></span>
+        </div>
+      </div>
+
+      <!-- ===== DATE RANGE PICKER ===== -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 mb-6 flex flex-wrap gap-3 items-center justify-between">
+        <div class="flex gap-2 flex-wrap items-center">
+          <span class="text-sm text-slate-500">Period:</span>
+          <button class="bg-amber-600 text-white px-4 py-2 rounded-xl text-sm">Today</button>
+          <button class="border border-slate-200 px-4 py-2 rounded-xl text-sm hover:bg-slate-50">This week</button>
+          <button class="border border-slate-200 px-4 py-2 rounded-xl text-sm hover:bg-slate-50">This month</button>
+          <button class="border border-slate-200 px-4 py-2 rounded-xl text-sm hover:bg-slate-50">This quarter</button>
+          <button class="border border-slate-200 px-4 py-2 rounded-xl text-sm hover:bg-slate-50">This year</button>
+        </div>
+        <div class="flex gap-2">
+          <input type="date" class="border border-slate-200 rounded-xl px-3 py-2 text-sm" value="2025-05-01">
+          <span class="text-slate-400">—</span>
+          <input type="date" class="border border-slate-200 rounded-xl px-3 py-2 text-sm" value="2025-05-21">
+          <button class="bg-amber-600 text-white px-4 py-2 rounded-xl text-sm">apply</button>
+        </div>
+      </div>
+
+      <!-- ===== TOP STATS CARDS ===== -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Total bookings</p>
+          <p class="text-2xl font-semibold">1,284</p>
+          <span class="text-xs text-green-600">↑ 8.3% vs last period</span>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Occupancy rate</p>
+          <p class="text-2xl font-semibold">72%</p>
+          <span class="text-xs text-green-600">↑ 5%</span>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Avg. length of stay</p>
+          <p class="text-2xl font-semibold">2.4 nights</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Cancellation rate</p>
+          <p class="text-2xl font-semibold text-amber-600">4.2%</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">RevPAR</p>
+          <p class="text-2xl font-semibold">₱3,240</p>
+        </div>
+      </div>
+
+      <!-- ===== BOOKING TREND CHART (visual placeholder) ===== -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 mb-8">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-semibold text-lg flex items-center gap-2"><i class="fa-solid fa-chart-line text-amber-600"></i> booking trend (May 1 - May 21, 2025)</h2>
+          <select class="border border-slate-200 rounded-lg px-3 py-1 text-sm">
+            <option>Daily</option>
+            <option>Weekly</option>
+            <option>Monthly</option>
+          </select>
+        </div>
+        <div class="h-48 flex items-end gap-1">
+          <div class="w-1/12 bg-blue-200 h-20 rounded-t"></div>
+          <div class="w-1/12 bg-blue-300 h-28 rounded-t"></div>
+          <div class="w-1/12 bg-blue-400 h-36 rounded-t"></div>
+          <div class="w-1/12 bg-blue-300 h-32 rounded-t"></div>
+          <div class="w-1/12 bg-blue-500 h-44 rounded-t"></div>
+          <div class="w-1/12 bg-blue-400 h-40 rounded-t"></div>
+          <div class="w-1/12 bg-blue-300 h-34 rounded-t"></div>
+          <div class="w-1/12 bg-blue-200 h-24 rounded-t"></div>
+          <div class="w-1/12 bg-blue-400 h-42 rounded-t"></div>
+          <div class="w-1/12 bg-blue-500 h-46 rounded-t"></div>
+          <div class="w-1/12 bg-blue-300 h-30 rounded-t"></div>
+          <div class="w-1/12 bg-blue-200 h-22 rounded-t"></div>
+        </div>
+        <div class="flex justify-between mt-2 text-xs text-slate-400">
+          <span>May 1</span><span>May 5</span><span>May 10</span><span>May 15</span><span>May 20</span>
+        </div>
+      </div>
+
+      <!-- ===== BOOKING BREAKDOWN ===== -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+
+        <!-- by room type -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5">
+          <h2 class="font-semibold text-lg flex items-center gap-2 mb-3"><i class="fa-regular fa-bed text-amber-600"></i> bookings by room type</h2>
+          <div class="space-y-3">
+            <div class="flex items-center gap-2">
+              <span class="text-sm w-28">Deluxe Twin</span>
+              <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-blue-500 w-[35%]"></div>
+              </div>
+              <span class="text-sm font-medium">448 (35%)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm w-28">Superior</span>
+              <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-green-500 w-[28%]"></div>
+              </div>
+              <span class="text-sm font-medium">359 (28%)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm w-28">Ocean Suite</span>
+              <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-purple-500 w-[22%]"></div>
+              </div>
+              <span class="text-sm font-medium">282 (22%)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm w-28">Family Suite</span>
+              <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-amber-500 w-[15%]"></div>
+              </div>
+              <span class="text-sm font-medium">195 (15%)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- by booking channel -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5">
+          <h2 class="font-semibold text-lg flex items-center gap-2 mb-3"><i class="fa-regular fa-share-from-square text-amber-600"></i> bookings by channel</h2>
+          <div class="space-y-3">
+            <div class="flex items-center gap-2">
+              <span class="text-sm w-28">Direct</span>
+              <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-green-500 w-[32%]"></div>
+              </div>
+              <span class="text-sm font-medium">411 (32%)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm w-28">OTA</span>
+              <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-blue-500 w-[45%]"></div>
+              </div>
+              <span class="text-sm font-medium">578 (45%)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm w-28">Corporate</span>
+              <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-purple-500 w-[15%]"></div>
+              </div>
+              <span class="text-sm font-medium">193 (15%)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm w-28">GDS</span>
+              <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-amber-500 w-[8%]"></div>
+              </div>
+              <span class="text-sm font-medium">102 (8%)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== BOOKING DETAILS TABLE ===== -->
+      <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden mb-8">
+        <div class="p-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+          <h2 class="font-semibold flex items-center gap-2"><i class="fa-regular fa-rectangle-list text-amber-600"></i> recent bookings</h2>
+          <button class="text-sm text-amber-700 border border-amber-600 px-3 py-1 rounded-lg hover:bg-amber-50">export</button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="text-slate-500 text-xs border-b">
+              <tr>
+                <td class="p-3">Booking ID</td>
+                <td class="p-3">Guest</td>
+                <td class="p-3">Room type</td>
+                <td class="p-3">Check-in</td>
+                <td class="p-3">Check-out</td>
+                <td class="p-3">Nights</td>
+                <td class="p-3">Channel</td>
+                <td class="p-3">Status</td>
+              </tr>
+            </thead>
+            <tbody class="divide-y">
+              <tr>
+                <td class="p-3 font-medium">#HR382</td>
+                <td class="p-3">Mia Cruz</td>
+                <td class="p-3">Deluxe Twin</td>
+                <td class="p-3">Jun 12</td>
+                <td class="p-3">Jun 15</td>
+                <td class="p-3">3</td>
+                <td class="p-3">Direct</td>
+                <td class="p-3"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">confirmed</span></td>
+              </tr>
+              <tr>
+                <td class="p-3 font-medium">#HR401</td>
+                <td class="p-3">John Doe</td>
+                <td class="p-3">Ocean Suite</td>
+                <td class="p-3">Jun 14</td>
+                <td class="p-3">Jun 17</td>
+                <td class="p-3">3</td>
+                <td class="p-3">Agoda</td>
+                <td class="p-3"><span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full text-xs">pending</span></td>
+              </tr>
+              <tr>
+                <td class="p-3 font-medium">#HR455</td>
+                <td class="p-3">Anna Santos</td>
+                <td class="p-3">Superior</td>
+                <td class="p-3">Jun 15</td>
+                <td class="p-3">Jun 18</td>
+                <td class="p-3">3</td>
+                <td class="p-3">Booking.com</td>
+                <td class="p-3"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">confirmed</span></td>
+              </tr>
+              <tr>
+                <td class="p-3 font-medium">#HR466</td>
+                <td class="p-3">Robert Chen</td>
+                <td class="p-3">Deluxe Twin</td>
+                <td class="p-3">Jun 16</td>
+                <td class="p-3">Jun 19</td>
+                <td class="p-3">3</td>
+                <td class="p-3">Corporate</td>
+                <td class="p-3"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">confirmed</span></td>
+              </tr>
+              <tr>
+                <td class="p-3 font-medium">#HR477</td>
+                <td class="p-3">Lisa Kim</td>
+                <td class="p-3">Suite</td>
+                <td class="p-3">Jun 18</td>
+                <td class="p-3">Jun 21</td>
+                <td class="p-3">3</td>
+                <td class="p-3">Expedia</td>
+                <td class="p-3"><span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full text-xs">pending</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="p-4 border-t border-slate-200 flex items-center justify-between">
+          <span class="text-xs text-slate-500">Showing 1-5 of 1,284 bookings</span>
+          <div class="flex gap-2">
+            <button class="border border-slate-200 px-3 py-1 rounded-lg text-sm">Previous</button>
+            <button class="bg-amber-600 text-white px-3 py-1 rounded-lg text-sm">1</button>
+            <button class="border border-slate-200 px-3 py-1 rounded-lg text-sm">2</button>
+            <button class="border border-slate-200 px-3 py-1 rounded-lg text-sm">3</button>
+            <button class="border border-slate-200 px-3 py-1 rounded-lg text-sm">4</button>
+            <button class="border border-slate-200 px-3 py-1 rounded-lg text-sm">5</button>
+            <button class="border border-slate-200 px-3 py-1 rounded-lg text-sm">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== BOTTOM: LEAD TIME & CANCELLATIONS ===== -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- booking lead time -->
+        <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-5">
+          <h2 class="font-semibold text-lg flex items-center gap-2 mb-3"><i class="fa-regular fa-clock text-amber-600"></i> booking lead time distribution</h2>
+          <div class="space-y-3">
+            <div class="flex items-center gap-2">
+              <span class="text-sm w-24">0-7 days</span>
+              <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-blue-500 w-[45%]"></div>
+              </div>
+              <span class="text-sm font-medium">45%</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm w-24">8-30 days</span>
+              <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-green-500 w-[35%]"></div>
+              </div>
+              <span class="text-sm font-medium">35%</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm w-24">31-60 days</span>
+              <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-purple-500 w-[15%]"></div>
+              </div>
+              <span class="text-sm font-medium">15%</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm w-24">60+ days</span>
+              <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-amber-500 w-[5%]"></div>
+              </div>
+              <span class="text-sm font-medium">5%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- cancellation summary -->
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+          <h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fa-regular fa-calendar-xmark text-amber-600"></i> cancellations</h3>
+          <ul class="space-y-2">
+            <li class="flex justify-between items-center">
+              <span>Total cancelled</span>
+              <span class="font-semibold">54</span>
+            </li>
+            <li class="flex justify-between items-center">
+              <span>Cancellation rate</span>
+              <span class="font-semibold">4.2%</span>
+            </li>
+            <li class="flex justify-between items-center border-t pt-2 mt-2">
+              <span>Lost revenue</span>
+              <span class="font-semibold text-rose-600">₱189,400</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ===== EXPORT BUTTONS ===== -->
+      <div class="flex justify-end gap-3 mt-6 mb-4">
+        <button class="border border-amber-600 text-amber-700 px-4 py-2 rounded-xl text-sm hover:bg-amber-50"><i class="fa-regular fa-file-pdf mr-2"></i>PDF</button>
+        <button class="border border-amber-600 text-amber-700 px-4 py-2 rounded-xl text-sm hover:bg-amber-50"><i class="fa-regular fa-file-excel mr-2"></i>Excel</button>
+        <button class="bg-amber-600 text-white px-4 py-2 rounded-xl text-sm hover:bg-amber-700"><i class="fa-regular fa-print mr-2"></i>Print</button>
+      </div>
+
+      <!-- footer note -->
+      <div class="mt-8 text-center text-xs text-slate-400 border-t pt-5">
+        ✅ Booking Reports — booking volume, room type breakdown, channel distribution, lead time, cancellation analysis
+      </div>
+    </main>
+  </div>
+</body>
+</html>

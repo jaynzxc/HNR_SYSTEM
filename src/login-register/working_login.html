@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login with Working Credentials</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .form-group { margin: 15px 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input { width: 300px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background: #007cba; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #005a87; }
+        .success { color: green; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
+        .info { background: #e7f3ff; padding: 15px; border-radius: 4px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h1>Login with Working Credentials</h1>
+    
+    <div class="info">
+        <h3>✅ Working Test Account Found:</h3>
+        <p><strong>Email:</strong> mia.cruz@email.com</p>
+        <p><strong>Password:</strong> customer123</p>
+        <p>This account will successfully log you in and redirect to the customer portal.</p>
+    </div>
+    
+    <form id="workingLoginForm">
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" value="mia.cruz@email.com" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" value="customer123" required>
+        </div>
+        <button type="submit">Login with Working Account</button>
+    </form>
+    
+    <div id="result"></div>
+    
+    <script>
+        document.getElementById('workingLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.innerHTML = '<p>Logging in...</p>';
+            
+            try {
+                const response = await fetch('./api/auth/auth.php/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                console.log('Login response:', data);
+                
+                if (response.ok && data.success) {
+                    resultDiv.innerHTML = '<p class="success">✅ Login successful! Redirecting...</p>';
+                    
+                    // Get redirect URL
+                    const redirectUrl = data.data?.redirect_to;
+                    console.log('Redirect URL:', redirectUrl);
+                    
+                    // Redirect immediately
+                    if (redirectUrl) {
+                        console.log('Redirecting to:', redirectUrl);
+                        window.location.href = redirectUrl;
+                    } else {
+                        console.log('Using fallback redirect');
+                        window.location.href = '../customer_portal/index.html';
+                    }
+                } else {
+                    resultDiv.innerHTML = `<p class="error">❌ Login failed: ${data.error || 'Unknown error'}</p>`;
+                }
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+                console.error('Login error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

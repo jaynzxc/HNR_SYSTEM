@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug JSON Error</title>
+</head>
+<body>
+    <h1>Debug JSON Parsing Error</h1>
+    <p>Testing all APIs to find which one is returning HTML instead of JSON...</p>
+    
+    <div id="results"></div>
+    
+    <script>
+        async function testAPI(url, name) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML += `<h3>Testing ${name}...</h3>`;
+            
+            try {
+                const response = await fetch(url);
+                const status = response.status;
+                const responseText = await response.text();
+                
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (parseError) {
+                    resultsDiv.innerHTML += `<p><strong>❌ ${name} - JSON Parse Error:</strong> ${parseError.message}</p>`;
+                    resultsDiv.innerHTML += `<p><strong>Raw Response:</strong></p><pre>${responseText}</pre>`;
+                    return;
+                }
+                
+                if (status === 200 && data.success) {
+                    resultsDiv.innerHTML += `<p><strong>✅ ${name} - Working:</strong> Returns valid JSON</p>`;
+                } else {
+                    resultsDiv.innerHTML += `<p><strong>❌ ${name} - Error:</strong> Status ${status}</p>`;
+                    resultsDiv.innerHTML += `<p><strong>Response:</strong></p><pre>${JSON.stringify(data, null, 2)}</pre>`;
+                }
+                
+            } catch (error) {
+                resultsDiv.innerHTML += `<p><strong>❌ ${name} - Network Error:</strong> ${error.message}</p>`;
+            }
+        }
+        
+        // Test all APIs that might be returning HTML
+        async function testAllAPIs() {
+            const tests = [
+                { url: './api/auth/simple_user.php', name: 'Simple User API' },
+                { url: './api/auth/user.php?endpoint=profile', name: 'User Profile API' },
+                { url: './api/auth/notification_preferences.php', name: 'Notification Preferences API' },
+                { url: './api/payment/payment_methods.php', name: 'Payment Methods API' },
+                { url: './api/booking/booking.php?endpoint=hotel-rooms', name: 'Hotel Rooms API' },
+                { url: './api/booking/booking.php?endpoint=reservations', name: 'Reservations API' },
+                { url: './api/booking/booking.php?endpoint=bookings', name: 'Bookings API' }
+            ];
+            
+            for (const test of tests) {
+                await testAPI(test.url, test.name);
+            }
+        }
+        
+        // Auto-run tests
+        testAllAPIs();
+    </script>
+</body>
+</html>

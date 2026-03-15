@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Path Test</title>
+</head>
+<body>
+    <h1>API Path Test</h1>
+    <div id="results"></div>
+    
+    <script>
+        async function testAPIPaths() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<h2>Testing API Paths...</h2>';
+            
+            const tests = [
+                { name: 'Basic Auth Test', url: '../login-register/api/auth/basic_test.php' },
+                { name: 'Basic Booking Test', url: './api/booking/basic_test.php' },
+                { name: 'Auth Debug Paths', url: '../login-register/api/auth/debug_paths.php' },
+                { name: 'Booking Debug Paths', url: './api/booking/debug_paths.php' },
+                { name: 'Booking Directory Check', url: './api/booking/check_dirs.php' },
+                { name: 'Booking Helpers Test', url: './api/booking/test_helpers.php' },
+                { name: 'Booking Direct Test', url: './api/booking/direct_test.php' },
+                { name: 'Booking Routing Test', url: './api/booking/test_routing.php' },
+                { name: 'Auth Session Test', url: '../login-register/api/auth/test_session.php' },
+                { name: 'Booking Logic Test', url: './api/booking/test_booking.php' },
+                { name: 'Simple User API', url: './api/auth/simple_user.php' },
+                { name: 'User API', url: './api/auth/user.php?endpoint=profile' },
+                { name: 'Auth Check Session', url: '../login-register/api/auth/auth.php/check-session' },
+                { name: 'Notification Preferences', url: './api/auth/notification_preferences.php' },
+                { name: 'Payment Methods', url: './api/payment/payment_methods.php' },
+                { name: 'Booking API', url: './api/booking/booking.php?endpoint=hotel-rooms' }
+            ];
+            
+            for (const test of tests) {
+                try {
+                    const response = await fetch(test.url);
+                    const status = response.status;
+                    const statusText = response.statusText;
+                    
+                    results.innerHTML += `<p><strong>${test.name}:</strong> ${status} - ${statusText}</p>`;
+                    
+                    if (status === 200) {
+                        results.innerHTML += `<p style="color: green;">✅ ${test.name} is accessible</p>`;
+                    } else {
+                        results.innerHTML += `<p style="color: red;">❌ ${test.name} returned error</p>`;
+                    }
+                } catch (error) {
+                    results.innerHTML += `<p style="color: red;">❌ ${test.name} failed: ${error.message}</p>`;
+                }
+            }
+        }
+        
+        // Run tests when page loads
+        window.addEventListener('load', testAPIPaths);
+    </script>
+</body>
+</html>

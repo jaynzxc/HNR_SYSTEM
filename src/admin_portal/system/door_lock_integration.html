@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · Door Lock Integration</title>
+  <!-- Tailwind via CDN + Font Awesome 6 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* exact same dropdown styles from index2.html */
+    .transition-side { transition: all 0.2s ease; }
+    .dropdown-arrow { transition: transform 0.2s; }
+    details[open] .dropdown-arrow { transform: rotate(90deg); }
+    details > summary { list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
+  </style>
+</head>
+<body class="bg-white font-sans antialiased">
+
+  <!-- APP CONTAINER: flex row (sidebar + main) -->
+  <div class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- ========== SIDEBAR (exact copy from index2.html) ========== -->
+    <aside class="lg:w-80 bg-white border-r border-slate-200 shadow-sm lg:min-h-screen shrink-0 overflow-y-auto">
+      <!-- brand -->
+      <div class="px-5 py-6 border-b border-slate-100 flex items-center gap-2">
+        <i class="fa-solid fa-utensils text-amber-600 text-xl"></i>
+        <i class="fa-solid fa-bed text-amber-600 text-xl"></i>
+        <span class="font-semibold text-lg tracking-tight text-slate-800">Lùcas<span class="text-amber-600">.admin</span></span>
+      </div>
+
+      <!-- admin badge -->
+      <div class="flex items-center gap-3 px-5 py-4 border-b border-slate-100 bg-slate-50/60">
+        <div class="h-9 w-9 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold">A</div>
+        <div>
+          <p class="font-medium text-sm">Andreo Reyes</p>
+          <p class="text-xs text-slate-500">general manager</p>
+        </div>
+      </div>
+
+      <!-- ===== SIDEBAR MENU (grouped with dropdowns) ===== -->
+      <nav class="p-4 space-y-2 text-sm">
+
+        <!-- Dashboard -->
+        <a href="../Dashboard.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition">
+          <i class="fa-solid fa-table-cells-large w-5 text-slate-400"></i>
+          <span>Dashboard</span>
+        </a>
+
+        <!-- HOTEL MANAGEMENT GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-hotel w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">HOTEL MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../Hotel_Management/Front_Desk_Reception.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-reception w-4 text-slate-400"></i> Front Desk / Reception</a>
+            <a href="../Hotel_Management/room_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-bed w-4 text-slate-400"></i> Room Management</a>
+            <a href="../Hotel_Management/Reservations_n_booking.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar-check w-4 text-slate-400"></i> Reservations & Booking</a>
+            <a href="../Hotel_Management/housekeeping_n_maintenance.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-broom w-4 text-slate-400"></i> Housekeeping & Maintenance</a>
+            <a href="../Hotel_Management/events_n_conference.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar w-4 text-slate-400"></i> Events & Conference</a>
+          </div>
+        </details>
+
+        <!-- RESTAURANT MANAGEMENT GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-utensils w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">RESTAURANT MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../restaurant_&_management/table_reservation.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-clock w-4"></i> Table Reservation</a>
+            <a href="../restaurant_&_management/menu_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-bars w-4"></i> Menu Management</a>
+            <a href="../restaurant_&_management/orders_POS.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-cash-register w-4"></i> Orders / POS</a>
+            <a href="../restaurant_&_management/kitchen_orders.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-fire w-4"></i> Kitchen Orders (KOT)</a>
+            <a href="../restaurant_&_management/wait_staff_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-user w-4"></i> Wait Staff Management</a>
+          </div>
+        </details>
+
+        <!-- CUSTOMER MANAGEMENT GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-regular fa-address-book w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">CUSTOMER MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../Customer_Management/guest_relationship.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-handshake w-4"></i> Guest Relationship (CRM)</a>
+            <a href="../Customer_Management/loyalty_rewards.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-star w-4"></i> Loyalty & Rewards</a>
+            <a href="../Customer_Management/customer_feedback&reviews.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-pen-to-square w-4"></i> Customer Feedback & Reviews</a>
+          </div>
+        </details>
+
+        <!-- OPERATIONS GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-gears w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">OPERATIONS</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../Operations/inventory_&_Stock.php" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-boxes w-4"></i> Inventory & Stock</a>
+            <a href="../Operations/biling_and_payment.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-credit-card w-4"></i> Billing & Payments</a>
+            <a href="../Operations/payment_gateway.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-wifi w-4"></i> Payment Gateway</a>
+          </div>
+        </details>
+
+        <!-- MARKETING GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-megaphone w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">MARKETING</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../Marketing/hotelmarketing_&_promotions.php" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-gem w-4"></i> Hotel Marketing & Promotions</a>
+            <a href="../Marketing/online_ordering_integration.php" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-cart-shopping w-4"></i> Online Ordering Integration</a>
+          </div>
+        </details>
+
+        <!-- REPORTS & ANALYTICS GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-chart-simple w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">REPORTS & ANALYTICS</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../reports_&_analytics/sales_report.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-chart-line w-4"></i> Sales Reports</a>
+            <a href="../reports_&_analytics/booking_reports.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar w-4"></i> Booking Reports</a>
+            <a href="../reports_&_analytics/analytics_dashboard.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-chart-pie w-4"></i> Analytics Dashboard</a>
+          </div>
+        </details>
+
+        <!-- SYSTEM - open with Door Lock Integration highlighted -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-amber-800 bg-amber-50 cursor-pointer transition-side">
+            <i class="fa-solid fa-computer w-5 text-amber-600"></i>
+            <span class="font-medium">SYSTEM</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-amber-600"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-200">
+            <a href="../System/channel_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-code-branch w-4 text-slate-400"></i> Channel Management</a>
+            <a href="../System/door_lock_integration.html" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-100/50 text-amber-700 font-medium"><i class="fa-solid fa-lock w-4 text-amber-600"></i> Door Lock Integration</a>
+            <a href="../System/settings.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-sliders w-4 text-slate-400"></i> Settings</a>
+          </div>
+        </details>
+
+        <!-- logout -->
+        <div class="border-t border-slate-200 pt-3 mt-3">
+          <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-700">
+            <i class="fa-solid fa-arrow-right-from-bracket w-5"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- ========== MAIN CONTENT (DOOR LOCK INTEGRATION) ========== -->
+    <main class="flex-1 p-5 lg:p-8 overflow-y-auto bg-white">
+
+      <!-- header with title and date -->
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h1 class="text-2xl lg:text-3xl font-light text-slate-800">Door Lock Integration</h1>
+          <p class="text-sm text-slate-500 mt-0.5">manage connected door lock systems, access events, and room-door mappings</p>
+        </div>
+        <div class="flex gap-3 text-sm">
+          <span class="bg-white border rounded-full px-4 py-2 flex items-center gap-2 shadow-sm"><i class="fa-regular fa-calendar text-slate-400"></i> May 21, 2025</span>
+          <span class="bg-white border rounded-full px-4 py-2 shadow-sm"><i class="fa-regular fa-bell"></i></span>
+        </div>
+      </div>
+
+      <!-- ===== STATS CARDS ===== -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Connected locks</p>
+          <p class="text-2xl font-semibold">48/48</p>
+          <span class="text-xs text-green-600">all online</span>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Today's access</p>
+          <p class="text-2xl font-semibold">342</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Active keys</p>
+          <p class="text-2xl font-semibold">124</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Battery alerts</p>
+          <p class="text-2xl font-semibold text-amber-600">3</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Last sync</p>
+          <p class="font-semibold text-sm">30 sec ago</p>
+        </div>
+      </div>
+
+      <!-- ===== CONNECTED LOCK SYSTEMS ===== -->
+      <h2 class="font-semibold text-lg mb-3 flex items-center gap-2"><i class="fa-solid fa-plug text-amber-600"></i> connected lock systems</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+
+        <!-- ASSA ABLOY -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-md transition">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xl"><i class="fa-solid fa-lock"></i></div>
+            <div>
+              <h3 class="font-semibold">ASSA ABLOY</h3>
+              <p class="text-xs text-slate-500">Visionline</p>
+            </div>
+          </div>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-slate-500">Status</span>
+              <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">connected</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Locks online</span>
+              <span>32/32</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Controller</span>
+              <span>192.168.1.100</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Last sync</span>
+              <span class="text-green-600">15 sec ago</span>
+            </div>
+          </div>
+          <div class="flex gap-2 mt-4">
+            <button class="flex-1 border border-amber-600 text-amber-700 py-2 rounded-xl text-sm hover:bg-amber-50">configure</button>
+            <button class="flex-1 bg-amber-600 text-white py-2 rounded-xl text-sm hover:bg-amber-700">diagnose</button>
+          </div>
+        </div>
+
+        <!-- Salto Systems -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-md transition">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xl"><i class="fa-solid fa-key"></i></div>
+            <div>
+              <h3 class="font-semibold">Salto Systems</h3>
+              <p class="text-xs text-slate-500">SALTO KS</p>
+            </div>
+          </div>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-slate-500">Status</span>
+              <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">connected</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Locks online</span>
+              <span>16/16</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Controller</span>
+              <span>192.168.1.101</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Last sync</span>
+              <span class="text-green-600">30 sec ago</span>
+            </div>
+          </div>
+          <div class="flex gap-2 mt-4">
+            <button class="flex-1 border border-amber-600 text-amber-700 py-2 rounded-xl text-sm hover:bg-amber-50">configure</button>
+            <button class="flex-1 bg-amber-600 text-white py-2 rounded-xl text-sm hover:bg-amber-700">diagnose</button>
+          </div>
+        </div>
+
+        <!-- Dormakaba -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-md transition">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 text-xl"><i class="fa-solid fa-door-open"></i></div>
+            <div>
+              <h3 class="font-semibold">Dormakaba</h3>
+              <p class="text-xs text-slate-500">Saflok</p>
+            </div>
+          </div>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-slate-500">Status</span>
+              <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">connected</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Locks online</span>
+              <span>0/0 (offline mode)</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Encoder</span>
+              <span>USB connected</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Last sync</span>
+              <span class="text-green-600">2 min ago</span>
+            </div>
+          </div>
+          <div class="flex gap-2 mt-4">
+            <button class="flex-1 border border-amber-600 text-amber-700 py-2 rounded-xl text-sm hover:bg-amber-50">configure</button>
+            <button class="flex-1 bg-amber-600 text-white py-2 rounded-xl text-sm hover:bg-amber-700">sync</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== AVAILABLE INTEGRATIONS ===== -->
+      <h2 class="font-semibold text-lg mb-3 flex items-center gap-2"><i class="fa-regular fa-plus text-amber-600"></i> available integrations</h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div class="border border-dashed border-slate-300 rounded-2xl p-4 text-center hover:bg-slate-50 cursor-pointer">
+          <i class="fa-solid fa-lock text-2xl text-slate-400 mb-1"></i>
+          <p class="text-sm font-medium">OpenWays</p>
+          <p class="text-xs text-slate-400">connect</p>
+        </div>
+        <div class="border border-dashed border-slate-300 rounded-2xl p-4 text-center hover:bg-slate-50 cursor-pointer">
+          <i class="fa-solid fa-key text-2xl text-slate-400 mb-1"></i>
+          <p class="text-sm font-medium">VingCard</p>
+          <p class="text-xs text-slate-400">connect</p>
+        </div>
+        <div class="border border-dashed border-slate-300 rounded-2xl p-4 text-center hover:bg-slate-50 cursor-pointer">
+          <i class="fa-solid fa-mobile-screen text-2xl text-slate-400 mb-1"></i>
+          <p class="text-sm font-medium">KABA</p>
+          <p class="text-xs text-slate-400">connect</p>
+        </div>
+        <div class="border border-dashed border-slate-300 rounded-2xl p-4 text-center hover:bg-slate-50 cursor-pointer">
+          <i class="fa-solid fa-cloud text-2xl text-slate-400 mb-1"></i>
+          <p class="text-sm font-medium">Miwa</p>
+          <p class="text-xs text-slate-400">connect</p>
+        </div>
+      </div>
+
+      <!-- ===== RECENT ACCESS EVENTS ===== -->
+      <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden mb-8">
+        <div class="p-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+          <h2 class="font-semibold flex items-center gap-2"><i class="fa-regular fa-clock text-amber-600"></i> recent access events</h2>
+          <button class="text-sm text-amber-700 border border-amber-600 px-3 py-1 rounded-lg hover:bg-amber-50">view all</button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="text-slate-500 text-xs border-b">
+              <tr>
+                <td class="p-3">Time</td>
+                <td class="p-3">Room</td>
+                <td class="p-3">Guest/Staff</td>
+                <td class="p-3">Access type</td>
+                <td class="p-3">Method</td>
+                <td class="p-3">Status</td>
+              </tr>
+            </thead>
+            <tbody class="divide-y">
+              <tr>
+                <td class="p-3">10:32 AM</td>
+                <td class="p-3 font-medium">1204</td>
+                <td class="p-3">Mia Cruz</td>
+                <td class="p-3">Check-in</td>
+                <td class="p-3">Mobile key</td>
+                <td class="p-3"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">granted</span></td>
+              </tr>
+              <tr>
+                <td class="p-3">10:15 AM</td>
+                <td class="p-3 font-medium">201</td>
+                <td class="p-3">Housekeeping</td>
+                <td class="p-3">Cleaning</td>
+                <td class="p-3">Staff card</td>
+                <td class="p-3"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">granted</span></td>
+              </tr>
+              <tr>
+                <td class="p-3">09:45 AM</td>
+                <td class="p-3 font-medium">305</td>
+                <td class="p-3">John Doe</td>
+                <td class="p-3">Room entry</td>
+                <td class="p-3">Key card</td>
+                <td class="p-3"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">granted</span></td>
+              </tr>
+              <tr>
+                <td class="p-3">09:12 AM</td>
+                <td class="p-3 font-medium">812</td>
+                <td class="p-3">Unknown</td>
+                <td class="p-3">Failed attempt</td>
+                <td class="p-3">Invalid card</td>
+                <td class="p-3"><span class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full text-xs">denied</span></td>
+              </tr>
+              <tr>
+                <td class="p-3">08:55 AM</td>
+                <td class="p-3 font-medium">410</td>
+                <td class="p-3">Maintenance</td>
+                <td class="p-3">Work order</td>
+                <td class="p-3">Staff card</td>
+                <td class="p-3"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">granted</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ===== BOTTOM: ROOM-LOCK MAPPING & BATTERY STATUS ===== -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- room mapping -->
+        <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-5">
+          <h2 class="font-semibold text-lg flex items-center gap-2 mb-3"><i class="fa-solid fa-diagram-project text-amber-600"></i> room-lock mapping</h2>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="text-slate-500 text-xs border-b">
+                <tr>
+                  <td class="p-2">Room</td>
+                  <td class="p-2">Lock ID</td>
+                  <td class="p-2">System</td>
+                  <td class="p-2">Battery</td>
+                  <td class="p-2">Last comm</td>
+                  <td class="p-2">Status</td>
+                </tr>
+              </thead>
+              <tbody class="divide-y">
+                <tr>
+                  <td class="p-2 font-medium">101</td>
+                  <td class="p-2">VLI-101-2345</td>
+                  <td class="p-2">ASSA ABLOY</td>
+                  <td class="p-2">92%</td>
+                  <td class="p-2">2 min ago</td>
+                  <td class="p-2"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">online</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-medium">102</td>
+                  <td class="p-2">VLI-102-2346</td>
+                  <td class="p-2">ASSA ABLOY</td>
+                  <td class="p-2">88%</td>
+                  <td class="p-2">2 min ago</td>
+                  <td class="p-2"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">online</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-medium">201</td>
+                  <td class="p-2">SALTO-201-789</td>
+                  <td class="p-2">Salto</td>
+                  <td class="p-2">76%</td>
+                  <td class="p-2">5 min ago</td>
+                  <td class="p-2"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">online</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-medium">305</td>
+                  <td class="p-2">SF-305-001</td>
+                  <td class="p-2">Dormakaba</td>
+                  <td class="p-2">15%</td>
+                  <td class="p-2">1 hour ago</td>
+                  <td class="p-2"><span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full text-xs">low battery</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-medium">410</td>
+                  <td class="p-2">VLI-410-2399</td>
+                  <td class="p-2">ASSA ABLOY</td>
+                  <td class="p-2">94%</td>
+                  <td class="p-2">3 min ago</td>
+                  <td class="p-2"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">online</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- battery alerts -->
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+          <h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fa-solid fa-battery-quarter text-amber-600"></i> battery alerts</h3>
+          <ul class="space-y-2">
+            <li class="flex justify-between items-center">
+              <span>Room 305</span>
+              <span class="text-amber-600 font-medium">15%</span>
+            </li>
+            <li class="flex justify-between items-center">
+              <span>Room 812</span>
+              <span class="text-amber-600 font-medium">18%</span>
+            </li>
+            <li class="flex justify-between items-center">
+              <span>Room 1204</span>
+              <span class="text-amber-600 font-medium">22%</span>
+            </li>
+          </ul>
+          <button class="w-full border border-amber-600 text-amber-700 rounded-xl py-2 text-sm mt-4 hover:bg-amber-100">generate report</button>
+        </div>
+      </div>
+
+      <!-- footer note -->
+      <div class="mt-8 text-center text-xs text-slate-400 border-t pt-5">
+        ✅ Door Lock Integration — connected lock systems, access events, room mapping, battery monitoring
+      </div>
+    </main>
+  </div>
+</body>
+</html>

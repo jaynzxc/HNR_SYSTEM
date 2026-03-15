@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Force Redirect Test</title>
+</head>
+<body>
+    <h1>Force Redirect Test</h1>
+    <button onclick="testDirectRedirect()">Test Direct Redirect to Customer Portal</button>
+    <button onclick="testLoginRedirect()">Test Login Flow</button>
+    
+    <div id="result"></div>
+    
+    <script>
+        function testDirectRedirect() {
+            console.log('🔍 Testing direct redirect to customer portal');
+            window.location.href = '../customer_portal/index.html';
+        }
+        
+        async function testLoginRedirect() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Testing login flow...</p>';
+            
+            try {
+                const response = await fetch('./api/auth/auth.php/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: 'roldantiu89@gmail.com',
+                        password: 'customer123'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                console.log('🔍 Full login response:', data);
+                console.log('🔍 Response keys:', Object.keys(data));
+                console.log('🔍 Data keys:', Object.keys(data.data || {}));
+                console.log('🔍 redirect_to location:', data.data?.redirect_to);
+                
+                resultDiv.innerHTML = `
+                    <h2>Login Response Analysis:</h2>
+                    <p><strong>Success:</strong> ${data.success}</p>
+                    <p><strong>Message:</strong> ${data.message}</p>
+                    <p><strong>Redirect URL:</strong> ${data.data?.redirect_to}</p>
+                    <p><strong>Type:</strong> ${typeof data.data?.redirect_to}</p>
+                    
+                    <button onclick="forceRedirect('${data.data?.redirect_to}')">Force Redirect to: ${data.data?.redirect_to}</button>
+                    <button onclick="forceRedirect('../customer_portal/index.html')">Force Redirect to Fallback</button>
+                `;
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        }
+        
+        function forceRedirect(url) {
+            console.log('🔍 Force redirecting to:', url);
+            if (url && url !== 'undefined' && url !== null) {
+                window.location.href = url;
+            } else {
+                console.log('❌ Invalid URL, using fallback');
+                window.location.href = '../customer_portal/index.html';
+            }
+        }
+    </script>
+</body>
+</html>

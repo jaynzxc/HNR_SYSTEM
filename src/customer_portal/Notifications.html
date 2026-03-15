@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications · Customer Portal (clean, no data)</title>
+  <!-- Tailwind via CDN + Font Awesome 6 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-slate-50 font-sans antialiased">
+
+  <!-- main flex wrapper (sidebar + content) -->
+  <div class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- ========== SIDEBAR (customer portal) ========== -->
+    <aside class="lg:w-80 bg-white border-r border-slate-200 shadow-sm shrink-0">
+      <div class="px-6 py-7 border-b border-slate-100">
+        <div class="flex items-center gap-2 text-amber-700">
+          <i class="fa-solid fa-utensils text-xl"></i>
+          <i class="fa-solid fa-bed text-xl"></i>
+          <span class="font-semibold text-xl tracking-tight text-slate-800">Lùcas<span class="text-amber-600">.stay</span></span>
+        </div>
+        <p class="text-xs text-slate-500 mt-1">customer portal · notifications</p>
+      </div>
+
+      <!-- user summary (empty shell) -->
+      <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-100 bg-slate-50/80">
+        <div class="h-12 w-12 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold text-lg" id="userInitials">—</div>
+        <div>
+          <p class="font-medium text-slate-800" id="displayName">Loading...</p>
+          <p class="text-xs text-slate-500 flex items-center gap-1"><i class="fa-regular fa-gem text-[11px]"></i> <span id="loyaltyTier">member</span> · <span id="points">0</span> pts</p>
+        </div>
+      </div>
+
+      <!-- navigation (notifications highlighted) -->
+       <nav class="p-4 space-y-1.5 text-sm">
+      <a href="./index.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-table-cells-large w-5 text-slate-400"></i>Dashboard</a>
+      <a href="./my_profile.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-user w-5 text-slate-400"></i>My Profile</a>
+      <a href="./hotel_booking.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-hotel w-5 text-slate-400"></i>Hotel Booking</a>
+      <a href="./my_reservation.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-calendar-check w-5 text-slate-400"></i>My Reservations</a>
+      <a href="./restaurant_reservation.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-clock w-5 text-slate-400"></i>Restaurant Reservation</a>
+      <a href="./order_food.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-bag-shopping w-5 text-slate-400"></i>Menu / Order Food</a>
+      <a href="./payments.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-credit-card w-5 text-slate-400"></i>Payments</a>
+      <a href="./loyalty_rewards.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-star w-5 text-slate-400"></i>Loyalty Rewards</a>
+      <a href="./Notifications.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-amber-50 text-amber-800 font-medium relative"><i class="fa-regular fa-bell w-5 text-amber-600"></i>Notifications<span id="sidebarNotificationCount" class="ml-auto bg-amber-100 text-amber-800 text-xs px-1.5 py-0.5 rounded-full">0</span></a>
+      <div class="border-t border-slate-200 pt-3 mt-3">
+        <a href="#" onclick="handleLogout()" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-700 transition"><i class="fa-solid fa-arrow-right-from-bracket w-5"></i>Logout</a>
+      </div>
+     </nav>
+    </aside>
+
+    <!-- ========== MAIN CONTENT (NOTIFICATIONS PAGE - CLEAN) ========== -->
+    <main class="flex-1 p-5 lg:p-8 overflow-y-auto">
+
+      <!-- header -->
+      <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 class="text-2xl lg:text-3xl font-light text-slate-800">Notifications</h1>
+          <p class="text-sm text-slate-500 mt-0.5">stay updated with your bookings and promos</p>
+        </div>
+        <div class="flex gap-2">
+          <button class="bg-white border border-slate-200 rounded-full px-4 py-2 text-sm flex items-center gap-2 hover:bg-slate-50" id="markAllReadBtn">
+            <i class="fa-regular fa-circle-check"></i> mark all as read
+          </button>
+          <div class="bg-white border border-slate-200 rounded-full px-4 py-2 text-sm flex items-center gap-2 shadow-sm">
+            <i class="fa-regular fa-calendar text-slate-400"></i> <span id="currentDate"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== FILTER TABS (functional counters) ===== -->
+      <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-2 mb-6" id="filterTabs">
+        <button class="filter-btn px-4 py-2 bg-amber-600 text-white rounded-full text-sm" data-filter="all">all <span id="allCount" class="ml-1 text-xs opacity-90">(0)</span></button>
+        <button class="filter-btn px-4 py-2 bg-white border border-slate-200 rounded-full text-sm hover:bg-slate-50" data-filter="unread">unread <span id="unreadCount" class="ml-1 text-xs text-slate-500">(0)</span></button>
+        <button class="filter-btn px-4 py-2 bg-white border border-slate-200 rounded-full text-sm hover:bg-slate-50" data-filter="bookings">bookings <span id="bookingsCount" class="ml-1 text-xs text-slate-500">(0)</span></button>
+        <button class="filter-btn px-4 py-2 bg-white border border-slate-200 rounded-full text-sm hover:bg-slate-50" data-filter="promos">promos <span id="promosCount" class="ml-1 text-xs text-slate-500">(0)</span></button>
+        <button class="filter-btn px-4 py-2 bg-white border border-slate-200 rounded-full text-sm hover:bg-slate-50" data-filter="system">system <span id="systemCount" class="ml-1 text-xs text-slate-500">(0)</span></button>
+      </div>
+
+      <!-- ===== NOTIFICATIONS LIST (empty) ===== -->
+      <div id="notificationsContainer" class="space-y-3">
+        <div class="text-center py-12 bg-white rounded-2xl border border-slate-200">
+          <i class="fa-regular fa-bell-slash text-4xl text-slate-300 mb-3"></i>
+          <p class="text-slate-500">No notifications yet.</p>
+          <p class="text-xs text-slate-400 mt-1">We'll notify you when something arrives.</p>
+        </div>
+      </div>
+
+      <!-- ===== LOAD MORE (hidden when empty) ===== -->
+      <div class="text-center mt-8" id="loadMoreContainer">
+        <button class="border border-amber-600 text-amber-700 px-6 py-2 rounded-full text-sm hover:bg-amber-50 transition" id="loadMoreBtn">load more</button>
+      </div>
+
+      <!-- ===== NOTIFICATION PREFERENCES LINK ===== -->
+      <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 mt-8 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <i class="fa-regular fa-bell-slash text-2xl text-amber-600"></i>
+          <div>
+            <p class="font-medium">manage notification preferences</p>
+            <p class="text-xs text-slate-600">choose which alerts you receive via email, SMS, or in-app</p>
+          </div>
+        </div>
+        <button class="bg-white border border-amber-600 text-amber-700 px-5 py-2 rounded-xl text-sm hover:bg-amber-50 transition" id="preferencesBtn">preferences</button>
+      </div>
+
+      <!-- bottom hint -->
+      <div class="mt-10 text-center text-xs text-slate-400 border-t pt-6">
+        Notifications module — clean state, zero notifications. Functional buttons (add demo, mark read).
+      </div>
+    </main>
+  </div>
+
+  <!-- Database API -->
+  <script src="./js/database.js"></script>
+
+  <script>
+    (function() {
+      // ---------- CLEAN STATE: no notifications ----------
+      let notifications = [];
+      let currentFilter = 'all';
+
+      // DOM elements
+      const container = document.getElementById('notificationsContainer');
+      const allCountSpan = document.getElementById('allCount');
+      const unreadCountSpan = document.getElementById('unreadCount');
+      const bookingsCountSpan = document.getElementById('bookingsCount');
+      const promosCountSpan = document.getElementById('promosCount');
+      const systemCountSpan = document.getElementById('systemCount');
+      const sidebarBadge = document.getElementById('sidebarNotificationCount');
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const markAllBtn = document.getElementById('markAllReadBtn');
+      const loadMoreBtn = document.getElementById('loadMoreBtn');
+      const dateSpan = document.getElementById('currentDate');
+
+      // Helper: format date
+      const now = new Date();
+      dateSpan.innerText = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).toLowerCase();
+
+      // Helper: generate random time string
+      function randomTimeAgo() {
+        const r = Math.floor(Math.random() * 60) + 1;
+        if (r < 10) return r + ' minutes ago';
+        else if (r < 30) return r + ' minutes ago';
+        else return 'about ' + Math.floor(r/10) + ' hours ago';
+      }
+
+      // Helper: get icon for category
+      function getIcon(cat) {
+        if (cat === 'booking') return 'fa-regular fa-calendar-check';
+        if (cat === 'reminder') return 'fa-regular fa-clock';
+        if (cat === 'promo') return 'fa-regular fa-gem';
+        if (cat === 'payment') return 'fa-regular fa-credit-card';
+        if (cat === 'points') return 'fa-regular fa-star';
+        if (cat === 'review') return 'fa-regular fa-pen-to-square';
+        return 'fa-regular fa-circle-info';
+      }
+
+      // Render notifications based on filter
+      function renderNotifications() {
+        if (notifications.length === 0) {
+          container.innerHTML = `
+            <div class="text-center py-12 bg-white rounded-2xl border border-slate-200">
+              <i class="fa-regular fa-bell-slash text-4xl text-slate-300 mb-3"></i>
+              <p class="text-slate-500">No notifications yet.</p>
+              <p class="text-xs text-slate-400 mt-1">We'll notify you when something arrives.</p>
+            </div>
+          `;
+          loadMoreBtn.disabled = true;
+          loadMoreBtn.classList.add('opacity-50', 'cursor-not-allowed');
+          return;
+        }
+
+        loadMoreBtn.disabled = false;
+        loadMoreBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+        let filtered = notifications;
+        if (currentFilter === 'unread') filtered = notifications.filter(n => !n.read);
+        else if (currentFilter === 'bookings') filtered = notifications.filter(n => n.category === 'booking' || n.category === 'reminder');
+        else if (currentFilter === 'promos') filtered = notifications.filter(n => n.category === 'promo');
+        else if (currentFilter === 'system') filtered = notifications.filter(n => n.category === 'system' || n.category === 'payment' || n.category === 'points' || n.category === 'review');
+
+        if (filtered.length === 0) {
+          container.innerHTML = `<div class="text-center py-12 bg-white rounded-2xl border border-slate-200"><p class="text-slate-500">No notifications in this category.</p></div>`;
+          return;
+        }
+
+        let html = '';
+        filtered.forEach(n => {
+          const borderClass = n.read ? 'border-slate-200' : 'border-l-4 border-amber-600';
+          const bgClass = n.read ? 'bg-white' : 'bg-white'; // all white, unread has left border
+          const opacityClass = n.read ? 'opacity-80' : '';
+          const badge = n.read ? '' : '<span class="bg-amber-600 text-white text-xs px-2 py-0.5 rounded-full ml-2">new</span>';
+
+          html += `
+            <div class="${borderClass} rounded-r-2xl rounded-l-none ${bgClass} p-5 flex flex-wrap items-start gap-4 shadow-sm ${opacityClass} notification-item" data-id="${n.id}">
+              <div class="h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 shrink-0"><i class="${getIcon(n.category)}"></i></div>
+              <div class="flex-1">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h3 class="font-semibold">${n.title}</h3>
+                  ${badge}
+                </div>
+                <p class="text-sm text-slate-600 mt-1">${n.message}</p>
+                <div class="flex items-center gap-4 mt-2 text-xs text-slate-400">
+                  <span><i class="fa-regular fa-clock mr-1"></i> ${n.timeAgo}</span>
+                  <button class="text-amber-700 hover:underline view-action" data-id="${n.id}" data-action="view">${n.viewText || 'view details'}</button>
+                  <button class="text-slate-500 hover:underline dismiss-action" data-id="${n.id}" data-action="dismiss">dismiss</button>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        container.innerHTML = html;
+
+        // Update counts in filter tabs
+        updateCounts();
+      }
+
+      // Update filter counts and sidebar badge
+      function updateCounts() {
+        const total = notifications.length;
+        const unread = notifications.filter(n => !n.read).length;
+        const bookings = notifications.filter(n => n.category === 'booking' || n.category === 'reminder').length;
+        const promos = notifications.filter(n => n.category === 'promo').length;
+        const system = notifications.filter(n => n.category === 'system' || n.category === 'payment' || n.category === 'points' || n.category === 'review').length;
+
+        allCountSpan.innerText = `(${total})`;
+        unreadCountSpan.innerText = `(${unread})`;
+        bookingsCountSpan.innerText = `(${bookings})`;
+        promosCountSpan.innerText = `(${promos})`;
+        systemCountSpan.innerText = `(${system})`;
+        sidebarBadge.innerText = unread;
+      }
+
+      // Dismiss notification
+      function dismissNotification(id) {
+        notifications = notifications.filter(n => n.id !== id);
+        renderNotifications();
+        updateCounts();
+      }
+
+      // Mark one as read (via view)
+      function markAsRead(id) {
+        const notif = notifications.find(n => n.id === id);
+        if (notif && !notif.read) {
+          notif.read = true;
+          renderNotifications();
+          updateCounts();
+        }
+      }
+
+      // Mark all as read
+      function markAllRead() {
+        notifications.forEach(n => n.read = true);
+        renderNotifications();
+        updateCounts();
+        alert('All notifications marked as read (demo).');
+      }
+
+      // Filter change
+      filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterButtons.forEach(b => {
+            b.classList.remove('bg-amber-600', 'text-white');
+            b.classList.add('bg-white', 'border', 'border-slate-200', 'text-slate-700');
+          });
+          btn.classList.remove('bg-white', 'border', 'border-slate-200', 'text-slate-700');
+          btn.classList.add('bg-amber-600', 'text-white');
+          currentFilter = btn.dataset.filter;
+          renderNotifications();
+        });
+      });
+
+      // Event delegation for view/dismiss
+      container.addEventListener('click', (e) => {
+        if (e.target.classList.contains('dismiss-action') || e.target.parentElement?.classList.contains('dismiss-action')) {
+          const btn = e.target.closest('button');
+          if (!btn) return;
+          const id = btn.dataset.id;
+          dismissNotification(id);
+        } else if (e.target.classList.contains('view-action') || e.target.parentElement?.classList.contains('view-action')) {
+          const btn = e.target.closest('button');
+          if (!btn) return;
+          const id = btn.dataset.id;
+          markAsRead(id);
+          alert(`Viewing notification ${id} (demo).`);
+        }
+      });
+
+      // Mark all as read
+      markAllBtn.addEventListener('click', markAllRead);
+
+      // Load more (simulate adding a demo notification)
+      loadMoreBtn.addEventListener('click', () => {
+        const demoNotif = {
+          id: 'demo-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5),
+          title: 'Demo notification',
+          message: 'This is a sample notification added via "load more". You can dismiss or view it.',
+          category: 'system',
+          read: false,
+          timeAgo: 'just now',
+          viewText: 'learn more'
+        };
+        notifications.push(demoNotif);
+        renderNotifications();
+        updateCounts();
+      });
+
+      // Preferences button
+      document.getElementById('preferencesBtn').addEventListener('click', () => {
+        alert('Notification preferences panel (demo).');
+      });
+
+      // Initialize empty
+      renderNotifications();
+      updateCounts();
+
+      // For convenience, you can double-click the header to add a sample notification (optional)
+      document.querySelector('h1')?.addEventListener('dblclick', () => {
+        const sample = {
+          id: 'sample-' + Date.now(),
+          title: 'Sample booking confirmation',
+          message: 'Your Deluxe Twin room from Jun 12-15 is confirmed.',
+          category: 'booking',
+          read: false,
+          timeAgo: 'just now',
+          viewText: 'view booking'
+        };
+        notifications.unshift(sample);
+        renderNotifications();
+        updateCounts();
+      });
+
+      // Load user data and initialize
+      async function initializeUserData() {
+        try {
+          const currentUser = await window.dbAPI.loadCurrentUserSimple();
+          
+          if (currentUser) {
+            // Update UI with actual user data
+            document.getElementById('userInitials').innerText = window.dbAPI.getUserInitials(currentUser.first_name, currentUser.last_name);
+            document.getElementById('displayName').innerText = `${currentUser.first_name} ${currentUser.last_name}`;
+            document.getElementById('loyaltyTier').innerText = currentUser.membership_tier || 'member';
+            document.getElementById('points').innerText = currentUser.loyalty_points || '0';
+          } else {
+            window.location.href = '../login-register/login_form.html';
+            return;
+          }
+        } catch (error) {
+          console.error('Failed to load user data:', error);
+          document.getElementById('userInitials').innerText = '—';
+          document.getElementById('displayName').innerText = 'Guest';
+          document.getElementById('loyaltyTier').innerText = '—';
+          document.getElementById('points').innerText = '0';
+        }
+      }
+
+      // Initialize user data
+      initializeUserData();
+
+      // Logout function
+      async function handleLogout() {
+        try {
+          await window.dbAPI.logout();
+        } catch (error) {
+          console.error('Logout error:', error);
+          window.dbAPI.showToast('Failed to logout', 'error');
+        }
+      }
+      
+      // Make functions global
+      window.handleLogout = handleLogout;
+    })();
+  </script>
+</body>
+</html>

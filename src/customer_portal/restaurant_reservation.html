@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lùcas · Table & Seating with Down Payment</title>
+  <!-- Tailwind via CDN + Font Awesome 6 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    .waiting-pulse { animation: softPulse 2s infinite; }
+    @keyframes softPulse { 0% { opacity: 0.7; } 50% { opacity: 1; } 100% { opacity: 0.7; } }
+    .table-tile { transition: all 0.1s ease; user-select: none; cursor: pointer; }
+    .table-tile:hover { box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+    button { cursor: pointer; }
+    .payment-badge {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 font-sans antialiased">
+
+<!-- main flex wrapper (sidebar + content) -->
+<div class="min-h-screen flex flex-col lg:flex-row">
+
+  <!-- ========== SIDEBAR (staff portal) ========== -->
+  <aside class="lg:w-80 bg-white border-r border-slate-200 shadow-sm shrink-0">
+    <div class="px-6 py-7 border-b border-slate-100">
+      <div class="flex items-center gap-2 text-amber-700">
+        <i class="fa-solid fa-utensils text-xl"></i>
+        <i class="fa-solid fa-bed text-xl"></i>
+        <span class="font-semibold text-xl tracking-tight text-slate-800">Lùcas<span class="text-amber-600">.stay</span></span>
+      </div>
+      <p class="text-xs text-slate-500 mt-1">customer · table & seating module</p>
+    </div>
+
+    <!-- user summary (customer view) -->
+    <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-100 bg-slate-50/80">
+      <div class="h-12 w-12 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold text-lg" id="userInitials">—</div>
+      <div>
+        <p class="font-medium text-slate-800" id="displayName">Loading...</p>
+        <p class="text-xs text-slate-500 flex items-center gap-1"><i class="fa-regular fa-gem text-[11px]"></i> <span id="loyaltyTier">member</span> · <span id="points">0</span> pts</p>
+      </div>
+    </div>
+
+    <!-- navigation (restaurant reservation active) -->
+     <nav class="p-4 space-y-1.5 text-sm">
+      <a href="./index.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-table-cells-large w-5 text-slate-400"></i>Dashboard</a>
+      <a href="./my_profile.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-user w-5 text-slate-400"></i>My Profile</a>
+      <a href="./hotel_booking.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-hotel w-5 text-slate-400"></i>Hotel Booking</a>
+      <a href="./my_reservation.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-calendar-check w-5 text-slate-400"></i>My Reservations</a>
+      <a href="./restaurant_reservation.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-amber-50 text-amber-800 font-medium"><i class="fa-regular fa-clock w-5 text-amber-600"></i>Restaurant Reservation</a>
+      <a href="./order_food.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-bag-shopping w-5 text-slate-400"></i>Menu / Order Food</a>
+      <a href="./payments.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-credit-card w-5 text-slate-400"></i>Payments</a>
+      <a href="./loyalty_rewards.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-star w-5 text-slate-400"></i>Loyalty Rewards</a>
+      <a href="./Notifications.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition relative"><i class="fa-regular fa-bell w-5 text-slate-400"></i>Notifications<span class="ml-auto bg-amber-100 text-amber-800 text-xs px-1.5 py-0.5 rounded-full">3</span></a>
+      <div class="border-t border-slate-200 pt-3 mt-3">
+        <a href="#" onclick="handleLogout()" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-700 transition"><i class="fa-solid fa-arrow-right-from-bracket w-5"></i>Logout</a>
+      </div>
+     </nav>
+  </aside>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main class="flex-1 p-5 lg:p-8 overflow-y-auto" id="mainContent">
+
+    <!-- header with real-time date and status -->
+    <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <h1 class="text-2xl lg:text-3xl font-light text-slate-800">Table reservation & seating</h1>
+        <p class="text-sm text-slate-500 mt-0.5">automated workflow · waiting list · table assignment</p>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-full px-4 py-2 text-sm flex items-center gap-2 shadow-sm">
+        <i class="fa-regular fa-calendar text-slate-400"></i> wednesday, 21 may 2025 · <span class="text-amber-600 font-medium">service: 5:00 PM</span>
+      </div>
+    </div>
+
+    <!-- ===== MAIN MODULE GRID (ALL FUNCTIONAL, NO SAMPLE DATA LOADED) ===== -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+      <!-- LEFT COLUMN (xl:col-span-2) -->
+      <div class="xl:col-span-2 space-y-6">
+
+        <!-- 1️⃣ ONLINE RESERVATION FORM WITH DOWN PAYMENT -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+          <h2 class="font-semibold text-xl flex items-center gap-2 mb-5">
+            <i class="fa-regular fa-pen-to-square text-amber-600"></i> online reservation · new booking
+            <span class="payment-badge text-white text-xs px-3 py-1 rounded-full ml-2">down payment required</span>
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs text-slate-500 mb-1">customer name <span class="text-red-400">*</span></label>
+              <input type="text" id="resName" placeholder="e.g. Mia Cruz" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white" value="">
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1">contact number <span class="text-red-400">*</span></label>
+              <input type="tel" id="resPhone" placeholder="+63 912 345 6789" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white" value="">
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1">email address <span class="text-red-400">*</span></label>
+              <input type="email" id="resEmail" placeholder="guest@example.com" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white" value="">
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1">number of guests <span class="text-red-400">*</span></label>
+              <select id="resGuests" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white">
+                <option value="1">1 guest</option>
+                <option value="2">2 guests</option>
+                <option value="3">3 guests</option>
+                <option value="4">4 guests</option>
+                <option value="5">5 guests</option>
+                <option value="6">6 guests</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1">reservation date <span class="text-red-400">*</span></label>
+              <input type="date" id="resDate" value="2025-05-21" class="w-full border border-slate-200 rounded-xl p-3 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs text-slate-500 mb-1">reservation time <span class="text-red-400">*</span></label>
+              <select id="resTime" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white">
+                <option value="5:30 PM">5:30 PM</option>
+                <option value="6:00 PM">6:00 PM</option>
+                <option value="6:30 PM">6:30 PM</option>
+                <option value="7:00 PM">7:00 PM</option>
+                <option value="7:30 PM">7:30 PM</option>
+                <option value="8:00 PM">8:00 PM</option>
+              </select>
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-xs text-slate-500 mb-1">special requests (optional)</label>
+              <textarea id="resRequest" rows="2" placeholder="allergies, celebration, etc." class="w-full border border-slate-200 rounded-xl p-3 text-sm"></textarea>
+            </div>
+          </div>
+
+          <!-- Down Payment Calculator -->
+          <div class="mt-5 p-4 bg-amber-50 rounded-xl border border-amber-200">
+            <div class="flex items-center justify-between mb-2">
+              <p class="font-medium flex items-center gap-2"><i class="fa-solid fa-coins text-amber-600"></i> Down Payment Calculation</p>
+              <span class="text-xs bg-white px-2 py-1 rounded-full">₱100 per guest</span>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="text-xs text-slate-600">Number of guests</p>
+                <p class="text-2xl font-bold" id="guestCountDisplay">2</p>
+              </div>
+              <div>
+                <p class="text-xs text-slate-600">Required down payment</p>
+                <p class="text-2xl font-bold text-amber-700" id="downPaymentAmount">₱200.00</p>
+              </div>
+            </div>
+            <p class="text-xs text-slate-500 mt-2"><i class="fa-regular fa-circle-info"></i> 50% of down payment will be converted to loyalty points after visit</p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3 mt-6">
+            <button class="bg-amber-600 hover:bg-amber-700 text-white px-8 py-3 rounded-xl font-medium transition" id="submitReservationBtn">
+              <i class="fa-regular fa-credit-card mr-2"></i>submit & pay down payment
+            </button>
+            <button class="border border-slate-300 text-slate-600 hover:bg-slate-50 px-6 py-3 rounded-xl font-medium transition text-sm" id="validateFieldsBtn"><i class="fa-regular fa-circle-check"></i> validate fields</button>
+          </div>
+          <p class="text-xs text-emerald-600 mt-2 flex items-center gap-1" id="validationHint"><i class="fa-regular fa-circle-check"></i> fill required fields</p>
+        </div>
+
+        <!-- 2️⃣ RESERVATION CHECKING + TABLE ASSIGNMENT (dynamic, fully functional) -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+          <h2 class="font-semibold text-xl flex items-center gap-2 mb-3"><i class="fa-regular fa-clipboard text-amber-600"></i> reservation checking & table assignment</h2>
+          <div class="flex flex-wrap gap-4 items-center border-b border-slate-100 pb-4">
+            <div class="bg-amber-50 px-4 py-2 rounded-xl"><span class="text-sm" id="currentWalkinDisplay">incoming: (no guest) · 0 guests · --:--</span></div>
+            <span class="bg-blue-100 text-blue-700 text-xs px-3 py-1 rounded-full"><i class="fa-regular fa-question"></i> walk‑in (no prior res)</span>
+          </div>
+
+          <!-- walk-in guest handling -->
+          <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="border rounded-xl p-4 bg-slate-50">
+              <p class="font-medium flex items-center gap-2"><i class="fa-regular fa-person-walking"></i> walk-in guest</p>
+              <p class="text-xs text-slate-500 mt-1">check table availability</p>
+              <div class="mt-3 flex items-center gap-2 text-sm" id="availabilityMessage"><i class="fa-regular fa-clock"></i> <span class="text-amber-600">enter guest details first</span></div>
+              <button class="mt-3 w-full bg-green-600 hover:bg-green-700 text-white text-sm py-2 rounded-xl transition flex items-center justify-center gap-2" id="assignWalkinBtn"><i class="fa-regular fa-bell"></i> assign & notify waiter</button>
+            </div>
+            <div class="border rounded-xl p-4 bg-red-50/40">
+              <p class="font-medium flex items-center gap-2"><i class="fa-regular fa-timer"></i> if no table available</p>
+              <p class="text-xs text-slate-500 mt-1">move to waiting list, show estimated wait.</p>
+              <div class="flex items-center gap-2 mt-2 text-sm"><i class="fa-regular fa-hourglass-half"></i> est. wait: 15‑20 min</div>
+              <button class="mt-3 w-full bg-slate-600 hover:bg-slate-700 text-white text-sm py-2 rounded-xl transition" id="addToWaitingBtn"><i class="fa-regular fa-list"></i> add to waiting list</button>
+            </div>
+          </div>
+          <div class="mt-5 border-t pt-3 text-xs text-slate-400 flex flex-wrap gap-6" id="dbStatus">
+            <span><i class="fa-regular fa-floppy-disk"></i> DB: Customers, Reservations</span>
+            <span><i class="fa-regular fa-chair"></i> Table → reserved after assignment</span>
+            <span><i class="fa-regular fa-clock"></i> seating time recorded</span>
+          </div>
+        </div>
+
+        <!-- 3️⃣ WAITING LIST QUEUE (starts empty) -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5">
+          <h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fa-regular fa-list-timeline text-amber-600"></i> waiting list queue · <span id="waitingCount">0</span> parties</h3>
+          <div class="space-y-2" id="waitingListContainer">
+            <div class="text-sm text-slate-400 text-center py-4">No parties waiting.</div>
+          </div>
+          <div class="flex justify-between items-center mt-4 text-xs text-slate-500 border-t pt-3">
+            <span><i class="fa-regular fa-arrow-right"></i> when table free → auto‑assign + notify</span>
+            <button class="text-amber-700 hover:underline" id="simulateTableFreeBtn"><i class="fa-regular fa-bell"></i> simulate table free</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN : table grid + notifications (no sample data) -->
+      <div class="space-y-6">
+
+        <!-- real-time table monitoring (clean state) -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5">
+          <h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fa-regular fa-grid-2 text-amber-600"></i> real‑time table status</h3>
+          <div class="grid grid-cols-3 sm:grid-cols-4 gap-2" id="tableGrid">
+            <!-- injected via JS (all available initially) -->
+          </div>
+          <!-- legend -->
+          <div class="flex flex-wrap gap-3 mt-4 text-[10px] text-slate-500 border-t pt-3">
+            <span><span class="inline-block w-3 h-3 bg-green-100 border border-green-300 rounded"></span> available</span>
+            <span><span class="inline-block w-3 h-3 bg-amber-100 border border-amber-300 rounded"></span> reserved</span>
+            <span><span class="inline-block w-3 h-3 bg-red-100 border border-red-300 rounded"></span> occupied</span>
+          </div>
+          <p class="text-xs text-slate-400 mt-2"><i class="fa-regular fa-comment"></i> click table to toggle status (demo)</p>
+        </div>
+
+        <!-- staff notification panel (empty at start) -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-5">
+          <h4 class="font-medium flex items-center gap-2"><i class="fa-regular fa-bell text-amber-600"></i> recent staff notifications</h4>
+          <ul class="text-xs space-y-3 mt-3" id="notificationList">
+            <li class="text-slate-400 text-center">No notifications yet.</li>
+          </ul>
+          <button class="w-full border border-amber-600 text-amber-700 hover:bg-amber-50 mt-4 py-2 rounded-xl text-sm transition" id="refreshNotifications"><i class="fa-regular fa-rotate"></i> refresh notifications</button>
+        </div>
+
+        <!-- seating time demo (dynamic seating recorded separately) -->
+        <div class="bg-slate-100 border border-slate-300 rounded-2xl p-5">
+          <h4 class="font-medium flex items-center gap-2"><i class="fa-regular fa-clock text-amber-600"></i> seating time recording</h4>
+          <div class="text-xs text-slate-500 mt-2">Seating times are logged when tables become occupied.</div>
+          <div class="mt-2 text-xs" id="seatingTimesDemo">No active seating times.</div>
+        </div>
+
+        <!-- payment summary badge -->
+        <div class="bg-linear-to-r from-amber-600 to-amber-700 rounded-2xl p-5 text-white">
+          <div class="flex items-center gap-3 mb-2">
+            <i class="fa-regular fa-credit-card text-2xl"></i>
+            <div>
+              <p class="text-sm opacity-90">down payment summary</p>
+              <p class="text-xs opacity-75">per guest: ₱100</p>
+            </div>
+          </div>
+          <p class="text-lg font-bold" id="paymentSummary">₱0.00 total down payments</p>
+          <p class="text-xs opacity-75 mt-1" id="paymentCount">0 pending payments</p>
+        </div>
+
+        <!-- db hint -->
+        <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-4 text-xs">
+          <p class="font-medium mb-1"><i class="fa-regular fa-database"></i> database schema active</p>
+          <ul class="list-disc list-inside text-slate-600">
+            <li>customers, reservations, tables, waiting_list</li>
+            <li>real-time status: available / reserved / occupied</li>
+            <li>down payments: ₱100/guest, redirect to payments page</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- bottom line -->
+    <div class="mt-10 text-center text-xs text-slate-400 border-t pt-6 flex flex-wrap justify-center gap-4">
+      <span>✅ 1. online reservation form</span>
+      <span>✅ 2. reservation checking (walk‑in)</span>
+      <span>✅ 3. table availability + assignment</span>
+      <span>✅ 4. waiting list mgmt</span>
+      <span>✅ 5. seating + status update</span>
+      <span>✅ 6. staff notifications</span>
+      <span>✅ 7. down payment (₱100/guest)</span>
+      <span>✅ 8. redirect to payments page</span>
+    </div>
+  </main>
+</div>
+
+<!-- Payment Processing Modal (optional) -->
+<div id="paymentProcessingModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-2xl p-8 max-w-sm w-full mx-4 text-center">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto mb-4"></div>
+    <h3 class="text-lg font-semibold mb-2">Processing Payment</h3>
+    <p class="text-sm text-slate-500" id="paymentProcessingMessage">Redirecting to payments page...</p>
+  </div>
+</div>
+
+<!-- Database API -->
+<script src="./js/database.js"></script>
+
+<script>
+  (function() {
+    // ---------- CLEAN STATE (no sample data) ----------
+    let tables = [
+      { id: 'T1', seats: 2, status: 'available' },
+      { id: 'T2', seats: 4, status: 'available' },
+      { id: 'T3', seats: 2, status: 'available' },
+      { id: 'T4', seats: 6, status: 'available' },
+      { id: 'T5', seats: 2, status: 'available' },
+      { id: 'T6', seats: 4, status: 'available' },
+      { id: 'T7', seats: 2, status: 'available' },
+      { id: 'T8', seats: 8, status: 'available' }
+    ];
+
+    let waitingList = [];   // empty
+    let notifications = []; // empty
+    let pendingPayments = []; // track down payments
+
+    // current walk-in from form
+    let currentWalkin = { name: '', guests: 2, time: '7:30 PM' }; // default guests=2, time preset, name empty
+
+    // Helper: add notification
+    function addNotification(msg, icon = 'bell') {
+      const now = new Date();
+      let hours = now.getHours();
+      let minutes = now.getMinutes();
+      let ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+      const timeStr = `${hours}:${minutes.toString().padStart(2,'0')} ${ampm}`;
+      notifications.unshift({ time: timeStr, msg, icon });
+      if (notifications.length > 8) notifications.pop();
+      renderNotifications();
+    }
+
+    // render all tables
+    function renderTables() {
+      const grid = document.getElementById('tableGrid');
+      grid.innerHTML = tables.map(t => {
+        let bg, border, statusText, textColor;
+        if (t.status === 'available') { bg = 'bg-green-100'; border = 'border-green-300'; statusText = 'available'; textColor = 'bg-green-600'; }
+        else if (t.status === 'reserved') { bg = 'bg-amber-100'; border = 'border-amber-300'; statusText = 'reserved'; textColor = 'bg-amber-600'; }
+        else { bg = 'bg-red-100'; border = 'border-red-300'; statusText = 'occupied'; textColor = 'bg-red-600'; }
+        return `<div class="${bg} ${border} border rounded-xl p-2 text-center text-xs table-tile" data-table="${t.id}">
+          <span class="font-bold">${t.id}</span> <span class="block">${t.seats} pax</span> 
+          <span class="${textColor} text-white px-1 rounded-full text-[10px] inline-block mt-1">${statusText}</span>
+        </div>`;
+      }).join('');
+    }
+
+    function renderWaiting() {
+      const container = document.getElementById('waitingListContainer');
+      if (waitingList.length === 0) {
+        container.innerHTML = '<div class="text-sm text-slate-400 text-center py-4">No parties waiting.</div>';
+      } else {
+        container.innerHTML = waitingList.map((w, idx) => {
+          let pulse = w.next ? 'waiting-pulse' : '';
+          let bg = w.next ? 'bg-amber-50' : 'bg-slate-50';
+          return `<div class="flex items-center justify-between ${bg} p-3 rounded-xl ${pulse}">
+            <div><span class="font-medium">${w.name}</span> <span class="text-xs bg-slate-200 ml-2 px-2 py-0.5 rounded-full">${w.guests} guests</span></div>
+            <div class="text-xs text-slate-500">waiting ${w.waitTime} min</div>
+            <span class="text-amber-600 text-xs">est. ${w.est} min</span>
+          </div>`;
+        }).join('');
+      }
+      document.getElementById('waitingCount').innerText = waitingList.length;
+    }
+
+    function renderNotifications() {
+      const list = document.getElementById('notificationList');
+      if (notifications.length === 0) {
+        list.innerHTML = '<li class="text-slate-400 text-center text-xs">No notifications yet.</li>';
+      } else {
+        list.innerHTML = notifications.map(n => {
+          let iconClass = 'fa-regular fa-bell';
+          if (n.icon === 'circle-check') iconClass = 'fa-regular fa-circle-check text-green-600';
+          else if (n.icon === 'clock') iconClass = 'fa-regular fa-clock';
+          else if (n.icon === 'hourglass-half') iconClass = 'fa-regular fa-hourglass-half';
+          else if (n.icon === 'calendar-check') iconClass = 'fa-regular fa-calendar-check text-amber-600';
+          else if (n.icon === 'rotate') iconClass = 'fa-regular fa-rotate';
+          else if (n.icon === 'credit-card') iconClass = 'fa-regular fa-credit-card text-amber-600';
+          return `<li class="flex gap-2 text-xs"><i class="${iconClass}"></i> ${n.time} · ${n.msg}</li>`;
+        }).join('');
+      }
+      document.getElementById('sidebarNotificationCount') && (document.getElementById('sidebarNotificationCount').innerText = notifications.length);
+      document.querySelector('nav .relative span.bg-amber-100') && (document.querySelector('nav .relative span.bg-amber-100').innerText = notifications.length);
+    }
+
+    function updatePaymentSummary() {
+      const totalDownPayments = pendingPayments.reduce((sum, p) => sum + p.amount, 0);
+      document.getElementById('paymentSummary').textContent = `₱${totalDownPayments.toFixed(2)} total down payments`;
+      document.getElementById('paymentCount').textContent = `${pendingPayments.length} pending payments`;
+    }
+
+    function updateAvailabilityMsg() {
+      if (!currentWalkin.name.trim()) {
+        document.querySelector('#availabilityMessage span').innerText = 'enter guest name first';
+        return;
+      }
+      let availableTable = tables.find(t => t.seats >= currentWalkin.guests && t.status === 'available');
+      let msg = availableTable ? `✅ ${currentWalkin.guests}-seater available? → yes (${availableTable.id})` : `❌ ${currentWalkin.guests}-seater available? → no · est. wait 15‑20 min`;
+      document.querySelector('#availabilityMessage span').innerText = msg;
+    }
+
+    // Update walkin display from form
+    function updateWalkinFromForm() {
+      const nameInput = document.getElementById('resName').value.trim();
+      const guests = parseInt(document.getElementById('resGuests').value);
+      const time = document.getElementById('resTime').value;
+      currentWalkin = { name: nameInput || '(unnamed guest)', guests, time };
+      document.getElementById('currentWalkinDisplay').innerText = `incoming: ${currentWalkin.name} · ${currentWalkin.guests} guests · ${currentWalkin.time}`;
+      
+      // Update down payment display
+      document.getElementById('guestCountDisplay').textContent = guests;
+      const downPayment = guests * 100;
+      document.getElementById('downPaymentAmount').textContent = `₱${downPayment.toFixed(2)}`;
+      
+      updateAvailabilityMsg();
+    }
+
+    // Show processing modal and redirect
+    function processDownPaymentAndRedirect(reservationData) {
+      const modal = document.getElementById('paymentProcessingModal');
+      const message = document.getElementById('paymentProcessingMessage');
+      message.textContent = `Processing ₱${reservationData.downPayment} down payment...`;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+
+      // Add to pending payments
+      pendingPayments.push({
+        id: Date.now(),
+        name: reservationData.name,
+        guests: reservationData.guests,
+        amount: reservationData.downPayment,
+        date: reservationData.date,
+        time: reservationData.time
+      });
+      updatePaymentSummary();
+
+      // Create payment data for payments page
+      const paymentData = {
+        amount: reservationData.downPayment,
+        description: `Restaurant reservation for ${reservationData.guests} guests on ${reservationData.date} at ${reservationData.time}`,
+        type: 'restaurant_down_payment',
+        customerName: reservationData.name,
+        customerPhone: reservationData.phone,
+        customerEmail: reservationData.email,
+        timestamp: new Date().toISOString()
+      };
+
+      // Save to sessionStorage for payments page
+      sessionStorage.setItem('pendingDownPayment', JSON.stringify(paymentData));
+      
+      // Add notification
+      addNotification(`Down payment of ₱${reservationData.downPayment} initiated for ${reservationData.name}`, 'credit-card');
+
+      // Simulate processing time then redirect
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        
+        // Check if payments page exists, if not, alert and simulate
+        if (window.location.href.includes('restaurant_reservation')) {
+          // Try to redirect to payments page
+          window.location.href = './payments.html';
+        } else {
+          alert(`✅ Down payment of ₱${reservationData.downPayment} processed successfully!\nRedirecting to payments page...`);
+          // In a real implementation, this would actually redirect
+          console.log('Redirect to payments.html with data:', paymentData);
+        }
+      }, 2000);
+    }
+
+    // ----- event listeners -----
+    document.getElementById('submitReservationBtn').addEventListener('click', () => {
+      updateWalkinFromForm();
+      
+      // Validate required fields
+      const name = document.getElementById('resName').value.trim();
+      const phone = document.getElementById('resPhone').value.trim();
+      const email = document.getElementById('resEmail').value.trim();
+      
+      if (!name || !phone || !email) {
+        alert('❌ Please fill in all required fields (name, phone, email).');
+        document.getElementById('validationHint').innerHTML = '<i class="fa-regular fa-circle-exclamation"></i> required fields missing';
+        return;
+      }
+
+      if (!name || name === '(unnamed guest)') {
+        alert('❌ Please enter a valid customer name.');
+        return;
+      }
+
+      const guests = parseInt(document.getElementById('resGuests').value);
+      const date = document.getElementById('resDate').value;
+      const time = document.getElementById('resTime').value;
+      const downPayment = guests * 100;
+
+      // Create reservation object
+      const reservation = {
+        name,
+        phone,
+        email,
+        guests,
+        date,
+        time,
+        downPayment,
+        request: document.getElementById('resRequest').value
+      };
+
+      // Process down payment and redirect
+      processDownPaymentAndRedirect(reservation);
+      
+      // Also add to notifications
+      addNotification(`New reservation: ${name} (${guests} pax) - Down payment: ₱${downPayment}`, 'calendar-check');
+    });
+
+    document.getElementById('validateFieldsBtn').addEventListener('click', () => {
+      const name = document.getElementById('resName').value.trim();
+      const phone = document.getElementById('resPhone').value.trim();
+      const email = document.getElementById('resEmail').value.trim();
+      if (!name || !phone || !email) {
+        document.getElementById('validationHint').innerHTML = '<i class="fa-regular fa-circle-exclamation"></i> required fields missing';
+      } else {
+        document.getElementById('validationHint').innerHTML = '<i class="fa-regular fa-circle-check"></i> all required fields look good';
+      }
+    });
+
+    document.getElementById('assignWalkinBtn').addEventListener('click', () => {
+      updateWalkinFromForm();
+      if (!currentWalkin.name || currentWalkin.name === '(unnamed guest)') {
+        alert('❌ Please enter customer name in reservation form.');
+        return;
+      }
+      let availableTable = tables.find(t => t.seats >= currentWalkin.guests && t.status === 'available');
+      if (availableTable) {
+        availableTable.status = 'reserved';
+        renderTables();
+        addNotification(`Table ${availableTable.id} assigned to walk‑in (${currentWalkin.name}) → waiter notified`, 'circle-check');
+        document.querySelector('#dbStatus span:nth-child(2)').innerHTML = `<i class="fa-regular fa-chair"></i> Table ${availableTable.id} → reserved (by walk-in)`;
+        alert(`✅ Table ${availableTable.id} assigned to ${currentWalkin.name}.`);
+      } else {
+        alert('❌ No table available. Add to waiting list.');
+      }
+    });
+
+    document.getElementById('addToWaitingBtn').addEventListener('click', () => {
+      updateWalkinFromForm();
+      if (!currentWalkin.name || currentWalkin.name === '(unnamed guest)') {
+        alert('❌ Please enter a name.');
+        return;
+      }
+      if (waitingList.some(w => w.name === currentWalkin.name)) {
+        alert(`${currentWalkin.name} already on waiting list.`);
+        return;
+      }
+      let newEntry = {
+        name: currentWalkin.name,
+        guests: currentWalkin.guests,
+        waitTime: 0,
+        est: Math.floor(Math.random() * 15 + 10), // simulate est
+        next: (waitingList.length === 0) // first in line becomes 'next'
+      };
+      waitingList.push(newEntry);
+      renderWaiting();
+      addNotification(`${currentWalkin.name} added to waiting list (est. ${newEntry.est} min)`, 'hourglass-half');
+      alert(`🚶 ${currentWalkin.name} added to waiting list.`);
+    });
+
+    document.getElementById('simulateTableFreeBtn').addEventListener('click', () => {
+      if (waitingList.length === 0) {
+        alert('Waiting list is empty.');
+        return;
+      }
+      let target = waitingList.find(w => w.next) || waitingList[0];
+      let availableTable = tables.find(t => t.seats >= target.guests && t.status === 'available');
+      if (availableTable) {
+        availableTable.status = 'reserved';
+        addNotification(`Table ${availableTable.id} now available → assigned to ${target.name} (waiting)`, 'bell');
+        waitingList = waitingList.filter(w => w.name !== target.name);
+        if (waitingList.length > 0) waitingList[0].next = true;
+        renderTables();
+        renderWaiting();
+        alert(`✅ Table ${availableTable.id} assigned to ${target.name}.`);
+      } else {
+        alert('No table currently available for waiting party.');
+      }
+    });
+
+    // table click: toggle status (demo)
+    document.getElementById('tableGrid').addEventListener('click', (e) => {
+      const tile = e.target.closest('.table-tile');
+      if (!tile) return;
+      const tableId = tile.dataset.table;
+      const table = tables.find(t => t.id === tableId);
+      if (table) {
+        if (table.status === 'available') table.status = 'reserved';
+        else if (table.status === 'reserved') table.status = 'occupied';
+        else if (table.status === 'occupied') table.status = 'available';
+        renderTables();
+        addNotification(`Table ${tableId} status changed to ${table.status} (manual)`, 'rotate');
+      }
+    });
+
+    document.getElementById('refreshNotifications').addEventListener('click', () => {
+      addNotification('Notification feed refreshed', 'rotate');
+    });
+
+    // Update walkin on form changes
+    ['resName', 'resGuests', 'resTime'].forEach(id => {
+      document.getElementById(id).addEventListener('change', updateWalkinFromForm);
+      if (id === 'resName') document.getElementById(id).addEventListener('input', updateWalkinFromForm);
+    });
+
+    // Update guest count display on guests change
+    document.getElementById('resGuests').addEventListener('change', updateWalkinFromForm);
+    document.getElementById('resGuests').addEventListener('input', updateWalkinFromForm);
+
+    // initial render (no sample data)
+    renderTables();
+    renderWaiting();
+    renderNotifications();
+    updateWalkinFromForm(); // reads empty name, shows placeholder
+    updatePaymentSummary();
+
+    // minimal demo for seating times placeholder
+    setInterval(() => {
+      let occupiedTables = tables.filter(t => t.status === 'occupied').map(t => `${t.id} (${t.seats}pax)`).join(', ') || 'None';
+      document.getElementById('seatingTimesDemo').innerText = occupiedTables !== 'None' ? `Occupied: ${occupiedTables}` : 'No occupied tables.';
+    }, 1000);
+
+    // Logout function
+    async function handleLogout() {
+      try {
+        await window.dbAPI.logout();
+      } catch (error) {
+        console.error('Logout error:', error);
+        window.dbAPI.showToast('Failed to logout', 'error');
+      }
+    }
+
+    // Load user data and initialize
+    async function initializeUserData() {
+      try {
+        // Load current user data
+        const currentUser = await window.dbAPI.loadCurrentUserSimple();
+        
+        if (currentUser) {
+          // Update UI with actual user data
+          document.getElementById('userInitials').innerText = window.dbAPI.getUserInitials(currentUser.first_name, currentUser.last_name);
+          document.getElementById('displayName').innerText = `${currentUser.first_name} ${currentUser.last_name}`;
+          document.getElementById('loyaltyTier').innerText = currentUser.membership_tier || 'member';
+          document.getElementById('points').innerText = currentUser.loyalty_points || '0';
+          
+          // Pre-fill form with user data
+          document.getElementById('resName').value = `${currentUser.first_name} ${currentUser.last_name}` || '';
+          document.getElementById('resPhone').value = currentUser.phone || '';
+          document.getElementById('resEmail').value = currentUser.email || '';
+        } else {
+          // If no user data, redirect to login
+          window.location.href = '../login-register/login_form.html';
+          return;
+        }
+      } catch (error) {
+        console.error('Failed to load user data:', error);
+        // Show guest mode as fallback
+        document.getElementById('userInitials').innerText = '—';
+        document.getElementById('displayName').innerText = 'Guest';
+        document.getElementById('loyaltyTier').innerText = '—';
+        document.getElementById('points').innerText = '0';
+      }
+    }
+    
+    // Make functions global
+    window.handleLogout = handleLogout;
+
+    // Initialize user data
+    initializeUserData();
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · Sales Reports</title>
+  <!-- Tailwind via CDN + Font Awesome 6 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* exact same dropdown styles from index2.html */
+    .transition-side { transition: all 0.2s ease; }
+    .dropdown-arrow { transition: transform 0.2s; }
+    details[open] .dropdown-arrow { transform: rotate(90deg); }
+    details > summary { list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
+  </style>
+</head>
+<body class="bg-white font-sans antialiased">
+
+  <!-- APP CONTAINER: flex row (sidebar + main) -->
+  <div class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- ========== SIDEBAR (exact copy from index2.html) ========== -->
+    <aside class="lg:w-80 bg-white border-r border-slate-200 shadow-sm lg:min-h-screen shrink-0 overflow-y-auto">
+      <!-- brand -->
+      <div class="px-5 py-6 border-b border-slate-100 flex items-center gap-2">
+        <i class="fa-solid fa-utensils text-amber-600 text-xl"></i>
+        <i class="fa-solid fa-bed text-amber-600 text-xl"></i>
+        <span class="font-semibold text-lg tracking-tight text-slate-800">Lùcas<span class="text-amber-600">.admin</span></span>
+      </div>
+
+      <!-- admin badge -->
+      <div class="flex items-center gap-3 px-5 py-4 border-b border-slate-100 bg-slate-50/60">
+        <div class="h-9 w-9 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold">A</div>
+        <div>
+          <p class="font-medium text-sm">Andreo Reyes</p>
+          <p class="text-xs text-slate-500">general manager</p>
+        </div>
+      </div>
+
+      <!-- ===== SIDEBAR MENU (grouped with dropdowns) ===== -->
+      <nav class="p-4 space-y-2 text-sm">
+
+        <!-- Dashboard -->
+        <a href="../Dashboard.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition">
+          <i class="fa-solid fa-table-cells-large w-5 text-slate-400"></i>
+          <span>Dashboard</span>
+        </a>
+
+        <!-- HOTEL MANAGEMENT GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-hotel w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">HOTEL MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../Hotel_management/Front_Desk_Reception.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-reception w-4 text-slate-400"></i> Front Desk / Reception</a>
+            <a href="../Hotel_management/room_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-bed w-4 text-slate-400"></i> Room Management</a>
+            <a href="../Hotel_management/Reservations_n_booking.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar-check w-4 text-slate-400"></i> Reservations & Booking</a>
+            <a href="../Hotel_management/housekeeping_n_maintenance.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-broom w-4 text-slate-400"></i> Housekeeping & Maintenance</a>
+            <a href="../Hotel_management/events_n_conference.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar w-4 text-slate-400"></i> Events & Conference</a>
+          </div>
+        </details>
+
+        <!-- RESTAURANT MANAGEMENT GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-utensils w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">RESTAURANT MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../restaurant_&_management/table_reservation.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-clock w-4"></i> Table Reservation</a>
+            <a href="../restaurant_&_management/menu_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-bars w-4"></i> Menu Management</a>
+            <a href="../restaurant_&_management/orders_POS.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-cash-register w-4"></i> Orders / POS</a>
+            <a href="../restaurant_&_management/kitchen_orders.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-fire w-4"></i> Kitchen Orders (KOT)</a>
+            <a href="../restaurant_&_management/wait_staff_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-user w-4"></i> Wait Staff Management</a>
+          </div>
+        </details>
+
+        <!-- CUSTOMER MANAGEMENT GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-regular fa-address-book w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">CUSTOMER MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../Customer_management/guest_relationship.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-handshake w-4"></i> Guest Relationship (CRM)</a>
+            <a href="../Customer_management/loyalty_rewards.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-star w-4"></i> Loyalty & Rewards</a>
+            <a href="../Customer_management/customer_feedback&reviews.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-pen-to-square w-4"></i> Customer Feedback & Reviews</a>
+          </div>
+        </details>
+
+        <!-- OPERATIONS GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-gears w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">OPERATIONS</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../Operations/inventory_&_stocks.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-boxes w-4"></i> Inventory & Stock</a>
+            <a href="../Operations/billing_&_payments.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-credit-card w-4"></i> Billing & Payments</a>
+            <a href="../Operations/payment_gateway.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-wifi w-4"></i> Payment Gateway</a>
+          </div>
+        </details>
+
+        <!-- MARKETING GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-megaphone w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">MARKETING</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../Marketing/hotelmarketing_&_promotions.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-gem w-4"></i> Hotel Marketing & Promotions</a>
+            <a href="../Marketing/online_ordering_integration.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-cart-shopping w-4"></i> Online Ordering Integration</a>
+          </div>
+        </details>
+
+        <!-- REPORTS & ANALYTICS - open with Sales Reports highlighted -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-amber-800 bg-amber-50 cursor-pointer transition-side">
+            <i class="fa-solid fa-chart-simple w-5 text-amber-600"></i>
+            <span class="font-medium">REPORTS & ANALYTICS</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-amber-600"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-200">
+            <a href="../reports_&_analytics/sales_report.html" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-100/50 text-amber-700 font-medium"><i class="fa-solid fa-chart-line w-4 text-amber-600"></i> Sales Reports</a>
+            <a href="../reports_&_analytics/booking_reports.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar w-4 text-slate-400"></i> Booking Reports</a>
+            <a href="../reports_&_analytics/analytics_dashboard.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-chart-pie w-4 text-slate-400"></i> Analytics Dashboard</a>
+          </div>
+        </details>
+
+        <!-- SYSTEM -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-computer w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">SYSTEM</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../System/channel_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-code-branch w-4"></i> Channel Management</a>
+            <a href="../System/door_lock_integration.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-lock w-4"></i> Door Lock Integration</a>
+            <a href="../System/settings.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-sliders w-4"></i> Settings</a>
+          </div>
+        </details>
+
+        <!-- logout -->
+        <div class="border-t border-slate-200 pt-3 mt-3">
+          <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-700">
+            <i class="fa-solid fa-arrow-right-from-bracket w-5"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- ========== MAIN CONTENT (SALES REPORTS) ========== -->
+    <main class="flex-1 p-5 lg:p-8 overflow-y-auto bg-white">
+
+      <!-- header with title and date -->
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h1 class="text-2xl lg:text-3xl font-light text-slate-800">Sales Reports</h1>
+          <p class="text-sm text-slate-500 mt-0.5">comprehensive sales analytics, revenue breakdown, and performance metrics</p>
+        </div>
+        <div class="flex gap-3 text-sm">
+          <span class="bg-white border rounded-full px-4 py-2 flex items-center gap-2 shadow-sm"><i class="fa-regular fa-calendar text-slate-400"></i> May 21, 2025</span>
+          <span class="bg-white border rounded-full px-4 py-2 shadow-sm"><i class="fa-regular fa-bell"></i></span>
+        </div>
+      </div>
+
+      <!-- ===== DATE RANGE PICKER ===== -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 mb-6 flex flex-wrap gap-3 items-center justify-between">
+        <div class="flex gap-2 flex-wrap items-center">
+          <span class="text-sm text-slate-500">Period:</span>
+          <button class="bg-amber-600 text-white px-4 py-2 rounded-xl text-sm">Today</button>
+          <button class="border border-slate-200 px-4 py-2 rounded-xl text-sm hover:bg-slate-50">Yesterday</button>
+          <button class="border border-slate-200 px-4 py-2 rounded-xl text-sm hover:bg-slate-50">This week</button>
+          <button class="border border-slate-200 px-4 py-2 rounded-xl text-sm hover:bg-slate-50">This month</button>
+          <button class="border border-slate-200 px-4 py-2 rounded-xl text-sm hover:bg-slate-50">This year</button>
+        </div>
+        <div class="flex gap-2">
+          <input type="date" class="border border-slate-200 rounded-xl px-3 py-2 text-sm" value="2025-05-01">
+          <span class="text-slate-400">—</span>
+          <input type="date" class="border border-slate-200 rounded-xl px-3 py-2 text-sm" value="2025-05-21">
+          <button class="bg-amber-600 text-white px-4 py-2 rounded-xl text-sm">apply</button>
+        </div>
+      </div>
+
+      <!-- ===== TOP STATS CARDS ===== -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Total revenue</p>
+          <p class="text-2xl font-semibold">₱1,284,500</p>
+          <span class="text-xs text-green-600">↑ 12.4% vs last period</span>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Total orders</p>
+          <p class="text-2xl font-semibold">1,842</p>
+          <span class="text-xs text-green-600">↑ 8.2%</span>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Avg. order value</p>
+          <p class="text-2xl font-semibold">₱697</p>
+          <span class="text-xs text-green-600">↑ 3.1%</span>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Hotel revenue</p>
+          <p class="text-2xl font-semibold">₱892,400</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Restaurant revenue</p>
+          <p class="text-2xl font-semibold">₱392,100</p>
+        </div>
+      </div>
+
+      <!-- ===== SALES CHART (visual placeholder) ===== -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 mb-8">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-semibold text-lg flex items-center gap-2"><i class="fa-solid fa-chart-line text-amber-600"></i> daily sales trend (May 1 - May 21, 2025)</h2>
+          <select class="border border-slate-200 rounded-lg px-3 py-1 text-sm">
+            <option>Daily</option>
+            <option>Weekly</option>
+            <option>Monthly</option>
+          </select>
+        </div>
+        <div class="h-48 flex items-end gap-1">
+          <div class="w-1/12 bg-amber-200 h-16 rounded-t"></div>
+          <div class="w-1/12 bg-amber-300 h-24 rounded-t"></div>
+          <div class="w-1/12 bg-amber-400 h-32 rounded-t"></div>
+          <div class="w-1/12 bg-amber-300 h-28 rounded-t"></div>
+          <div class="w-1/12 bg-amber-500 h-40 rounded-t"></div>
+          <div class="w-1/12 bg-amber-400 h-36 rounded-t"></div>
+          <div class="w-1/12 bg-amber-300 h-30 rounded-t"></div>
+          <div class="w-1/12 bg-amber-200 h-20 rounded-t"></div>
+          <div class="w-1/12 bg-amber-400 h-38 rounded-t"></div>
+          <div class="w-1/12 bg-amber-500 h-42 rounded-t"></div>
+          <div class="w-1/12 bg-amber-300 h-26 rounded-t"></div>
+          <div class="w-1/12 bg-amber-200 h-18 rounded-t"></div>
+        </div>
+        <div class="flex justify-between mt-2 text-xs text-slate-400">
+          <span>May 1</span><span>May 5</span><span>May 10</span><span>May 15</span><span>May 20</span>
+        </div>
+      </div>
+
+      <!-- ===== REVENUE BREAKDOWN ===== -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <!-- by category -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5">
+          <h2 class="font-semibold text-lg flex items-center gap-2 mb-3"><i class="fa-regular fa-chart-pie text-amber-600"></i> revenue by category</h2>
+          <div class="space-y-3">
+            <div class="flex items-center gap-2">
+              <span class="text-sm w-24">Room bookings</span>
+              <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-blue-500 w-[68%]"></div>
+              </div>
+              <span class="text-sm font-medium">₱892.4k (68%)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm w-24">Restaurant</span>
+              <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-green-500 w-[22%]"></div>
+              </div>
+              <span class="text-sm font-medium">₱288.6k (22%)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm w-24">Events</span>
+              <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-purple-500 w-[6%]"></div>
+              </div>
+              <span class="text-sm font-medium">₱78.7k (6%)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm w-24">Spa & other</span>
+              <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-amber-500 w-[4%]"></div>
+              </div>
+              <span class="text-sm font-medium">₱52.5k (4%)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- by payment method -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5">
+          <h2 class="font-semibold text-lg flex items-center gap-2 mb-3"><i class="fa-regular fa-credit-card text-amber-600"></i> revenue by payment method</h2>
+          <div class="space-y-3">
+            <div class="flex items-center gap-2">
+              <span class="text-sm w-24">GCash</span>
+              <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-blue-500 w-[42%]"></div>
+              </div>
+              <span class="text-sm font-medium">₱539.5k (42%)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm w-24">Credit card</span>
+              <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-green-500 w-[35%]"></div>
+              </div>
+              <span class="text-sm font-medium">₱449.6k (35%)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm w-24">Cash</span>
+              <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-amber-500 w-[15%]"></div>
+              </div>
+              <span class="text-sm font-medium">₱192.7k (15%)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm w-24">Bank transfer</span>
+              <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-purple-500 w-[8%]"></div>
+              </div>
+              <span class="text-sm font-medium">₱102.7k (8%)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== TOP SELLING ITEMS & DAILY SUMMARY ===== -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+
+        <!-- top selling items -->
+        <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-5">
+          <h2 class="font-semibold text-lg flex items-center gap-2 mb-3"><i class="fa-solid fa-crown text-amber-600"></i> top selling items</h2>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="text-slate-500 text-xs border-b">
+                <tr>
+                  <td class="p-2">Item</td>
+                  <td class="p-2">Category</td>
+                  <td class="p-2">Units sold</td>
+                  <td class="p-2">Revenue</td>
+                </tr>
+              </thead>
+              <tbody class="divide-y">
+                <tr>
+                  <td class="p-2 font-medium">Deluxe Twin room</td>
+                  <td class="p-2">Hotel</td>
+                  <td class="p-2">124</td>
+                  <td class="p-2">₱520,800</td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-medium">Sizzling Sisig</td>
+                  <td class="p-2">Restaurant</td>
+                  <td class="p-2">342</td>
+                  <td class="p-2">₱99,180</td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-medium">Ocean Suite</td>
+                  <td class="p-2">Hotel</td>
+                  <td class="p-2">42</td>
+                  <td class="p-2">₱289,800</td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-medium">Halo-Halo</td>
+                  <td class="p-2">Restaurant</td>
+                  <td class="p-2">287</td>
+                  <td class="p-2">₱43,050</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- daily summary -->
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+          <h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fa-regular fa-sun text-amber-600"></i> today's summary</h3>
+          <ul class="space-y-2">
+            <li class="flex justify-between items-center">
+              <span>Revenue</span>
+              <span class="font-semibold">₱124,580</span>
+            </li>
+            <li class="flex justify-between items-center">
+              <span>Orders</span>
+              <span class="font-semibold">142</span>
+            </li>
+            <li class="flex justify-between items-center">
+              <span>Occupancy</span>
+              <span class="font-semibold">67%</span>
+            </li>
+            <li class="flex justify-between items-center border-t pt-2 mt-2">
+              <span>Projected month end</span>
+              <span class="font-semibold text-green-600">₱1.45M</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ===== EXPORT BUTTONS ===== -->
+      <div class="flex justify-end gap-3 mb-4">
+        <button class="border border-amber-600 text-amber-700 px-4 py-2 rounded-xl text-sm hover:bg-amber-50"><i class="fa-regular fa-file-pdf mr-2"></i>PDF</button>
+        <button class="border border-amber-600 text-amber-700 px-4 py-2 rounded-xl text-sm hover:bg-amber-50"><i class="fa-regular fa-file-excel mr-2"></i>Excel</button>
+        <button class="bg-amber-600 text-white px-4 py-2 rounded-xl text-sm hover:bg-amber-700"><i class="fa-regular fa-print mr-2"></i>Print</button>
+      </div>
+
+      <!-- footer note -->
+      <div class="mt-8 text-center text-xs text-slate-400 border-t pt-5">
+        ✅ Sales Reports — revenue overview, category breakdown, payment methods, top items, daily summary
+      </div>
+    </main>
+  </div>
+</body>
+</html>

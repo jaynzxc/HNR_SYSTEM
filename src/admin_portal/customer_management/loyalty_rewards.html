@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · Loyalty & Rewards</title>
+  <!-- Tailwind via CDN + Font Awesome 6 (kept only for calendar, bell, search, plus, pen) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* exact same dropdown styles from index2.html */
+    .transition-side { transition: all 0.2s ease; }
+    .dropdown-arrow { transition: transform 0.2s; }
+    details[open] .dropdown-arrow { transform: rotate(90deg); }
+    details > summary { list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
+    /* simple modal overlay */  
+    .modal-bg { background: rgba(0,0,0,0.4); backdrop-filter: blur(2px); }
+    /* notification center */
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #ef4444;
+      color: white;
+      border-radius: 9999px;
+      font-size: 10px;
+      padding: 2px 6px;
+    }
+  </style>
+</head>
+<body class="bg-white font-sans antialiased">
+
+  <!-- APP CONTAINER: flex row (sidebar + main) -->
+  <div class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- ========== SIDEBAR (exact copy from index2.html) ========== -->
+    <aside class="lg:w-80 bg-white border-r border-slate-200 shadow-sm lg:min-h-screen shrink-0 overflow-y-auto">
+      <!-- brand -->
+      <div class="px-5 py-6 border-b border-slate-100 flex items-center gap-2">
+        <i class="fa-solid fa-utensils text-amber-600 text-xl"></i>
+        <i class="fa-solid fa-bed text-amber-600 text-xl"></i>
+        <span class="font-semibold text-lg tracking-tight text-slate-800">HNR<span class="text-amber-600">.admin</span></span>
+      </div>
+
+      <!-- admin badge -->
+      <div class="flex items-center gap-3 px-5 py-4 border-b border-slate-100 bg-slate-50/60">
+        <div class="h-9 w-9 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold">A</div>
+        <div>
+          <p class="font-medium text-sm">Admin</p>
+          <p class="text-xs text-slate-500">role</p>
+        </div>
+      </div>
+
+      <!-- ===== SIDEBAR MENU (grouped with dropdowns) ===== -->
+      <nav class="p-4 space-y-2 text-sm">
+
+        <!-- Dashboard -->
+        <a href="../Dashboard.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition">
+          <i class="fa-solid fa-table-cells-large w-5 text-slate-400"></i>
+          <span>Dashboard</span>
+        </a>
+
+        <!-- HOTEL MANAGEMENT GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-hotel w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">HOTEL MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../hotel_management/front_desk_reception.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-reception w-4 text-slate-400"></i> Front Desk / Reception</a>
+            <a href="../hotel_management/room_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-bed w-4 text-slate-400"></i> Room Management</a>
+            <a href="../hotel_management/reservation_&_booking.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar-check w-4 text-slate-400"></i> Reservations & Booking</a>
+            <a href="../hotel_management/housekeeping_&_maintenance.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-broom w-4 text-slate-400"></i> Housekeeping & Maintenance</a>
+            <a href="../hotel_management/event_&_conference.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar w-4 text-slate-400"></i> Events & Conference</a>
+          </div>
+        </details>
+
+        <!-- RESTAURANT MANAGEMENT GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-utensils w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">RESTAURANT MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../restaurant_&_management/table_reservation.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-clock w-4"></i> Table Reservation</a>
+            <a href="../restaurant_&_management/menu_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-bars w-4"></i> Menu Management</a>
+            <a href="../restaurant_&_management/orders_POS.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-cash-register w-4"></i> Orders / POS</a>
+            <a href="../restaurant_&_management/kitchen_orders.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-fire w-4"></i> Kitchen Orders (KOT)</a>
+            <a href="../restaurant_&_management/wait_staff_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-user w-4"></i> Wait Staff Management</a>
+          </div>
+        </details>
+
+        <!-- CUSTOMER MANAGEMENT - open with Loyalty & Rewards highlighted -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-amber-800 bg-amber-50 cursor-pointer transition-side">
+            <i class="fa-regular fa-address-book w-5 text-amber-600"></i>
+            <span class="font-medium">CUSTOMER MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-amber-600"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-200">
+            <a href="../customer_management/customer_relationship.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-handshake w-4 text-slate-400"></i> Guest Relationship (CRM)</a>
+            <a href="../customer_management/loyalty_rewards.html" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-100/50 text-amber-700 font-medium"><i class="fa-regular fa-star w-4 text-amber-600"></i> Loyalty & Rewards</a>
+            <a href="../customer_management/customer_feedback_&_reviews.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-pen-to-square w-4 text-slate-400"></i> Customer Feedback & Reviews</a>
+          </div>
+        </details>
+
+        <!-- OPERATIONS -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-gears w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">OPERATIONS</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../operations/inventory_&_stocks.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-boxes w-4"></i> Inventory & Stock</a>
+            <a href="../operations/billing_and_payments.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-credit-card w-4"></i> Billing & Payments</a>
+            <a href="../operations/payment_gateway.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-wifi w-4"></i> Payment Gateway</a>
+          </div>
+        </details>
+
+        <!-- MARKETING -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-megaphone w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">MARKETING</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../marketing/hotelmarketing_&_promotions.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-gem w-4"></i> Hotel Marketing & Promotions</a>
+            <a href="../marketing/online_ordering_integration.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-cart-shopping w-4"></i> Online Ordering Integration</a>
+          </div>
+        </details>
+
+        <!-- REPORTS & ANALYTICS -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-chart-simple w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">REPORTS & ANALYTICS</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../reports_&_analytics/sales_reports.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-chart-line w-4"></i> Sales Reports</a>
+            <a href="../reports_&_analytics/booking_reports.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar w-4"></i> Booking Reports</a>
+            <a href="../reports_&_analytics/analytics_dashboard.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-chart-pie w-4"></i> Analytics Dashboard</a>
+          </div>
+        </details>
+
+        <!-- SYSTEM -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-computer w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">SYSTEM</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../system/channel_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-code-branch w-4"></i> Channel Management</a>
+            <a href="../system/door_lock_integration.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-lock w-4"></i> Door Lock Integration</a>
+            <a href="../system/settings.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-sliders w-4"></i> Settings</a>
+          </div>
+        </details>
+
+        <!-- logout -->
+        <div class="border-t border-slate-200 pt-3 mt-3">
+          <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-700">
+            <i class="fa-solid fa-arrow-right-from-bracket w-5"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- ========== MAIN CONTENT (LOYALTY & REWARDS) ========== -->
+    <main class="flex-1 p-5 lg:p-8 overflow-y-auto bg-white relative">
+
+      <!-- header with title, date and NOTIFICATION ICON -->
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h1 class="text-2xl lg:text-3xl font-light text-slate-800">Loyalty & Rewards</h1>
+          <p class="text-sm text-slate-500 mt-0.5">manage loyalty tiers, points, rewards, and member benefits</p>
+        </div>
+        <div class="flex gap-3 text-sm items-center">
+          <span class="bg-white border rounded-full px-4 py-2 flex items-center gap-2 shadow-sm"><i class="fa-regular fa-calendar text-slate-400"></i> May 21, 2025</span>
+          <!-- notification bell with badge and dropdown (function) -->
+          <div class="relative" id="notificationContainer">
+            <button id="notificationBell" class="bg-white border rounded-full w-10 h-10 flex items-center justify-center shadow-sm relative">
+              <i class="fa-regular fa-bell text-slate-600 text-lg"></i>
+              <span id="notifBadge" class="notification-badge">3</span>
+            </button>
+            <!-- notification dropdown (hidden by default) -->
+            <div id="notifDropdown" class="absolute right-0 mt-2 w-80 bg-white border rounded-2xl shadow-xl z-50 hidden overflow-hidden">
+              <div class="p-3 border-b bg-slate-50 flex justify-between items-center">
+                <span class="font-semibold text-sm">Notifications</span>
+                <button id="markReadBtn" class="text-xs text-amber-600 hover:underline">mark all read</button>
+              </div>
+              <div class="max-h-64 overflow-y-auto" id="notifList">
+                <div class="p-3 border-b hover:bg-slate-50 flex gap-2 items-start">
+                  <i class="fa-regular fa-star text-amber-400 mt-1"></i>
+                  <div><p class="text-xs">Mia Cruz redeemed Free Coffee</p><span class="text-[10px] text-slate-400">2 min ago</span></div>
+                </div>
+                <div class="p-3 border-b hover:bg-slate-50 flex gap-2 items-start">
+                  <i class="fa-regular fa-gem text-purple-400 mt-1"></i>
+                  <div><p class="text-xs">Anna Reyes reached Platinum tier</p><span class="text-[10px] text-slate-400">1 hour ago</span></div>
+                </div>
+                <div class="p-3 hover:bg-slate-50 flex gap-2 items-start">
+                  <i class="fa-regular fa-clock text-blue-400 mt-1"></i>
+                  <div><p class="text-xs">Points adjustment for John Doe</p><span class="text-[10px] text-slate-400">yesterday</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== STATS CARDS ===== -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Total members</p>
+          <p class="text-2xl font-semibold">1,284</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Active this month</p>
+          <p class="text-2xl font-semibold">342</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Points issued</p>
+          <p class="text-2xl font-semibold">248k</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Rewards redeemed</p>
+          <p class="text-2xl font-semibold">1,284</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Conversion rate</p>
+          <p class="text-2xl font-semibold">18%</p>
+        </div>
+      </div>
+
+      <!-- ===== TIER OVERVIEW ===== -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 text-center">
+          <span class="bg-slate-200 text-slate-700 text-xs px-3 py-1 rounded-full">bronze</span>
+          <p class="text-2xl font-bold mt-2">642</p>
+          <p class="text-xs text-slate-500">members</p>
+          <p class="text-xs text-slate-400 mt-1">0-499 pts</p>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 text-center">
+          <span class="bg-slate-200 text-slate-700 text-xs px-3 py-1 rounded-full">silver</span>
+          <p class="text-2xl font-bold mt-2">384</p>
+          <p class="text-xs text-slate-500">members</p>
+          <p class="text-xs text-slate-400 mt-1">500-999 pts</p>
+        </div>
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 text-center">
+          <span class="bg-amber-200 text-amber-800 text-xs px-3 py-1 rounded-full">gold</span>
+          <p class="text-2xl font-bold mt-2">198</p>
+          <p class="text-xs text-slate-500">members</p>
+          <p class="text-xs text-slate-400 mt-1">1,000-1,999 pts</p>
+        </div>
+        <div class="bg-purple-50 border border-purple-200 rounded-2xl p-5 text-center">
+          <span class="bg-purple-200 text-purple-800 text-xs px-3 py-1 rounded-full">platinum</span>
+          <p class="text-2xl font-bold mt-2">60</p>
+          <p class="text-xs text-slate-500">members</p>
+          <p class="text-xs text-slate-400 mt-1">2,000+ pts</p>
+        </div>
+      </div>
+
+      <!-- ===== ACTION BAR (create reward & adjust points - adjust is ordinary button) ===== -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 mb-6 flex flex-wrap gap-3 items-center justify-between">
+        <div class="flex gap-2 flex-wrap">
+          <!-- create reward button (kept plus icon) -->
+          <button id="createRewardBtn" class="bg-amber-600 text-white px-4 py-2 rounded-xl text-sm"><i class="fa-regular fa-plus mr-1"></i>create reward</button>
+        </div>
+        <!-- search bar with live filter & icon (kept) -->
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input type="text" id="searchMemberInput" placeholder="search members..." class="border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-sm w-64 focus:ring-1 focus:ring-amber-500 outline-none">
+        </div>
+      </div>
+
+      <!-- ===== MEMBERS TABLE (shows ALL members, adjust button now text only) ===== -->
+      <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden mb-8">
+        <div class="p-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+          <h2 class="font-semibold flex items-center gap-2"><i class="fa-regular fa-star text-amber-600"></i> all members by points</h2>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm" id="memberTable">
+            <thead class="text-slate-500 text-xs border-b">
+              <tr>
+                <td class="p-3">Member</td>
+                <td class="p-3">Tier</td>
+                <td class="p-3">Points balance</td>
+                <td class="p-3">Lifetime points</td>
+                <td class="p-3">Last activity</td>
+                <td class="p-3">Actions</td>
+              </tr>
+            </thead>
+            <tbody class="divide-y" id="tableBody">
+              <!-- rows populated by js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ===== AVAILABLE REWARDS & RECENT REDEMPTIONS ===== -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- available rewards -->
+        <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-5">
+          <h2 class="font-semibold text-lg mb-3">available rewards</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="border rounded-xl p-3 flex justify-between items-center">
+              <div><p class="font-medium">Free Coffee</p><p class="text-xs text-slate-500">240 points</p></div>
+              <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">active</span>
+            </div>
+            <div class="border rounded-xl p-3 flex justify-between items-center">
+              <div><p class="font-medium">Free Breakfast</p><p class="text-xs text-slate-500">480 points</p></div>
+              <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">active</span>
+            </div>
+            <div class="border rounded-xl p-3 flex justify-between items-center">
+              <div><p class="font-medium">Late Check-out</p><p class="text-xs text-slate-500">600 points</p></div>
+              <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">active</span>
+            </div>
+            <div class="border rounded-xl p-3 flex justify-between items-center">
+              <div><p class="font-medium">Room Upgrade</p><p class="text-xs text-slate-500">1,200 points</p></div>
+              <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">active</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- recent redemptions -->
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+          <h3 class="font-semibold mb-3">recent redemptions</h3>
+          <ul class="space-y-2">
+            <li class="flex justify-between items-center border-b pb-1"><span>Mia Cruz</span> <span class="text-xs">Free coffee · 240 pts</span></li>
+            <li class="flex justify-between items-center border-b pb-1"><span>John Doe</span> <span class="text-xs">Late check-out · 600 pts</span></li>
+            <li class="flex justify-between items-center"><span>Anna Reyes</span> <span class="text-xs">Room upgrade · 1,200 pts</span></li>
+          </ul>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODALS (hidden by default) + notification toasts (upper right) -->
+
+  <!-- create reward modal -->
+  <div id="rewardModal" class="fixed inset-0 modal-bg hidden items-center justify-center z-50" style="display: none;">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <h3 class="text-xl font-semibold mb-4">✨ create new reward</h3>
+      <input type="text" placeholder="reward name" class="w-full border p-2 rounded mb-3">
+      <input type="number" placeholder="points required" class="w-full border p-2 rounded mb-4">
+      <div class="flex justify-end gap-2">
+        <button id="cancelReward" class="px-4 py-2 border rounded-lg">cancel</button>
+        <button id="saveReward" class="px-4 py-2 bg-amber-600 text-white rounded-lg">save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- adjust points modal -->
+  <div id="pointsModal" class="fixed inset-0 modal-bg hidden items-center justify-center z-50">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6">
+      <h3 class="text-xl font-semibold mb-4">adjust points</h3>
+      <select class="w-full border p-2 rounded mb-3"><option>Anna Reyes (#G10236)</option><option>Mia Cruz (#G10234)</option></select>
+      <input type="number" placeholder="points to add / subtract" class="w-full border p-2 rounded mb-4">
+      <div class="flex justify-end gap-2">
+        <button id="cancelPoints" class="px-4 py-2 border rounded-lg">cancel</button>
+        <button id="savePoints" class="px-4 py-2 bg-amber-600 text-white rounded-lg">update</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- notification toasts container (upper right) -->
+  <div id="toastContainer" class="fixed top-5 right-5 z-[100] flex flex-col gap-2 w-80"></div>
+
+  <script>
+    (function() {
+      // ---------- sample member data ----------
+      const membersData = [
+        { id: 'G10236', name: 'Anna Reyes', initials: 'AR', tier: 'platinum', tierClass: 'bg-purple-100 text-purple-700', points: 4280, lifetime: 12450, last: 'May 15, 2025' },
+        { id: 'G10234', name: 'Mia Cruz', initials: 'MC', tier: 'gold', tierClass: 'bg-amber-100 text-amber-700', points: 1240, lifetime: 3890, last: 'May 20, 2025' },
+        { id: 'G10238', name: 'Lisa Santos', initials: 'LS', tier: 'gold', tierClass: 'bg-amber-100 text-amber-700', points: 1180, lifetime: 4220, last: 'May 18, 2025' },
+        { id: 'G10235', name: 'John Doe', initials: 'JD', tier: 'silver', tierClass: 'bg-slate-100 text-slate-600', points: 840, lifetime: 2150, last: 'May 10, 2025' },
+        { id: 'G10237', name: 'Robert Tan', initials: 'RT', tier: 'bronze', tierClass: 'bg-slate-100 text-slate-600', points: 320, lifetime: 980, last: 'Apr 28, 2025' },
+        { id: 'G10239', name: 'Emma Watson', initials: 'EW', tier: 'platinum', tierClass: 'bg-purple-100 text-purple-700', points: 5120, lifetime: 15000, last: 'May 22, 2025' },
+        { id: 'G10240', name: 'James Lee', initials: 'JL', tier: 'silver', tierClass: 'bg-slate-100 text-slate-600', points: 670, lifetime: 1300, last: 'May 12, 2025' },
+        { id: 'G10241', name: 'Sophia Clark', initials: 'SC', tier: 'bronze', tierClass: 'bg-slate-100 text-slate-600', points: 120, lifetime: 450, last: 'May 5, 2025' }
+      ];
+
+      // filter state (no pagination)
+      let filterText = '';
+
+      // render full table (all members)
+      function renderTable() {
+        const tbody = document.getElementById('tableBody');
+        if (!tbody) return;
+
+        const filtered = membersData.filter(m => 
+          m.name.toLowerCase().includes(filterText.toLowerCase()) ||
+          m.id.toLowerCase().includes(filterText.toLowerCase()) ||
+          m.tier.toLowerCase().includes(filterText.toLowerCase())
+        );
+
+        tbody.innerHTML = '';
+        filtered.forEach(m => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td class="p-3">
+              <div class="flex items-center gap-2">
+                <div class="h-8 w-8 rounded-full ${m.tier === 'platinum' ? 'bg-purple-200' : (m.tier === 'gold' ? 'bg-amber-200' : 'bg-slate-200')} flex items-center justify-center text-xs font-bold">${m.initials}</div>
+                <div><span class="font-medium">${m.name}</span><p class="text-xs text-slate-400">ID: #${m.id}</p></div>
+              </div>
+            </td>
+            <td class="p-3"><span class="${m.tierClass} px-2 py-0.5 rounded-full text-xs">${m.tier}</span></td>
+            <td class="p-3 font-semibold">${m.points}</td>
+            <td class="p-3">${m.lifetime}</td>
+            <td class="p-3">${m.last}</td>
+            <td class="p-3">
+              <!-- adjust button as ordinary text (no icon) -->
+              <button class="adjust-individual text-blue-600 text-xs hover:underline" data-id="${m.id}" data-name="${m.name}">adjust</button>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        // attach adjust listeners
+        document.querySelectorAll('.adjust-individual').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            document.getElementById('pointsModal').classList.remove('hidden');
+            document.getElementById('pointsModal').style.display = 'flex';
+          });
+        });
+      }
+
+      // toast function (upper right)
+      function showToast(title, message, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `bg-white border-l-4 ${type==='success'?'border-green-500':type==='info'?'border-blue-500':'border-amber-500'} rounded-lg shadow-lg p-3 flex justify-between items-start animate-slide-in`;
+        toast.innerHTML = `<div><strong class="text-sm">${title}</strong><p class="text-xs text-slate-500">${message}</p></div><button class="text-slate-400 hover:text-slate-600" onclick="this.parentElement.remove()"><i class="fa-regular fa-xmark"></i></button>`;
+        container.appendChild(toast);
+        setTimeout(() => { if(toast.parentNode) toast.remove(); }, 4000);
+      }
+
+      // search filter
+      document.getElementById('searchMemberInput').addEventListener('input', (e) => {
+        filterText = e.target.value;
+        renderTable();
+      });
+
+      // ----- modal handling -----
+      const rewardModal = document.getElementById('rewardModal');
+      const pointsModal = document.getElementById('pointsModal');
+
+      function hideModals() {
+        rewardModal.classList.add('hidden'); rewardModal.style.display = 'none';
+        pointsModal.classList.add('hidden'); pointsModal.style.display = 'none';
+      }
+
+      document.getElementById('createRewardBtn').addEventListener('click', () => {
+        rewardModal.classList.remove('hidden'); rewardModal.style.display = 'flex';
+      });
+
+      document.getElementById('cancelReward').addEventListener('click', hideModals);
+      document.getElementById('saveReward').addEventListener('click', () => { showToast('Reward created', 'New reward added'); hideModals(); });
+      document.getElementById('cancelPoints').addEventListener('click', hideModals);
+      document.getElementById('savePoints').addEventListener('click', () => { showToast('Points updated', 'Balance adjusted'); hideModals(); });
+
+      // notification dropdown logic
+      const bell = document.getElementById('notificationBell');
+      const dropdown = document.getElementById('notifDropdown');
+      const badge = document.getElementById('notifBadge');
+      bell.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('hidden');
+      });
+      document.addEventListener('click', (e) => {
+        if (!dropdown.contains(e.target) && !bell.contains(e.target)) dropdown.classList.add('hidden');
+      });
+      document.getElementById('markReadBtn').addEventListener('click', () => {
+        badge.innerText = '0';
+        showToast('🔔 Notifications', 'All marked as read', 'info');
+      });
+
+      // close modals on outside click
+      [rewardModal, pointsModal].forEach(modal => {
+        modal.addEventListener('click', (e) => { if (e.target === modal) hideModals(); });
+      });
+
+      // initial render
+      renderTable();
+    })();
+  </script>
+</body>
+</html>

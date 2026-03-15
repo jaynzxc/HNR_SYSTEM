@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reviews · Customer Portal (clean, no sample data)</title>
+  <!-- Tailwind via CDN + Font Awesome 6 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    .review-card { transition: box-shadow 0.2s; }
+    .rating-star { cursor: pointer; transition: color 0.1s; }
+  </style>
+</head>
+<body class="bg-slate-50 font-sans antialiased">
+
+  <!-- main flex wrapper (sidebar + content) -->
+  <div class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- ========== SIDEBAR (customer portal) ========== -->
+    <aside class="lg:w-80 bg-white border-r border-slate-200 shadow-sm shrink-0">
+      <div class="px-6 py-7 border-b border-slate-100">
+        <div class="flex items-center gap-2 text-amber-700">
+          <i class="fa-solid fa-utensils text-xl"></i>
+          <i class="fa-solid fa-bed text-xl"></i>
+          <span class="font-semibold text-xl tracking-tight text-slate-800">Lùcas<span class="text-amber-600">.stay</span></span>
+        </div>
+        <p class="text-xs text-slate-500 mt-1">customer portal · reviews</p>
+      </div>
+
+      <!-- user summary -->
+      <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-100 bg-slate-50/80">
+        <div class="h-12 w-12 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold text-lg">MC</div>
+        <div>
+          <p class="font-medium text-slate-800">Mia Cruz</p>
+          <p class="text-xs text-slate-500 flex items-center gap-1"><i class="fa-regular fa-gem text-[11px]"></i> gold member · <span id="loyaltyPoints">1240</span> pts</p>
+        </div>
+      </div>
+
+      <!-- navigation -->
+       <nav class="p-4 space-y-1.5 text-sm">
+      <a href="./index.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-table-cells-large w-5 text-slate-400"></i>Dashboard</a>
+      <a href="./my_profile.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-user w-5 text-slate-400"></i>My Profile</a>
+      <a href="./hotel_booking.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-amber-50 text-amber-800 font-medium"><i class="fa-solid fa-hotel w-5 text-amber-600"></i>Hotel Booking</a>
+      <a href="./my_reservation.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-calendar-check w-5 text-slate-400"></i>My Reservations</a>
+      <a href="./restaurant_reservation.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-clock w-5 text-slate-400"></i>Restaurant Reservation</a>
+      <a href="./order_food.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-bag-shopping w-5 text-slate-400"></i>Menu / Order Food</a>
+      <a href="./payments.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-credit-card w-5 text-slate-400"></i>Payments</a>
+      <a href="./loyalty_rewards.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-star w-5 text-slate-400"></i>Loyalty Rewards</a>
+      <a href="./Notifications.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition relative"><i class="fa-regular fa-bell w-5 text-slate-400"></i>Notifications<span class="ml-auto bg-amber-100 text-amber-800 text-xs px-1.5 py-0.5 rounded-full">3</span></a>
+      <div class="border-t border-slate-200 pt-3 mt-3">
+        <a href="#" onclick="handleLogout()" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-700 transition"><i class="fa-solid fa-arrow-right-from-bracket w-5"></i>Logout</a>
+      </div>
+     </nav>
+    </aside>
+
+    <!-- ========== MAIN CONTENT (REVIEWS PAGE) ========== -->
+    <main class="flex-1 p-5 lg:p-8 overflow-y-auto">
+
+      <!-- header -->
+      <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 class="text-2xl lg:text-3xl font-light text-slate-800">Reviews & Feedback</h1>
+          <p class="text-sm text-slate-500 mt-0.5">share your experience and read past reviews</p>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-full px-4 py-2 text-sm flex items-center gap-2 shadow-sm">
+          <i class="fa-regular fa-calendar text-slate-400"></i> wednesday, 21 may 2025
+        </div>
+      </div>
+
+      <!-- ===== LEAVE A REVIEW SECTION (fully functional) ===== -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 mb-8">
+        <h2 class="font-semibold text-xl flex items-center gap-2 mb-4"><i class="fa-regular fa-pen-to-square text-amber-600"></i> write a new review</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-xs text-slate-500 mb-1">select experience *</label>
+            <select id="reviewExperience" class="w-full border border-slate-200 rounded-xl p-3 text-sm bg-white">
+              <option value="Hotel stay · Deluxe Twin (Jun 12-15, 2025)">Hotel stay · Deluxe Twin (Jun 12-15, 2025)</option>
+              <option value="Restaurant · Azure (May 21, 2025)">Restaurant · Azure (May 21, 2025)</option>
+              <option value="Hotel stay · Ocean Suite (Apr 10-13, 2025)">Hotel stay · Ocean Suite (Apr 10-13, 2025)</option>
+              <option value="Restaurant · Azure (May 5, 2025)">Restaurant · Azure (May 5, 2025)</option>
+              <option value="Room service (May 15, 2025)">Room service (May 15, 2025)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-500 mb-1">your rating *</label>
+            <div class="flex items-center gap-1 text-3xl text-slate-300" id="ratingStars">
+              <i class="fa-regular fa-star rating-star" data-value="1"></i>
+              <i class="fa-regular fa-star rating-star" data-value="2"></i>
+              <i class="fa-regular fa-star rating-star" data-value="3"></i>
+              <i class="fa-regular fa-star rating-star" data-value="4"></i>
+              <i class="fa-regular fa-star rating-star" data-value="5"></i>
+              <span class="text-sm text-slate-500 ml-3" id="ratingDisplay">0/5</span>
+            </div>
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-xs text-slate-500 mb-1">your review *</label>
+            <textarea id="reviewText" rows="4" placeholder="Tell us about your experience..." class="w-full border border-slate-200 rounded-xl p-3 text-sm"></textarea>
+          </div>
+        </div>
+        <div class="flex gap-3 mt-4">
+          <button class="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-xl font-medium transition" id="submitReviewBtn">submit review</button>
+          <button class="border border-slate-300 px-6 py-3 rounded-xl text-slate-700 hover:bg-slate-50 transition" id="clearReviewBtn">clear</button>
+        </div>
+        <p class="text-xs text-green-600 mt-3 flex items-center gap-1" id="pointsHint"><i class="fa-regular fa-circle-check"></i> earn 20 loyalty points per review!</p>
+      </div>
+
+      <!-- ===== MY PAST REVIEWS (starts empty) ===== -->
+      <h2 class="font-semibold text-xl mb-4 flex items-center gap-2"><i class="fa-regular fa-clock-rotate-left text-amber-600"></i> my past reviews</h2>
+      <div id="myReviewsContainer" class="space-y-4 mb-8">
+        <!-- empty state: no sample data -->
+        <div class="text-slate-400 text-center py-8 bg-white rounded-2xl border border-slate-200">You haven't written any reviews yet.</div>
+      </div>
+
+      <!-- ===== RECENT REVIEWS FROM OTHER GUESTS (starts empty) ===== -->
+      <h2 class="font-semibold text-xl mb-4 flex items-center gap-2"><i class="fa-regular fa-comments text-amber-600"></i> recent guest reviews</h2>
+      <div id="guestReviewsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- empty state: no sample data -->
+        <div class="text-slate-400 text-center py-8 bg-white rounded-2xl border border-slate-200 md:col-span-2">No guest reviews yet.</div>
+      </div>
+
+      <!-- bottom hint -->
+      <div class="mt-10 text-center text-xs text-slate-400 border-t pt-6">
+        Reviews module — completely empty. Write your first review!
+      </div>
+    </main> 
+  </div>
+
+  <!-- Database API -->
+  <script src="./js/database.js"></script>
+
+  <script>
+    (function() {
+      // ----- ALL DATA REMOVED (empty states) -----
+      let myReviews = [];        // no past reviews
+      let guestReviews = [];     // no guest reviews
+      let loyaltyPoints = 1240;  // starting points (unchanged)
+
+      let currentRating = 0;     // for new review form
+      let editingId = null;      // if editing, store review id
+
+      // DOM elements
+      const myReviewsContainer = document.getElementById('myReviewsContainer');
+      const guestReviewsContainer = document.getElementById('guestReviewsContainer');
+      const ratingStars = document.querySelectorAll('.rating-star');
+      const ratingDisplay = document.getElementById('ratingDisplay');
+      const reviewText = document.getElementById('reviewText');
+      const reviewExperience = document.getElementById('reviewExperience');
+      const submitBtn = document.getElementById('submitReviewBtn');
+      const clearBtn = document.getElementById('clearReviewBtn');
+      const pointsHint = document.getElementById('pointsHint');
+      const loyaltySpan = document.getElementById('loyaltyPoints');
+
+      // Helper: generate unique id
+      function generateId() { return 'rev_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); }
+
+      // Helper: format date
+      function todayStr() {
+        const d = new Date();
+        return `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}-${d.getDate().toString().padStart(2,'0')}`;
+      }
+
+      // Render MY past reviews
+      function renderMyReviews() {
+        if (myReviews.length === 0) {
+          myReviewsContainer.innerHTML = '<div class="text-slate-400 text-center py-8 bg-white rounded-2xl border border-slate-200">You haven\'t written any reviews yet.</div>';
+          return;
+        }
+        let html = '';
+        myReviews.forEach(rev => {
+          const starsFull = '★'.repeat(rev.rating);
+          const starsEmpty = '☆'.repeat(5 - rev.rating);
+          const starsDisplay = `<span class="text-yellow-400">${starsFull}</span><span class="text-slate-300">${starsEmpty}</span>`;
+          html += `
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 review-card" data-review-id="${rev.id}">
+              <div class="flex flex-wrap items-start justify-between gap-3">
+                <div class="flex gap-3">
+                  <div class="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center text-amber-700"><i class="fa-solid ${rev.icon || 'fa-pen'}"></i></div>
+                  <div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <h3 class="font-semibold">${rev.experience}</h3>
+                      <div class="flex text-sm">${starsDisplay}</div>
+                      <span class="text-xs text-slate-400">${rev.rating}.0</span>
+                    </div>
+                    <p class="text-xs text-slate-500">${rev.date} · ${rev.detail || ''}</p>
+                    <p class="text-sm mt-2">"${rev.text}"</p>
+                    <div class="flex items-center gap-3 mt-2">
+                      <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">published</span>
+                      <button class="text-xs text-amber-700 hover:underline edit-review" data-id="${rev.id}">edit</button>
+                      <button class="text-xs text-rose-600 hover:underline delete-review" data-id="${rev.id}">delete</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        myReviewsContainer.innerHTML = html;
+      }
+
+      // Render guest reviews (always empty initially)
+      function renderGuestReviews() {
+        if (guestReviews.length === 0) {
+          guestReviewsContainer.innerHTML = '<div class="text-slate-400 text-center py-8 bg-white rounded-2xl border border-slate-200 md:col-span-2">No guest reviews yet.</div>';
+          return;
+        }
+        let html = '';
+        guestReviews.forEach(g => {
+          const starsFull = '★'.repeat(g.rating);
+          const starsEmpty = '☆'.repeat(5 - g.rating);
+          const starsDisplay = `<span class="text-yellow-400">${starsFull}</span><span class="text-slate-300">${starsEmpty}</span>`;
+          html += `
+            <div class="bg-white border border-slate-200 rounded-2xl p-4">
+              <div class="flex items-center gap-2 mb-2">
+                <div class="h-8 w-8 rounded-full bg-slate-300 flex items-center justify-center text-xs font-bold uppercase">${g.initials}</div>
+                <div>
+                  <p class="font-medium text-sm">${g.name}</p>
+                  <div class="flex text-xs">${starsDisplay}</div>
+                </div>
+              </div>
+              <p class="text-sm">"${g.text}"</p>
+              <p class="text-xs text-slate-400 mt-2">${g.timeAgo} · ${g.category}</p>
+            </div>
+          `;
+        });
+        guestReviewsContainer.innerHTML = html;
+      }
+
+      // Update points display
+      function updatePoints(added = 0) {
+        loyaltyPoints += added;
+        loyaltySpan.innerText = loyaltyPoints;
+      }
+
+      // Reset new review form
+      function resetForm() {
+        reviewExperience.selectedIndex = 0;
+        reviewText.value = '';
+        currentRating = 0;
+        editingId = null;
+        ratingStars.forEach(s => {
+          s.classList.remove('fa-solid', 'text-yellow-400');
+          s.classList.add('fa-regular', 'text-slate-300');
+        });
+        ratingDisplay.innerText = '0/5';
+        submitBtn.innerText = 'submit review';
+        pointsHint.innerHTML = '<i class="fa-regular fa-circle-check"></i> earn 20 loyalty points per review!';
+      }
+
+      // star rating setup
+      ratingStars.forEach(star => {
+        star.addEventListener('click', (e) => {
+          const val = parseInt(star.dataset.value);
+          currentRating = val;
+          ratingStars.forEach((s, idx) => {
+            if (idx < val) {
+              s.classList.remove('fa-regular', 'text-slate-300');
+              s.classList.add('fa-solid', 'text-yellow-400');
+            } else {
+              s.classList.remove('fa-solid', 'text-yellow-400');
+              s.classList.add('fa-regular', 'text-slate-300');
+            }
+          });
+          ratingDisplay.innerText = val + '/5';
+        });
+      });
+      // Submit new / update review
+      submitBtn.addEventListener('click', () => {
+        const exp = reviewExperience.value;
+        const text = reviewText.value.trim();
+        if (!text) { window.dbAPI.showToast('Please write your review', 'error'); return; }
+        if (currentRating === 0) { window.dbAPI.showToast('Please select a rating', 'error'); return; }
+
+        if (editingId) {
+          // update existing review
+          const idx = myReviews.findIndex(r => r.id === editingId);
+          if (idx !== -1) {
+            myReviews[idx].experience = exp;
+            myReviews[idx].text = text;
+            myReviews[idx].rating = currentRating;
+            myReviews[idx].date = todayStr();
+          }
+          addNotification(`Review updated`, 'rotate');
+          editingId = null;
+        } else {
+          // create new review (NO guest review auto-generated)
+          const newReview = {
+            id: generateId(),
+            experience: exp,
+            text: text,
+            rating: currentRating,
+            date: todayStr(),
+            detail: 'just now',
+            icon: 'fa-pen'
+          };
+          myReviews.unshift(newReview);
+          updatePoints(20);
+          addNotification(`New review posted +20 pts`, 'circle-check');
+        }
+
+        renderMyReviews();
+        renderGuestReviews();  // guestReviews unchanged (still empty unless manually added later)
+        resetForm();
+      });
+
+      // Clear / cancel
+      clearBtn.addEventListener('click', resetForm);
+
+      // Edit/Delete review
+      myReviewsContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('edit-review')) {
+          const id = e.target.dataset.id;
+          const review = myReviews.find(r => r.id === id);
+          if (!review) return;
+          editingId = id;
+          // populate form
+          for (let i = 0; i < reviewExperience.options.length; i++) {
+            if (reviewExperience.options[i].value === review.experience) {
+              reviewExperience.selectedIndex = i; break;
+            }
+          }
+          reviewText.value = review.text;
+          currentRating = review.rating;
+          // set stars
+          ratingStars.forEach((s, idx) => {
+            if (idx < review.rating) {
+              s.classList.remove('fa-regular', 'text-slate-300');
+              s.classList.add('fa-solid', 'text-yellow-400');
+            } else {
+              s.classList.remove('fa-solid', 'text-yellow-400');
+              s.classList.add('fa-regular', 'text-slate-300');
+            }
+          });
+          ratingDisplay.innerText = review.rating + '/5';
+          submitBtn.innerText = 'update review';
+          pointsHint.innerHTML = '<i class="fa-regular fa-pen"></i> editing review (no extra points)';
+        }
+
+        if (e.target.classList.contains('delete-review')) {
+          const id = e.target.dataset.id;
+          if (confirm('Delete this review?')) {
+            myReviews = myReviews.filter(r => r.id !== id);
+            renderMyReviews();
+            addNotification('Review deleted', 'trash-can');
+          }
+        }
+      });
+
+      // simple notification simulation (console + optional alert)
+      function addNotification(msg, icon) {
+        console.log(`🔔 ${msg}`);
+        const oldHint = pointsHint.innerHTML;
+        pointsHint.innerHTML = `<i class="fa-regular fa-${icon}"></i> ${msg}`;
+        setTimeout(() => { pointsHint.innerHTML = oldHint; }, 2000);
+      }
+
+      // Initialize: absolutely no sample data
+      renderMyReviews();
+      renderGuestReviews();
+      resetForm();
+
+      // Load user data and initialize
+      async function initializeUserData() {
+        try {
+          const currentUser = await window.dbAPI.loadCurrentUserSimple();
+          
+          if (currentUser) {
+            // Update UI with actual user data
+            document.getElementById('userInitials').innerText = window.dbAPI.getUserInitials(currentUser.first_name, currentUser.last_name);
+            document.getElementById('displayName').innerText = `${currentUser.first_name} ${currentUser.last_name}`;
+            document.getElementById('loyaltyTier').innerText = currentUser.membership_tier || 'member';
+            document.getElementById('loyaltyPoints').innerText = currentUser.loyalty_points || '0';
+          } else {
+            window.location.href = '../login-register/login_form.html';
+            return;
+          }
+        } catch (error) {
+          console.error('Failed to load user data:', error);
+          document.getElementById('userInitials').innerText = '—';
+          document.getElementById('displayName').innerText = 'Guest';
+          document.getElementById('loyaltyTier').innerText = '—';
+          document.getElementById('loyaltyPoints').innerText = '0';
+        }
+      }
+
+      // Initialize user data
+      initializeUserData();
+
+      // Logout function
+      async function handleLogout() {
+        try {
+          await window.dbAPI.logout();
+        } catch (error) {
+          console.error('Logout error:', error);
+          window.dbAPI.showToast('Failed to logout', 'error');
+        }
+      }
+      
+      // Make functions global
+      window.handleLogout = handleLogout;
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · Housekeeping & Maintenance</title>
+  <!-- Tailwind via CDN + Font Awesome 6 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* exact same dropdown styles from index2.html */
+    .transition-side { transition: all 0.2s ease; }
+    .dropdown-arrow { transition: transform 0.2s; }
+    details[open] .dropdown-arrow { transform: rotate(90deg); }
+    details > summary { list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
+  </style>
+</head>
+<body class="bg-white font-sans antialiased">
+
+  <!-- APP CONTAINER: flex row (sidebar + main) -->
+  <div class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- ========== SIDEBAR (exact copy from index2.html) ========== -->
+    <aside class="lg:w-80 bg-white border-r border-slate-200 shadow-sm lg:min-h-screen shrink-0 overflow-y-auto">
+      <!-- brand -->
+      <div class="px-5 py-6 border-b border-slate-100 flex items-center gap-2">
+        <i class="fa-solid fa-utensils text-amber-600 text-xl"></i>
+        <i class="fa-solid fa-bed text-amber-600 text-xl"></i>
+        <span class="font-semibold text-lg tracking-tight text-slate-800">Lùcas<span class="text-amber-600">.admin</span></span>
+      </div>
+
+      <!-- admin badge -->
+      <div class="flex items-center gap-3 px-5 py-4 border-b border-slate-100 bg-slate-50/60">
+        <div class="h-9 w-9 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold">A</div>
+        <div>
+          <p class="font-medium text-sm">Andreo Reyes</p>
+          <p class="text-xs text-slate-500">general manager</p>
+        </div>
+      </div>
+
+      <!-- ===== SIDEBAR MENU (grouped with dropdowns) ===== -->
+      <nav class="p-4 space-y-2 text-sm">
+
+        <!-- Dashboard -->
+        <a href="../Dashboard.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition">
+          <i class="fa-solid fa-table-cells-large w-5 text-slate-400"></i>
+          <span>Dashboard</span>
+        </a>
+
+        <!-- HOTEL MANAGEMENT GROUP (dropdown) - open with Housekeeping highlighted -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-amber-800 bg-amber-50 cursor-pointer transition-side">
+            <i class="fa-solid fa-hotel w-5 text-amber-600"></i>
+            <span class="font-medium">HOTEL MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-amber-600"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-200">
+            <a href="../hotel_management/front_desk_reception.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-reception w-4 text-slate-400"></i> Front Desk / Reception</a>
+            <a href="../hotel_management/room_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-bed w-4 text-slate-400"></i> Room Management</a>
+            <a href="../hotel_management/reservation_&_booking.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar-check w-4 text-slate-400"></i> Reservations & Booking</a>
+            <a href="../hotel_management/housekeeping_&_maintenance.html" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-100/50 text-amber-700 font-medium"><i class="fa-solid fa-broom w-4 text-amber-600"></i> Housekeeping & Maintenance</a>
+            <a href="../hotel_management/event_&_conference.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar w-4 text-slate-400"></i> Events & Conference</a>
+          </div>
+        </details>
+
+        <!-- RESTAURANT MANAGEMENT GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-utensils w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">RESTAURANT MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../restaurant_management/table_reservation.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-clock w-4"></i> Table Reservation</a>
+            <a href="../restaurant_management/menu_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-bars w-4"></i> Menu Management</a>
+            <a href="../restaurant_management/orders_pos.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-cash-register w-4"></i> Orders / POS</a>
+            <a href="../restaurant_management/kitchen_orders.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-fire w-4"></i> Kitchen Orders (KOT)</a>
+            <a href="../restaurant_management/wait_staff_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-user w-4"></i> Wait Staff Management</a>
+          </div>
+        </details>
+
+        <!-- CUSTOMER MANAGEMENT -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-regular fa-address-book w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">CUSTOMER MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../customer_management/customer_relationship.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-handshake w-4"></i> Guest Relationship (CRM)</a>
+            <a href="../customer_management/loyalty_rewards.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-star w-4"></i> Loyalty & Rewards</a>
+            <a href="../customer_management/customer_feedback_&_reviews.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-pen-to-square w-4"></i> Customer Feedback & Reviews</a>
+          </div>
+        </details>
+
+        <!-- OPERATIONS -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-gears w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">OPERATIONS</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../operations/inventory_&_stocks.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-boxes w-4"></i> Inventory & Stock</a>
+            <a href="../operations/billing_&_payment.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-credit-card w-4"></i> Billing & Payments</a>
+            <a href="../operations/payment_gateway.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-wifi w-4"></i> Payment Gateway</a>
+          </div>
+        </details>
+
+        <!-- MARKETING -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-megaphone w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">MARKETING</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../marketing/hotelmarketing_&_promotions.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-gem w-4"></i> Hotel Marketing & Promotions</a>
+            <a href="../marketing/online_ordering_integration.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-cart-shopping w-4"></i> Online Ordering Integration</a>
+          </div>
+        </details>
+
+        <!-- REPORTS & ANALYTICS -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-chart-simple w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">REPORTS & ANALYTICS</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../reports_&_analytics/sales_report.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-chart-line w-4"></i> Sales Reports</a>
+            <a href="../reports_&_analytics/booking_reports.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar w-4"></i> Booking Reports</a>
+            <a href="../reports_&_analytics/analytics_dashboard.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-chart-pie w-4"></i> Analytics Dashboard</a>
+          </div>
+        </details>
+
+        <!-- SYSTEM -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-computer w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">SYSTEM</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../system/channel_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-code-branch w-4"></i> Channel Management</a>
+            <a href="../system/door_lock_integration.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-lock w-4"></i> Door Lock Integration</a>
+            <a href="../system/settings.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-sliders w-4"></i> Settings</a>
+          </div>
+        </details>
+
+        <!-- logout -->
+        <div class="border-t border-slate-200 pt-3 mt-3">
+          <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-700">
+            <i class="fa-solid fa-arrow-right-from-bracket w-5"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- ========== MAIN CONTENT (HOUSEKEEPING & MAINTENANCE) ========== -->
+    <main class="flex-1 p-5 lg:p-8 overflow-y-auto bg-white">
+
+      <!-- header with title and date -->
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h1 class="text-2xl lg:text-3xl font-light text-slate-800">Housekeeping & Maintenance</h1>
+          <p class="text-sm text-slate-500 mt-0.5">manage room cleaning status, staff assignments, and maintenance requests</p>
+        </div>
+        <div class="flex gap-3 text-sm">
+          <span class="bg-white border rounded-full px-4 py-2 flex items-center gap-2 shadow-sm"><i class="fa-regular fa-calendar text-slate-400"></i> May 21, 2025</span>
+          <span class="bg-white border rounded-full px-4 py-2 shadow-sm"><i class="fa-regular fa-bell"></i></span>
+        </div>
+      </div>
+
+      <!-- ===== STATS CARDS ===== -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Clean rooms</p>
+          <p class="text-2xl font-semibold text-green-600">32</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Dirty / to clean</p>
+          <p class="text-2xl font-semibold text-amber-600">8</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">In progress</p>
+          <p class="text-2xl font-semibold text-blue-600">5</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Maintenance</p>
+          <p class="text-2xl font-semibold text-rose-600">3</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Staff on duty</p>
+          <p class="text-2xl font-semibold">12</p>
+        </div>
+      </div>
+
+      <!-- ===== FILTER AND TABS ===== -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 mb-6 flex flex-wrap gap-3 items-center justify-between">
+        <div class="flex gap-2 flex-wrap">
+          <button class="bg-amber-600 text-white px-4 py-2 rounded-xl text-sm">all tasks</button>
+          <button class="border border-slate-200 px-4 py-2 rounded-xl text-sm hover:bg-slate-50">to clean</button>
+          <button class="border border-slate-200 px-4 py-2 rounded-xl text-sm hover:bg-slate-50">in progress</button>
+          <button class="border border-slate-200 px-4 py-2 rounded-xl text-sm hover:bg-slate-50">maintenance</button>
+          <button class="border border-slate-200 px-4 py-2 rounded-xl text-sm hover:bg-slate-50">completed</button>
+        </div>
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input type="text" placeholder="search room..." class="border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-sm w-64 focus:ring-1 focus:ring-amber-500 outline-none">
+        </div>
+      </div>
+
+      <!-- ===== TWO COLUMN LAYOUT ===== -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+
+        <!-- LEFT: Housekeeping tasks list (2/3 width) -->
+        <div class="lg:col-span-2 space-y-6">
+
+          <!-- housekeeping tasks table -->
+          <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+            <div class="p-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+              <h2 class="font-semibold flex items-center gap-2"><i class="fa-solid fa-broom text-amber-600"></i> Housekeeping tasks</h2>
+              <button class="text-sm text-amber-700 border border-amber-600 px-3 py-1 rounded-lg hover:bg-amber-50">assign tasks</button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead class="text-slate-500 text-xs border-b">
+                  <tr>
+                    <td class="p-3">Room</td>
+                    <td class="p-3">Status</td>
+                    <td class="p-3">Priority</td>
+                    <td class="p-3">Assigned to</td>
+                    <td class="p-3">Last cleaned</td>
+                    <td class="p-3">Actions</td>
+                  </tr>
+                </thead>
+                <tbody class="divide-y">
+                  <tr>
+                    <td class="p-3 font-medium">101</td>
+                    <td class="p-3"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">clean</span></td>
+                    <td class="p-3">—</td>
+                    <td class="p-3">Elena</td>
+                    <td class="p-3">today 9am</td>
+                    <td class="p-3"><button class="text-amber-700 text-xs">inspect</button></td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-medium">102</td>
+                    <td class="p-3"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">clean</span></td>
+                    <td class="p-3">—</td>
+                    <td class="p-3">Elena</td>
+                    <td class="p-3">today 9:30am</td>
+                    <td class="p-3"><button class="text-amber-700 text-xs">inspect</button></td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-medium">201</td>
+                    <td class="p-3"><span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full text-xs">dirty</span></td>
+                    <td class="p-3"><span class="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs">high</span></td>
+                    <td class="p-3">—</td>
+                    <td class="p-3">yesterday</td>
+                    <td class="p-3"><button class="text-amber-700 text-xs">assign</button></td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-medium">202</td>
+                    <td class="p-3"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full text-xs">in progress</span></td>
+                    <td class="p-3">normal</td>
+                    <td class="p-3">John</td>
+                    <td class="p-3">started 1pm</td>
+                    <td class="p-3"><button class="text-amber-700 text-xs">mark done</button></td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-medium">305</td>
+                    <td class="p-3"><span class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full text-xs">maintenance</span></td>
+                    <td class="p-3"><span class="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs">urgent</span></td>
+                    <td class="p-3">Maintenance</td>
+                    <td class="p-3">—</td>
+                    <td class="p-3"><button class="text-amber-700 text-xs">view</button></td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-medium">306</td>
+                    <td class="p-3"><span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full text-xs">dirty</span></td>
+                    <td class="p-3">normal</td>
+                    <td class="p-3">—</td>
+                    <td class="p-3">yesterday</td>
+                    <td class="p-3"><button class="text-amber-700 text-xs">assign</button></td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-medium">410</td>
+                    <td class="p-3"><span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full text-xs">dirty</span></td>
+                    <td class="p-3">low</td>
+                    <td class="p-3">—</td>
+                    <td class="p-3">2 days ago</td>
+                    <td class="p-3"><button class="text-amber-700 text-xs">assign</button></td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-medium">812</td>
+                    <td class="p-3"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">clean</span></td>
+                    <td class="p-3">—</td>
+                    <td class="p-3">Maria</td>
+                    <td class="p-3">today 11am</td>
+                    <td class="p-3"><button class="text-amber-700 text-xs">inspect</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- maintenance requests -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5">
+            <h2 class="font-semibold text-lg flex items-center gap-2 mb-3"><i class="fa-solid fa-wrench text-amber-600"></i> active maintenance requests</h2>
+            <div class="space-y-3">
+              <div class="flex justify-between items-center border-b pb-2">
+                <div><span class="font-medium">Room 305</span><p class="text-xs text-slate-500">AC not cooling · reported 10:30 AM</p></div>
+                <span class="bg-red-100 text-red-700 text-xs px-2 py-0.5 rounded-full">urgent</span>
+              </div>
+              <div class="flex justify-between items-center border-b pb-2">
+                <div><span class="font-medium">Room 410</span><p class="text-xs text-slate-500">leaking faucet · reported 9:00 AM</p></div>
+                <span class="bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded-full">in progress</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <div><span class="font-medium">Room 1204</span><p class="text-xs text-slate-500">TV not working · reported yesterday</p></div>
+                <span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full">scheduled</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Staff & Quick Actions -->
+        <div class="space-y-5">
+
+          <!-- housekeeping staff on duty -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5">
+            <h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fa-regular fa-user text-amber-600"></i> housekeeping staff</h3>
+            <ul class="space-y-2">
+              <li class="flex justify-between items-center">
+                <span><span class="font-medium">Elena</span> <span class="text-xs text-slate-500">(lead)</span></span>
+                <span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full">on duty</span>
+              </li>
+              <li class="flex justify-between items-center">
+                <span><span class="font-medium">John</span></span>
+                <span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full">on duty</span>
+              </li>
+              <li class="flex justify-between items-center">
+                <span><span class="font-medium">Maria</span></span>
+                <span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full">on duty</span>
+              </li>
+              <li class="flex justify-between items-center">
+                <span><span class="font-medium">Carlos</span></span>
+                <span class="bg-amber-100 text-amber-700 text-xs px-2 py-0.5 rounded-full">break</span>
+              </li>
+              <li class="flex justify-between items-center">
+                <span><span class="font-medium">Ana</span></span>
+                <span class="bg-slate-100 text-slate-700 text-xs px-2 py-0.5 rounded-full">off</span>
+              </li>
+            </ul>
+            <button class="w-full border border-amber-600 text-amber-700 rounded-xl py-2 text-sm mt-4 hover:bg-amber-50">manage staff</button>
+          </div>
+
+          <!-- quick actions -->
+          <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+            <h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fa-regular fa-bolt text-amber-600"></i> quick actions</h3>
+            <div class="grid grid-cols-2 gap-2">
+              <button class="bg-white border border-slate-200 rounded-xl p-2 text-xs hover:bg-amber-100">report issue</button>
+              <button class="bg-white border border-slate-200 rounded-xl p-2 text-xs hover:bg-amber-100">assign room</button>
+              <button class="bg-white border border-slate-200 rounded-xl p-2 text-xs hover:bg-amber-100">task list</button>
+              <button class="bg-white border border-slate-200 rounded-xl p-2 text-xs hover:bg-amber-100">supplies</button>
+            </div>
+          </div>
+
+          <!-- linen / supplies summary -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5">
+            <h3 class="font-semibold flex items-center gap-2 mb-2"><i class="fa-regular fa-basket-shopping text-amber-600"></i> linen & supplies</h3>
+            <div class="space-y-1 text-sm">
+              <div class="flex justify-between"><span>Towels</span><span class="text-green-600">good</span></div>
+              <div class="flex justify-between"><span>Bed sheets</span><span class="text-amber-600">low (restock)</span></div>
+              <div class="flex justify-between"><span>Toiletries</span><span class="text-green-600">good</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== BOTTOM: ROOM STATUS SUMMARY (mini grid) ===== -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5">
+        <h2 class="font-semibold text-lg flex items-center gap-2 mb-3"><i class="fa-regular fa-building text-amber-600"></i> floor status summary</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          <div class="border rounded-xl p-2 text-center"><span class="text-xs text-slate-500">Floor 1</span><div class="flex justify-center gap-1 mt-1"><span class="bg-green-500 w-2 h-2 rounded-full"></span><span class="bg-green-500 w-2 h-2 rounded-full"></span><span class="bg-amber-500 w-2 h-2 rounded-full"></span><span class="bg-green-500 w-2 h-2 rounded-full"></span></div></div>
+          <div class="border rounded-xl p-2 text-center"><span class="text-xs text-slate-500">Floor 2</span><div class="flex justify-center gap-1 mt-1"><span class="bg-green-500 w-2 h-2 rounded-full"></span><span class="bg-blue-500 w-2 h-2 rounded-full"></span><span class="bg-green-500 w-2 h-2 rounded-full"></span><span class="bg-amber-500 w-2 h-2 rounded-full"></span></div></div>
+          <div class="border rounded-xl p-2 text-center"><span class="text-xs text-slate-500">Floor 3</span><div class="flex justify-center gap-1 mt-1"><span class="bg-rose-500 w-2 h-2 rounded-full"></span><span class="bg-green-500 w-2 h-2 rounded-full"></span><span class="bg-amber-500 w-2 h-2 rounded-full"></span><span class="bg-green-500 w-2 h-2 rounded-full"></span></div></div>
+          <div class="border rounded-xl p-2 text-center"><span class="text-xs text-slate-500">Floor 4</span><div class="flex justify-center gap-1 mt-1"><span class="bg-green-500 w-2 h-2 rounded-full"></span><span class="bg-green-500 w-2 h-2 rounded-full"></span><span class="bg-green-500 w-2 h-2 rounded-full"></span><span class="bg-blue-500 w-2 h-2 rounded-full"></span></div></div>
+          <div class="border rounded-xl p-2 text-center"><span class="text-xs text-slate-500">Floor 5</span><div class="flex justify-center gap-1 mt-1"><span class="bg-green-500 w-2 h-2 rounded-full"></span><span class="bg-amber-500 w-2 h-2 rounded-full"></span><span class="bg-green-500 w-2 h-2 rounded-full"></span><span class="bg-green-500 w-2 h-2 rounded-full"></span></div></div>
+          <div class="border rounded-xl p-2 text-center"><span class="text-xs text-slate-500">Floor 12</span><div class="flex justify-center gap-1 mt-1"><span class="bg-green-500 w-2 h-2 rounded-full"></span><span class="bg-green-500 w-2 h-2 rounded-full"></span><span class="bg-green-500 w-2 h-2 rounded-full"></span><span class="bg-amber-500 w-2 h-2 rounded-full"></span></div></div>
+        </div>
+        <div class="flex gap-4 mt-3 text-xs text-slate-500">
+          <span><span class="inline-block w-2 h-2 bg-green-500 rounded-full mr-1"></span> clean</span>
+          <span><span class="inline-block w-2 h-2 bg-amber-500 rounded-full mr-1"></span> dirty</span>
+          <span><span class="inline-block w-2 h-2 bg-blue-500 rounded-full mr-1"></span> in progress</span>
+          <span><span class="inline-block w-2 h-2 bg-rose-500 rounded-full mr-1"></span> maintenance</span>
+        </div>
+      </div>
+
+      <!-- footer note -->
+      <div class="mt-8 text-center text-xs text-slate-400 border-t pt-5">
+        ✅ Housekeeping & Maintenance — task list, staff management, maintenance requests, floor summary
+      </div>
+    </main>
+  </div>
+</body>
+</html>

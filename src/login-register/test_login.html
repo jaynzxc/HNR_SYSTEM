@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Login Form</title>
+</head>
+<body>
+    <h2>Testing Login Form</h2>
+    <button onclick="testLogin()">Test Login</button>
+    <div id="result"></div>
+    
+    <script>
+        async function testLogin() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Testing login...</p>';
+            
+            try {
+                const response = await fetch('./api/auth/auth.php/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: 'mia.cruz@email.com',
+                        password: 'customer123'
+                    })
+                });
+                
+                console.log('🔍 Response status:', response.status);
+                console.log('🔍 Response headers:', response.headers);
+                
+                const data = await response.json();
+                
+                console.log('🔍 Full login response:', JSON.stringify(data, null, 2));
+                console.log('🔍 Response structure:', {
+                    success: data.success,
+                    message: data.message,
+                    hasData: !!data.data,
+                    dataKeys: data.data ? Object.keys(data.data) : 'no data object',
+                    redirectUrl: data.data?.redirect_to,
+                    fullResponse: data
+                });
+                
+                resultDiv.innerHTML = `
+                    <h3>Response:</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                    <p><strong>Redirect URL:</strong> ${data.data?.redirect_to || 'undefined'}</p>
+                    <p><strong>Success:</strong> ${data.success}</p>
+                `;
+                
+                if (response.ok && data.success) {
+                    const redirectUrl = data.data?.redirect_to;
+                    console.log('🔍 Redirecting to:', redirectUrl);
+                    console.log('🔍 Full data object:', data.data);
+                    console.log('🔍 All keys in data.data:', data.data ? Object.keys(data.data) : 'no data');
+                    
+                    if (redirectUrl && redirectUrl !== 'undefined') {
+                        console.log('✅ Redirecting to valid URL:', redirectUrl);
+                        // window.location.href = redirectUrl; // Commented out for testing
+                        resultDiv.innerHTML += `<p style="color: green;">✅ Would redirect to: ${redirectUrl}</p>`;
+                    } else {
+                        console.error('❌ No redirect URL found or URL is undefined');
+                        console.error('❌ Available data:', data);
+                        
+                        const fallbackUrl = '/hotel_resto_system/src/customer_portal/index.html';
+                        console.log('🔄 Using fallback redirect:', fallbackUrl);
+                        // window.location.href = fallbackUrl; // Commented out for testing
+                        resultDiv.innerHTML += `<p style="color: orange;">🔄 Would use fallback: ${fallbackUrl}</p>`;
+                    }
+                } else {
+                    console.error('Login failed:', data);
+                    resultDiv.innerHTML += `<p style="color: red;">❌ Login failed: ${data.error || 'Unknown error'}</p>`;
+                }
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                resultDiv.innerHTML += `<p style="color: red;">❌ Network error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

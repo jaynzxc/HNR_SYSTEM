@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu / Order Food · Customer Portal (functional, no sample cart)</title>
+  <!-- Tailwind via CDN + Font Awesome 6 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    .menu-item button { transition: all 0.15s ease; }
+    .category-filter button.active { background-color: #d97706; color: white; border-color: #d97706; }
+  </style>
+</head>
+<body class="bg-slate-50 font-sans antialiased">
+
+  <!-- main flex wrapper (sidebar + content) -->
+  <div class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- ========== SIDEBAR (same customer portal, Menu active) ========== -->
+    <aside class="lg:w-80 bg-white border-r border-slate-200 shadow-sm shrink-0">
+      <div class="px-6 py-7 border-b border-slate-100">
+        <div class="flex items-center gap-2 text-amber-700">
+          <i class="fa-solid fa-utensils text-xl"></i>
+          <i class="fa-solid fa-bed text-xl"></i>
+          <span class="font-semibold text-xl tracking-tight text-slate-800">Lùcas<span class="text-amber-600">.stay</span></span>
+        </div>
+        <p class="text-xs text-slate-500 mt-1">customer portal · menu / order</p>
+      </div>
+
+      <!-- user summary -->
+      <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-100 bg-slate-50/80">
+        <div class="h-12 w-12 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold text-lg" id="userInitials">—</div>
+        <div>
+          <p class="font-medium text-slate-800" id="displayName">Loading...</p>
+          <p class="text-xs text-slate-500 flex items-center gap-1"><i class="fa-regular fa-gem text-[11px]"></i> <span id="loyaltyTier">member</span> · <span id="points">0</span> pts</p>
+        </div>
+      </div>
+
+      <!-- navigation (menu / order food highlighted) -->
+       <nav class="p-4 space-y-1.5 text-sm">
+      <a href="./index.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-table-cells-large w-5 text-slate-400"></i>Dashboard</a>
+      <a href="./my_profile.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-user w-5 text-slate-400"></i>My Profile</a>
+      <a href="./hotel_booking.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-hotel w-5 text-slate-400"></i>Hotel Booking</a>
+      <a href="./my_reservation.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-calendar-check w-5 text-slate-400"></i>My Reservations</a>
+      <a href="./restaurant_reservation.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-clock w-5 text-slate-400"></i>Restaurant Reservation</a>
+      <a href="./order_food.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-amber-50 text-amber-800 font-medium"><i class="fa-solid fa-bag-shopping w-5 text-amber-600"></i>Menu / Order Food</a>
+      <a href="./payments.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-credit-card w-5 text-slate-400"></i>Payments</a>
+      <a href="./loyalty_rewards.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-star w-5 text-slate-400"></i>Loyalty Rewards</a>
+      <a href="./Notifications.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition relative"><i class="fa-regular fa-bell w-5 text-slate-400"></i>Notifications<span class="ml-auto bg-amber-100 text-amber-800 text-xs px-1.5 py-0.5 rounded-full">3</span></a>
+      <div class="border-t border-slate-200 pt-3 mt-3">
+        <a href="#" onclick="handleLogout()" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-700 transition"><i class="fa-solid fa-arrow-right-from-bracket w-5"></i>Logout</a>
+      </div>
+     </nav>
+    </aside>
+
+    <!-- ========== MAIN CONTENT (MENU / ORDER FOOD PAGE) ========== -->
+    <main class="flex-1 p-5 lg:p-8 overflow-y-auto">
+
+      <!-- header -->
+      <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 class="text-2xl lg:text-3xl font-light text-slate-800">Menu / Order Food</h1>
+          <p class="text-sm text-slate-500 mt-0.5">order from Azure Restaurant & other outlets</p>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-full px-4 py-2 text-sm flex items-center gap-2 shadow-sm">
+          <i class="fa-regular fa-calendar text-slate-400"></i> wednesday, 21 may 2025
+        </div>
+      </div>
+
+      <!-- ===== TWO COLUMN: menu items (left) & current order (right) ===== -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- LEFT: menu categories and items (2/3 width) -->
+        <div class="lg:col-span-2 space-y-6">
+
+          <!-- category tabs / filter -->
+          <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-2 category-filter" id="categoryFilter">
+            <button data-cat="all" class="px-4 py-2 bg-amber-600 text-white rounded-full text-sm active">all</button>
+            <button data-cat="appetizers" class="px-4 py-2 bg-white border border-slate-200 rounded-full text-sm hover:bg-slate-50">appetizers</button>
+            <button data-cat="mains" class="px-4 py-2 bg-white border border-slate-200 rounded-full text-sm hover:bg-slate-50">mains</button>
+            <button data-cat="desserts" class="px-4 py-2 bg-white border border-slate-200 rounded-full text-sm hover:bg-slate-50">desserts</button>
+            <button data-cat="beverages" class="px-4 py-2 bg-white border border-slate-200 rounded-full text-sm hover:bg-slate-50">beverages</button>
+          </div>
+
+          <!-- menu grid (items with data-category and data-price) -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap4" id="menuGrid">
+            <!-- item 1 - mains -->
+            <div class="menu-item bg-white rounded-2xl border border-slate-200 p-4 flex gap-3 hover:shadow-md transition" data-category="mains" data-name="Sinigang na Baboy" data-price="320">
+              <div class="h-20 w-20 bg-slate-200 rounded-xl shrink-0 flex items-center justify-center text-slate-400"><i class="fa-regular fa-image"></i></div>
+              <div class="flex-1">
+                <div class="flex items-start justify-between">
+                  <h3 class="font-semibold">Sinigang na Baboy</h3>
+                  <span class="text-amber-700 font-bold">₱320</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">tamarind soup, pork, veggies</p>
+                <div class="flex items-center justify-between mt-2">
+                  <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">available</span>
+                  <button class="add-to-order text-amber-700 text-sm border border-amber-600 px-3 py-1 rounded-lg hover:bg-amber-50">add</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- item 2 - mains -->
+            <div class="menu-item bg-white rounded-2xl border border-slate-200 p-4 flex gap-3 hover:shadow-md transition" data-category="mains" data-name="Sizzling Sisig" data-price="290">
+              <div class="h-20 w-20 bg-slate-200 rounded-xl shrink-0 flex items-center justify-center text-slate-400"><i class="fa-regular fa-image"></i></div>
+              <div class="flex-1">
+                <div class="flex items-start justify-between">
+                  <h3 class="font-semibold">Sizzling Sisig</h3>
+                  <span class="text-amber-700 font-bold">₱290</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">chopped pork, onion, egg</p>
+                <div class="flex items-center justify-between mt-2">
+                  <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">available</span>
+                  <button class="add-to-order text-amber-700 text-sm border border-amber-600 px-3 py-1 rounded-lg hover:bg-amber-50">add</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- item 3 - mains -->
+            <div class="menu-item bg-white rounded-2xl border border-slate-200 p-4 flex gap-3 hover:shadow-md transition" data-category="mains" data-name="Crispy Pata" data-price="550">
+              <div class="h-20 w-20 bg-slate-200 rounded-xl shrink-0 flex items-center justify-center text-slate-400"><i class="fa-regular fa-image"></i></div>
+              <div class="flex-1">
+                <div class="flex items-start justify-between">
+                  <h3 class="font-semibold">Crispy Pata</h3>
+                  <span class="text-amber-700 font-bold">₱550</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">deep-fried pork knuckle</p>
+                <div class="flex items-center justify-between mt-2">
+                  <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">available</span>
+                  <button class="add-to-order text-amber-700 text-sm border border-amber-600 px-3 py-1 rounded-lg hover:bg-amber-50">add</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- item 4 - desserts -->
+            <div class="menu-item bg-white rounded-2xl border border-slate-200 p-4 flex gap-3 hover:shadow-md transition" data-category="desserts" data-name="Halo-Halo" data-price="150">
+              <div class="h-20 w-20 bg-slate-200 rounded-xl shrink-0 flex items-center justify-center text-slate-400"><i class="fa-regular fa-image"></i></div>
+              <div class="flex-1">
+                <div class="flex items-start justify-between">
+                  <h3 class="font-semibold">Halo-Halo</h3>
+                  <span class="text-amber-700 font-bold">₱150</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">shaved ice, fruits, leche flan</p>
+                <div class="flex items-center justify-between mt-2">
+                  <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">available</span>
+                  <button class="add-to-order text-amber-700 text-sm border border-amber-600 px-3 py-1 rounded-lg hover:bg-amber-50">add</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- item 5 - beverages -->
+            <div class="menu-item bg-white rounded-2xl border border-slate-200 p-4 flex gap-3 hover:shadow-md transition" data-category="beverages" data-name="Fresh Buko Juice" data-price="90">
+              <div class="h-20 w-20 bg-slate-200 rounded-xl shrink-0 flex items-center justify-center text-slate-400"><i class="fa-regular fa-image"></i></div>
+              <div class="flex-1">
+                <div class="flex items-start justify-between">
+                  <h3 class="font-semibold">Fresh Buko Juice</h3>
+                  <span class="text-amber-700 font-bold">₱90</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">with coconut pulp</p>
+                <div class="flex items-center justify-between mt-2">
+                  <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">available</span>
+                  <button class="add-to-order text-amber-700 text-sm border border-amber-600 px-3 py-1 rounded-lg hover:bg-amber-50">add</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- item 6 - mains (garlic rice) -->
+            <div class="menu-item bg-white rounded-2xl border border-slate-200 p-4 flex gap-3 hover:shadow-md transition" data-category="mains" data-name="Garlic Rice" data-price="50">
+              <div class="h-20 w-20 bg-slate-200 rounded-xl shrink-0 flex items-center justify-center text-slate-400"><i class="fa-regular fa-image"></i></div>
+              <div class="flex-1">
+                <div class="flex items-start justify-between">
+                  <h3 class="font-semibold">Garlic Rice</h3>
+                  <span class="text-amber-700 font-bold">₱50</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">sinangag, plain</p>
+                <div class="flex items-center justify-between mt-2">
+                  <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">available</span>
+                  <button class="add-to-order text-amber-700 text-sm border border-amber-600 px-3 py-1 rounded-lg hover:bg-amber-50">add</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: current order cart & summary (fully interactive, EMPTY on load) -->
+        <div class="space-y-5">
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 sticky top-4">
+            <h2 class="font-semibold text-lg flex items-center gap-2 border-b pb-3"><i class="fa-solid fa-bag-shopping text-amber-600"></i> your order</h2>
+
+            <!-- order items container (dynamic, starts empty) -->
+            <div id="orderItemsContainer" class="space-y-3 mt-4 max-h-80 overflow-y-auto">
+              <div class="text-sm text-slate-400 text-center py-4" id="emptyCartMsg">Your cart is empty.</div>
+            </div>
+
+            <!-- summary area (dynamically filled) -->
+            <div id="summaryDetails" class="space-y-2 text-sm">
+              <!-- subtotals appear here via js, initially blank -->
+            </div>
+
+            <!-- delivery / pickup options -->
+            <div class="mt-4">
+              <label class="block text-xs text-slate-500 mb-1">order type</label>
+              <select id="orderType" class="w-full border border-slate-200 rounded-xl p-2 text-sm">
+                <option value="dine-in (table 9)">dine-in (table 9)</option>
+                <option value="takeaway">takeaway</option>
+                <option value="room delivery (room 1204)">room delivery (room 1204)</option>
+              </select>
+            </div>
+
+            <button id="placeOrderBtn" class="w-full bg-amber-600 hover:bg-amber-700 text-white py-3 rounded-xl font-medium mt-5 transition">place order</button>
+            <p class="text-xs text-slate-400 text-center mt-3">estimated ready: 25-35 min</p>
+          </div>
+
+          <!-- loyalty / promo card (functional) -->
+          <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4">
+            <div class="flex items-center gap-2 text-amber-700">
+              <i class="fa-regular fa-star"></i>
+              <span class="font-semibold text-sm">loyalty reward</span>
+            </div>
+            <p class="text-xs text-slate-600 mt-1">use 240 pts to get 1 free halo-halo!</p>
+            <button id="applyPointsBtn" class="text-xs bg-amber-600 text-white px-3 py-1.5 rounded-lg mt-2">apply points</button>
+          </div>
+        </div>
+      </div>
+      <!-- bottom hint -->
+      <div class="mt-10 text-center text-xs text-slate-400 border-t pt-6">
+        ✅ Menu / Order Food module — fully functional cart, starts empty. Add items to begin.
+      </div>
+    </main>
+  </div>
+
+  <!-- Database API -->
+  <script src="./js/database.js"></script>
+
+  <script>
+    (function() {
+      // ----- DATA & STATE (empty cart) -----
+      let order = []; // no sample items
+      // Generate unique item ID
+      function generateItemId(name) {
+        return name.replace(/\s/g, '') + '-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5);
+      }
+
+      // Load user data and initialize
+      async function initializeUserData() {
+        try {
+          const currentUser = await window.dbAPI.loadCurrentUserSimple();
+          
+          if (currentUser) {
+            // Update UI with actual user data
+            document.getElementById('userInitials').innerText = window.dbAPI.getUserInitials(currentUser.first_name, currentUser.last_name);
+            document.getElementById('displayName').innerText = `${currentUser.first_name} ${currentUser.last_name}`;
+            document.getElementById('loyaltyTier').innerText = currentUser.membership_tier || 'member';
+            document.getElementById('points').innerText = currentUser.loyalty_points || '0';
+          } else {
+            window.location.href = '../login-register/login_form.html';
+            return;
+          }
+        } catch (error) {
+          console.error('Failed to load user data:', error);
+          document.getElementById('userInitials').innerText = '—';
+          document.getElementById('displayName').innerText = 'Guest';
+          document.getElementById('loyaltyTier').innerText = '—';
+          document.getElementById('points').innerText = '0';
+        }
+      }
+
+      // ----- RENDER ORDER CART -----
+      const container = document.getElementById('orderItemsContainer');
+      const summaryDetails = document.getElementById('summaryDetails');
+      const placeOrderBtn = document.getElementById('placeOrderBtn');
+
+      function renderOrder() {
+        if (!container) return;
+        container.innerHTML = '';
+
+        if (order.length === 0) {
+          container.innerHTML = '<div class="text-sm text-slate-400 text-center py-4">Your cart is empty.</div>';
+          if (summaryDetails) summaryDetails.innerHTML = '';
+          return;
+        }
+
+        // Build order items
+        order.forEach((item) => {
+          const itemDiv = document.createElement('div');
+          itemDiv.className = 'flex justify-between items-center order-item';
+          itemDiv.dataset.itemId = item.id;
+          itemDiv.innerHTML = `
+            <div><span class="font-medium">${item.name}</span><span class="block text-xs text-slate-500">x${item.quantity}</span></div>
+            <span class="text-sm">₱${item.price * item.quantity}</span>
+            <button class="text-rose-500 text-xs trash-btn" data-id="${item.id}" data-name="${item.name}"><i class="fa-regular fa-trash-can"></i></button>
+          `;
+          container.appendChild(itemDiv);
+        });
+
+        // attach remove event
+        document.querySelectorAll('.trash-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const id = btn.dataset.id;
+            removeFromOrder(id);
+          });
+        });
+
+        updateSummary();
+      }
+
+      // compute totals and display
+      function updateSummary() {
+        if (!summaryDetails) return;
+        if (order.length === 0) {
+          summaryDetails.innerHTML = '';
+          return;
+        }
+        const subtotal = order.reduce((acc, i) => acc + (i.price * i.quantity), 0);
+        const service = Math.round(subtotal * 0.05);
+        const total = subtotal + service;
+
+        summaryDetails.innerHTML = `
+          <div class="flex justify-between items-center text-slate-400 pt-2 border-t border-dashed">
+            <span>subtotal</span><span>₱${subtotal}</span>
+          </div>
+          <div class="flex justify-between items-center text-slate-400">
+            <span>service fee (5%)</span><span>₱${service}</span>
+          </div>
+          <div class="flex justify-between items-center font-bold text-lg border-t pt-2">
+            <span>total</span><span>₱${total}</span>
+          </div>
+        `;
+      }
+
+      // ----- ORDER MODIFIERS -----
+      function addToOrder(name, price) {
+        const existing = order.find(i => i.name === name);
+        if (existing) {
+          existing.quantity += 1;
+        } else {
+          order.push({
+            id: generateItemId(name),
+            name: name,
+            price: price,
+            quantity: 1
+          });
+        }
+        renderOrder();
+      }
+
+      function removeFromOrder(id) {
+        order = order.filter(i => i.id !== id);
+        renderOrder();
+      }
+
+      // ----- ATTACH ADD BUTTONS TO MENU -----
+      document.querySelectorAll('.add-to-order').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const menuItem = btn.closest('.menu-item');
+          if (!menuItem) return;
+          const name = menuItem.dataset.name;
+          const price = parseInt(menuItem.dataset.price);
+          if (name && !isNaN(price)) {
+            addToOrder(name, price);
+          }
+        });
+      });
+
+      // ----- CATEGORY FILTER -----
+      const filterButtons = document.querySelectorAll('#categoryFilter button');
+      const menuItems = document.querySelectorAll('.menu-item');
+
+      filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterButtons.forEach(b => {
+            b.classList.remove('bg-amber-600', 'text-white');
+            b.classList.add('bg-white', 'border', 'border-slate-200', 'text-slate-700');
+          });
+          btn.classList.remove('bg-white', 'border', 'border-slate-200', 'text-slate-700');
+          btn.classList.add('bg-amber-600', 'text-white');
+          
+          const cat = btn.dataset.cat;
+          menuItems.forEach(item => {
+            if (cat === 'all' || item.dataset.category === cat) {
+              item.style.display = 'flex';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        });
+      });
+
+      // ----- PLACE ORDER (simulate) -----
+      if (placeOrderBtn) {
+        placeOrderBtn.addEventListener('click', () => {
+          if (order.length === 0) {
+            alert('Your cart is empty. Add some delicious food!');
+          } else {
+            const orderType = document.getElementById('orderType')?.value || 'dine-in';
+            alert(`Order placed! (simulated)\nItems: ${order.length} type(s)\n${orderType}\nThank you, Mia Cruz!`);
+            order = [];
+            renderOrder();
+          }
+        });
+      }
+
+      // ----- APPLY POINTS (free halo-halo simulation) -----
+      document.getElementById('applyPointsBtn')?.addEventListener('click', () => {
+        // check if any Halo-Halo (standard) exists?
+        const standardHalo = order.find(i => i.name === 'Halo-Halo');
+        // we also want to avoid duplicate freebies
+        const freeItemName = 'Halo-Halo (loyalty free)';
+        const alreadyFree = order.find(i => i.name === freeItemName);
+
+        if (standardHalo || alreadyFree) {
+          // if there's already a standard halo, we can add a free one, but prevent double free
+          if (!alreadyFree) {
+            order.push({
+              id: generateItemId(freeItemName),
+              name: freeItemName,
+              price: 0,
+              quantity: 1
+            });
+            renderOrder();
+            alert('240 points used — added 1 free Halo-Halo (₱0) to your order.');
+          } else {
+            alert('You already have a free halo‑halo in cart.');
+          }
+        } else {
+          alert('Add a regular Halo-Halo first, then apply points to get a free one.');
+        }
+      });
+
+      // Logout function
+      async function handleLogout() {
+        try {
+          await window.dbAPI.logout();
+        } catch (error) {
+          console.error('Logout error:', error);
+          window.dbAPI.showToast('Failed to logout', 'error');
+        }
+      }
+      
+      // Make functions global
+      window.handleLogout = handleLogout;
+
+      // Ensure cart is empty on load (no sample data)
+      window.addEventListener('load', function() {
+        order = []; // explicit empty
+        renderOrder();
+      });
+      
+      // Initialize user data
+      initializeUserData();
+    })();
+  </script>
+</body>
+</html>

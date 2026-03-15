@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · Channel Management</title>
+  <!-- Tailwind via CDN + Font Awesome 6 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* exact same dropdown styles from index2.html */
+    .transition-side { transition: all 0.2s ease; }
+    .dropdown-arrow { transition: transform 0.2s; }
+    details[open] .dropdown-arrow { transform: rotate(90deg); }
+    details > summary { list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
+  </style>
+</head>
+<body class="bg-white font-sans antialiased">
+
+  <!-- APP CONTAINER: flex row (sidebar + main) -->
+  <div class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- ========== SIDEBAR (exact copy from index2.html) ========== -->
+    <aside class="lg:w-80 bg-white border-r border-slate-200 shadow-sm lg:min-h-screen shrink-0 overflow-y-auto">
+      <!-- brand -->
+      <div class="px-5 py-6 border-b border-slate-100 flex items-center gap-2">
+        <i class="fa-solid fa-utensils text-amber-600 text-xl"></i>
+        <i class="fa-solid fa-bed text-amber-600 text-xl"></i>
+        <span class="font-semibold text-lg tracking-tight text-slate-800">Lùcas<span class="text-amber-600">.admin</span></span>
+      </div>
+
+      <!-- admin badge -->
+      <div class="flex items-center gap-3 px-5 py-4 border-b border-slate-100 bg-slate-50/60">
+        <div class="h-9 w-9 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold">A</div>
+        <div>
+          <p class="font-medium text-sm">Andreo Reyes</p>
+          <p class="text-xs text-slate-500">general manager</p>
+        </div>
+      </div>
+
+      <!-- ===== SIDEBAR MENU (grouped with dropdowns) ===== -->
+      <nav class="p-4 space-y-2 text-sm">
+
+        <!-- Dashboard -->
+        <a href="../Dashboard.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition">
+          <i class="fa-solid fa-table-cells-large w-5 text-slate-400"></i>
+          <span>Dashboard</span>
+        </a>
+
+        <!-- HOTEL MANAGEMENT GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-hotel w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">HOTEL MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../Hotel_Management/Front_Desk_Reception.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-reception w-4 text-slate-400"></i> Front Desk / Reception</a>
+            <a href="../Hotel_Management/room_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-bed w-4 text-slate-400"></i> Room Management</a>
+            <a href="../Hotel_Management/Reservations_n_booking.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar-check w-4 text-slate-400"></i> Reservations & Booking</a>
+            <a href="../Hotel_Management/housekeeping_n_maintenance.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-broom w-4 text-slate-400"></i> Housekeeping & Maintenance</a>
+            <a href="../Hotel_Management/events_n_conference.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar w-4 text-slate-400"></i> Events & Conference</a>
+          </div>
+        </details>
+
+        <!-- RESTAURANT MANAGEMENT GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-utensils w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">RESTAURANT MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../restaurant_&_management/table_reservation.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-clock w-4"></i> Table Reservation</a>
+            <a href="../restaurant_&_management/menu_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-bars w-4"></i> Menu Management</a>
+            <a href="../restaurant_&_management/orders_POS.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-cash-register w-4"></i> Orders / POS</a>
+            <a href="../restaurant_&_management/kitchen_orders.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-fire w-4"></i> Kitchen Orders (KOT)</a>
+            <a href="../restaurant_&_management/wait_staff_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-user w-4"></i> Wait Staff Management</a>
+          </div>
+        </details>
+
+        <!-- CUSTOMER MANAGEMENT GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-regular fa-address-book w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">CUSTOMER MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../Customer_Management/guest_relationship.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-handshake w-4"></i> Guest Relationship (CRM)</a>
+            <a href="../Customer_Management/loyalty_rewards.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-star w-4"></i> Loyalty & Rewards</a>
+            <a href="../Customer_Management/customer_feedback&reviews.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-pen-to-square w-4"></i> Customer Feedback & Reviews</a>
+          </div>
+        </details>
+
+        <!-- OPERATIONS GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-gears w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">OPERATIONS</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../Operations/inventory_&_stocks.php" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-boxes w-4"></i> Inventory & Stock</a>
+            <a href="../Operations/biling_and_payment.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-credit-card w-4"></i> Billing & Payments</a>
+            <a href="../Operations/payment_gateway.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-wifi w-4"></i> Payment Gateway</a>
+          </div>
+        </details>
+
+        <!-- MARKETING GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-megaphone w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">MARKETING</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../Marketing/hotelmarketing_&_promotions.php" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-gem w-4"></i> Hotel Marketing & Promotions</a>
+            <a href="../Marketing/online_ordering_integration.php" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-cart-shopping w-4"></i> Online Ordering Integration</a>
+          </div>
+        </details>
+
+        <!-- REPORTS & ANALYTICS GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-chart-simple w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">REPORTS & ANALYTICS</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../reports_&_analytics/sales_report.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-chart-line w-4"></i> Sales Reports</a>
+            <a href="../reports_&_analytics/booking_reports.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar w-4"></i> Booking Reports</a>
+            <a href="../reports_&_analytics/analytics_dashboard.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-chart-pie w-4"></i> Analytics Dashboard</a>
+          </div>
+        </details>
+
+        <!-- SYSTEM - open with Channel Management highlighted -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-amber-800 bg-amber-50 cursor-pointer transition-side">
+            <i class="fa-solid fa-computer w-5 text-amber-600"></i>
+            <span class="font-medium">SYSTEM</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-amber-600"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-200">
+            <a href="../System/channel_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-100/50 text-amber-700 font-medium"><i class="fa-solid fa-code-branch w-4 text-amber-600"></i> Channel Management</a>
+            <a href="../System/door_lock_integration.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-lock w-4 text-slate-400"></i> Door Lock Integration</a>
+            <a href="../System/settings.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-sliders w-4 text-slate-400"></i> Settings</a>
+          </div>
+        </details>
+
+        <!-- logout -->
+        <div class="border-t border-slate-200 pt-3 mt-3">
+          <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-700">
+            <i class="fa-solid fa-arrow-right-from-bracket w-5"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- ========== MAIN CONTENT (CHANNEL MANAGEMENT) ========== -->
+    <main class="flex-1 p-5 lg:p-8 overflow-y-auto bg-white">
+
+      <!-- header with title and date -->
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h1 class="text-2xl lg:text-3xl font-light text-slate-800">Channel Management</h1>
+          <p class="text-sm text-slate-500 mt-0.5">manage connected OTAs, sync settings, and monitor channel performance</p>
+        </div>
+        <div class="flex gap-3 text-sm">
+          <span class="bg-white border rounded-full px-4 py-2 flex items-center gap-2 shadow-sm"><i class="fa-regular fa-calendar text-slate-400"></i> May 21, 2025</span>
+          <span class="bg-white border rounded-full px-4 py-2 shadow-sm"><i class="fa-regular fa-bell"></i></span>
+        </div>
+      </div>
+
+      <!-- ===== STATS CARDS ===== -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Connected channels</p>
+          <p class="text-2xl font-semibold">6</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Total bookings (30d)</p>
+          <p class="text-2xl font-semibold">842</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Revenue from OTAs</p>
+          <p class="text-2xl font-semibold">₱892k</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Commission paid</p>
+          <p class="text-2xl font-semibold text-amber-600">₱124k</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Last sync</p>
+          <p class="text-2xl font-semibold">2 min ago</p>
+        </div>
+      </div>
+
+      <!-- ===== ACTION BAR ===== -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 mb-6 flex flex-wrap gap-3 items-center justify-between">
+        <div class="flex gap-2 flex-wrap">
+          <button class="bg-amber-600 text-white px-4 py-2 rounded-xl text-sm">+ connect new channel</button>
+          <button class="border border-slate-200 px-4 py-2 rounded-xl text-sm hover:bg-slate-50">sync all</button>
+          <button class="border border-slate-200 px-4 py-2 rounded-xl text-sm hover:bg-slate-50">mapping rules</button>
+          <button class="border border-slate-200 px-4 py-2 rounded-xl text-sm hover:bg-slate-50">logs</button>
+        </div>
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input type="text" placeholder="search channels..." class="border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-sm w-64 focus:ring-1 focus:ring-amber-500 outline-none">
+        </div>
+      </div>
+
+      <!-- ===== CONNECTED CHANNELS ===== -->
+      <h2 class="font-semibold text-lg mb-3 flex items-center gap-2"><i class="fa-solid fa-link text-amber-600"></i> connected channels</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
+
+        <!-- Booking.com -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-md transition">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xl font-bold">B</div>
+            <div>
+              <h3 class="font-semibold">Booking.com</h3>
+              <p class="text-xs text-slate-500">Connected since Jan 2024</p>
+            </div>
+          </div>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-slate-500">Commission</span>
+              <span>15%</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Bookings (30d)</span>
+              <span>284</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Revenue</span>
+              <span class="font-medium">₱312k</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Last sync</span>
+              <span class="text-green-600">2 min ago</span>
+            </div>
+          </div>
+          <div class="flex gap-2 mt-4">
+            <button class="flex-1 border border-amber-600 text-amber-700 py-2 rounded-xl text-sm hover:bg-amber-50">configure</button>
+            <button class="flex-1 bg-amber-600 text-white py-2 rounded-xl text-sm hover:bg-amber-700">sync</button>
+          </div>
+        </div>
+
+        <!-- Agoda -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-md transition">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 text-xl font-bold">A</div>
+            <div>
+              <h3 class="font-semibold">Agoda</h3>
+              <p class="text-xs text-slate-500">Connected since Mar 2024</p>
+            </div>
+          </div>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-slate-500">Commission</span>
+              <span>18%</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Bookings (30d)</span>
+              <span>156</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Revenue</span>
+              <span class="font-medium">₱187k</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Last sync</span>
+              <span class="text-green-600">5 min ago</span>
+            </div>
+          </div>
+          <div class="flex gap-2 mt-4">
+            <button class="flex-1 border border-amber-600 text-amber-700 py-2 rounded-xl text-sm hover:bg-amber-50">configure</button>
+            <button class="flex-1 bg-amber-600 text-white py-2 rounded-xl text-sm hover:bg-amber-700">sync</button>
+          </div>
+        </div>
+
+        <!-- Expedia -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-md transition">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xl font-bold">E</div>
+            <div>
+              <h3 class="font-semibold">Expedia</h3>
+              <p class="text-xs text-slate-500">Connected since Feb 2024</p>
+            </div>
+          </div>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-slate-500">Commission</span>
+              <span>20%</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Bookings (30d)</span>
+              <span>98</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Revenue</span>
+              <span class="font-medium">₱118k</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Last sync</span>
+              <span class="text-green-600">12 min ago</span>
+            </div>
+          </div>
+          <div class="flex gap-2 mt-4">
+            <button class="flex-1 border border-amber-600 text-amber-700 py-2 rounded-xl text-sm hover:bg-amber-50">configure</button>
+            <button class="flex-1 bg-amber-600 text-white py-2 rounded-xl text-sm hover:bg-amber-700">sync</button>
+          </div>
+        </div>
+
+        <!-- Airbnb -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-md transition">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="h-10 w-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 text-xl font-bold">A</div>
+            <div>
+              <h3 class="font-semibold">Airbnb</h3>
+              <p class="text-xs text-slate-500">Connected since Apr 2024</p>
+            </div>
+          </div>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-slate-500">Commission</span>
+              <span>14%</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Bookings (30d)</span>
+              <span>142</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Revenue</span>
+              <span class="font-medium">₱184k</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Last sync</span>
+              <span class="text-green-600">8 min ago</span>
+            </div>
+          </div>
+          <div class="flex gap-2 mt-4">
+            <button class="flex-1 border border-amber-600 text-amber-700 py-2 rounded-xl text-sm hover:bg-amber-50">configure</button>
+            <button class="flex-1 bg-amber-600 text-white py-2 rounded-xl text-sm hover:bg-amber-700">sync</button>
+          </div>
+        </div>
+
+        <!-- Traveloka -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-md transition">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="h-10 w-10 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 text-xl font-bold">T</div>
+            <div>
+              <h3 class="font-semibold">Traveloka</h3>
+              <p class="text-xs text-slate-500">Connected since May 2024</p>
+            </div>
+          </div>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-slate-500">Commission</span>
+              <span>16%</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Bookings (30d)</span>
+              <span>112</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Revenue</span>
+              <span class="font-medium">₱91k</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Last sync</span>
+              <span class="text-green-600">15 min ago</span>
+            </div>
+          </div>
+          <div class="flex gap-2 mt-4">
+            <button class="flex-1 border border-amber-600 text-amber-700 py-2 rounded-xl text-sm hover:bg-amber-50">configure</button>
+            <button class="flex-1 bg-amber-600 text-white py-2 rounded-xl text-sm hover:bg-amber-700">sync</button>
+          </div>
+        </div>
+
+        <!-- Direct website -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-md transition">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 text-xl"><i class="fa-solid fa-globe"></i></div>
+            <div>
+              <h3 class="font-semibold">Direct Website</h3>
+              <p class="text-xs text-slate-500">Built-in channel</p>
+            </div>
+          </div>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-slate-500">Commission</span>
+              <span>0%</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Bookings (30d)</span>
+              <span>250</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Revenue</span>
+              <span class="font-medium">₱324k</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-500">Status</span>
+              <span class="text-green-600">active</span>
+            </div>
+          </div>
+          <div class="flex gap-2 mt-4">
+            <button class="flex-1 border border-amber-600 text-amber-700 py-2 rounded-xl text-sm hover:bg-amber-50">settings</button>
+            <button class="flex-1 bg-amber-600 text-white py-2 rounded-xl text-sm hover:bg-amber-700">view</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== AVAILABLE CHANNELS TO CONNECT ===== -->
+      <h2 class="font-semibold text-lg mb-3 flex items-center gap-2"><i class="fa-regular fa-plus text-amber-600"></i> available channels</h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div class="border border-dashed border-slate-300 rounded-2xl p-4 text-center hover:bg-slate-50 cursor-pointer">
+          <i class="fa-solid fa-hotel text-2xl text-slate-400 mb-1"></i>
+          <p class="text-sm font-medium">Hotels.com</p>
+          <p class="text-xs text-slate-400">connect</p>
+        </div>
+        <div class="border border-dashed border-slate-300 rounded-2xl p-4 text-center hover:bg-slate-50 cursor-pointer">
+          <i class="fa-solid fa-umbrella-beach text-2xl text-slate-400 mb-1"></i>
+          <p class="text-sm font-medium">Trip.com</p>
+          <p class="text-xs text-slate-400">connect</p>
+        </div>
+        <div class="border border-dashed border-slate-300 rounded-2xl p-4 text-center hover:bg-slate-50 cursor-pointer">
+          <i class="fa-solid fa-plane text-2xl text-slate-400 mb-1"></i>
+          <p class="text-sm font-medium">Ctrip</p>
+          <p class="text-xs text-slate-400">connect</p>
+        </div>
+        <div class="border border-dashed border-slate-300 rounded-2xl p-4 text-center hover:bg-slate-50 cursor-pointer">
+          <i class="fa-solid fa-globe text-2xl text-slate-400 mb-1"></i>
+          <p class="text-sm font-medium">Hostelworld</p>
+          <p class="text-xs text-slate-400">connect</p>
+        </div>
+      </div>
+
+      <!-- ===== RECENT CHANNEL ACTIVITY ===== -->
+      <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden mb-8">
+        <div class="p-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+          <h2 class="font-semibold flex items-center gap-2"><i class="fa-regular fa-clock text-amber-600"></i> recent channel activity</h2>
+          <button class="text-sm text-amber-700 border border-amber-600 px-3 py-1 rounded-lg hover:bg-amber-50">view all</button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="text-slate-500 text-xs border-b">
+              <tr>
+                <td class="p-3">Time</td>
+                <td class="p-3">Channel</td>
+                <td class="p-3">Action</td>
+                <td class="p-3">Details</td>
+                <td class="p-3">Status</td>
+              </tr>
+            </thead>
+            <tbody class="divide-y">
+              <tr>
+                <td class="p-3">2 min ago</td>
+                <td class="p-3">Booking.com</td>
+                <td class="p-3">Sync completed</td>
+                <td class="p-3">3 rooms updated</td>
+                <td class="p-3"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">success</span></td>
+              </tr>
+              <tr>
+                <td class="p-3">15 min ago</td>
+                <td class="p-3">Airbnb</td>
+                <td class="p-3">New booking</td>
+                <td class="p-3">#AB123 - Deluxe Twin</td>
+                <td class="p-3"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">imported</span></td>
+              </tr>
+              <tr>
+                <td class="p-3">32 min ago</td>
+                <td class="p-3">Agoda</td>
+                <td class="p-3">Rate update</td>
+                <td class="p-3">Ocean Suite price changed</td>
+                <td class="p-3"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs">success</span></td>
+              </tr>
+              <tr>
+                <td class="p-3">1 hour ago</td>
+                <td class="p-3">Expedia</td>
+                <td class="p-3">Sync failed</td>
+                <td class="p-3">Connection timeout</td>
+                <td class="p-3"><span class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full text-xs">failed</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ===== BOTTOM: MAPPING RULES & COMMISSION SUMMARY ===== -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- room type mapping -->
+        <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-5">
+          <h2 class="font-semibold text-lg flex items-center gap-2 mb-3"><i class="fa-solid fa-diagram-project text-amber-600"></i> room type mapping</h2>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="text-slate-500 text-xs border-b">
+                <tr>
+                  <td class="p-2">Hotel room</td>
+                  <td class="p-2">Booking.com</td>
+                  <td class="p-2">Agoda</td>
+                  <td class="p-2">Expedia</td>
+                  <td class="p-2">Airbnb</td>
+                </tr>
+              </thead>
+              <tbody class="divide-y">
+                <tr>
+                  <td class="p-2 font-medium">Deluxe Twin</td>
+                  <td class="p-2">Deluxe Twin</td>
+                  <td class="p-2">Deluxe - Twin</td>
+                  <td class="p-2">Deluxe, 2 Beds</td>
+                  <td class="p-2">Deluxe room</td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-medium">Ocean Suite</td>
+                  <td class="p-2">Suite</td>
+                  <td class="p-2">Ocean Suite</td>
+                  <td class="p-2">Suite, Ocean View</td>
+                  <td class="p-2">Luxury suite</td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-medium">Superior</td>
+                  <td class="p-2">Superior</td>
+                  <td class="p-2">Superior Room</td>
+                  <td class="p-2">Superior, 1 Bed</td>
+                  <td class="p-2">Standard room</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- commission summary -->
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+          <h3 class="font-semibold flex items-center gap-2 mb-3"><i class="fa-regular fa-chart-pie text-amber-600"></i> commission summary</h3>
+          <ul class="space-y-2">
+            <li class="flex justify-between items-center">
+              <span>Booking.com (15%)</span>
+              <span>₱46,800</span>
+            </li>
+            <li class="flex justify-between items-center">
+              <span>Agoda (18%)</span>
+              <span>₱33,660</span>
+            </li>
+            <li class="flex justify-between items-center">
+              <span>Expedia (20%)</span>
+              <span>₱23,600</span>
+            </li>
+            <li class="flex justify-between items-center">
+              <span>Airbnb (14%)</span>
+              <span>₱25,760</span>
+            </li>
+            <li class="flex justify-between items-center border-t pt-2 mt-2 font-semibold">
+              <span>Total commission</span>
+              <span>₱129,820</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- footer note -->
+      <div class="mt-8 text-center text-xs text-slate-400 border-t pt-5">
+        ✅ Channel Management — connected OTAs, sync status, room mapping, commission tracking, activity logs
+      </div>
+    </main>
+  </div>
+</body>
+</html>

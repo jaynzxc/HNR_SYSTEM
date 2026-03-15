@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Debug Test</title>
+</head>
+<body>
+    <h1>Login Debug Test</h1>
+    <form id="debugLoginForm">
+        <div>
+            <label>Email:</label>
+            <input type="email" id="debugEmail" value="roldan.tiu@email.com" required>
+        </div>
+        <div>
+            <label>Password:</label>
+            <input type="password" id="debugPassword" value="customer123" required>
+        </div>
+        <button type="submit">Test Login</button>
+    </form>
+    
+    <div id="debugResult"></div>
+    
+    <script>
+        document.getElementById('debugLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('debugEmail').value;
+            const password = document.getElementById('debugPassword').value;
+            const resultDiv = document.getElementById('debugResult');
+            
+            resultDiv.innerHTML = '<p>Testing login...</p>';
+            
+            try {
+                const response = await fetch('./api/auth/auth.php/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <h2>Login Response:</h2>
+                    <h3>HTTP Status: ${response.status}</h3>
+                    <h3>Full Response:</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                    
+                    <h3>Redirect URL Analysis:</h3>
+                    <p><strong>data.data?.redirect_to:</strong> ${data.data?.redirect_to}</p>
+                    <p><strong>data.redirect_to:</strong> ${data.redirect_to}</p>
+                    <p><strong>Type of data.data?.redirect_to:</strong> ${typeof data.data?.redirect_to}</p>
+                    <p><strong>Length of redirect URL:</strong> ${data.data?.redirect_to ? data.data?.redirect_to.length : 'undefined'}</p>
+                    
+                    <h3>Test Redirect:</h3>
+                    <button onclick="testRedirect()">Test Redirect to: ${data.data?.redirect_to}</button>
+                `;
+                
+                window.testData = data;
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        });
+        
+        function testRedirect() {
+            const redirectUrl = window.testData.data?.redirect_to;
+            console.log('🔍 Testing redirect to:', redirectUrl);
+            if (redirectUrl && redirectUrl !== 'undefined' && redirectUrl !== null) {
+                console.log('✅ Redirecting to:', redirectUrl);
+                window.location.href = redirectUrl;
+            } else {
+                console.error('❌ Invalid redirect URL:', redirectUrl);
+            }
+        }
+    </script>
+</body>
+</html>

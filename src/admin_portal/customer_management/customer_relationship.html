@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · Customer Relationship (CRM)</title>
+  <!-- Tailwind via CDN + Font Awesome 6 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* exact same dropdown styles from index2.html */
+    .transition-side { transition: all 0.2s ease; }
+    .dropdown-arrow { transition: transform 0.2s; }
+    details[open] .dropdown-arrow { transform: rotate(90deg); }
+    details > summary { list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
+    .modal { transition: opacity 0.2s ease; }
+    .filter-panel { transition: all 0.3s ease; }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #10b981;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #ef4444;
+      color: white;
+      border-radius: 9999px;
+      padding: 2px 6px;
+      font-size: 10px;
+      font-weight: bold;
+    }
+    .notification-panel {
+      position: absolute;
+      top: 50px;
+      right: 0;
+      width: 320px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      border: 1px solid #e2e8f0;
+      z-index: 100;
+      animation: slideDown 0.2s ease;
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .notification-item {
+      transition: background-color 0.2s;
+      cursor: pointer;
+    }
+    .notification-item:hover {
+      background-color: #f8fafc;
+    }
+    .notification-item.unread {
+      background-color: #fef3c7;
+    }
+    .pagination-button {
+      min-width: 36px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="bg-white font-sans antialiased">
+
+  <!-- Toast notification container -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50"></div>
+
+  <!-- APP CONTAINER: flex row (sidebar + main) -->
+  <div class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- ========== SIDEBAR ========== -->
+    <aside class="lg:w-80 bg-white border-r border-slate-200 shadow-sm lg:min-h-screen shrink-0 overflow-y-auto">
+      <!-- brand -->
+      <div class="px-5 py-6 border-b border-slate-100 flex items-center gap-2">
+        <i class="fa-solid fa-utensils text-amber-600 text-xl"></i>
+        <i class="fa-solid fa-bed text-amber-600 text-xl"></i>
+        <span class="font-semibold text-lg tracking-tight text-slate-800">Lùcas<span class="text-amber-600">.admin</span></span>
+      </div>
+
+      <!-- admin badge -->
+      <div class="flex items-center gap-3 px-5 py-4 border-b border-slate-100 bg-slate-50/60">
+        <div class="h-9 w-9 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold">A</div>
+        <div>
+          <p class="font-medium text-sm">Admin</p>
+          <p class="text-xs text-slate-500">role</p>
+        </div>
+      </div>
+
+      <!-- ===== SIDEBAR MENU ===== -->
+      <nav class="p-4 space-y-2 text-sm">
+        <!-- Dashboard -->
+        <a href="../Dashboard.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition">
+          <i class="fa-solid fa-table-cells-large w-5 text-slate-400"></i>
+          <span>Dashboard</span>
+        </a>
+
+        <!-- HOTEL MANAGEMENT GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-hotel w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">HOTEL MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../Hotel_management/Front_Desk_Reception.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-reception w-4 text-slate-400"></i> Front Desk / Reception</a>
+            <a href="../Hotel_management/room_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-bed w-4 text-slate-400"></i> Room Management</a>
+            <a href="../Hotel_management/Reservations_n_Booking.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar-check w-4 text-slate-400"></i> Reservations & Booking</a>
+            <a href="../Hotel_management/housekeeping_n_maintenance.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-broom w-4 text-slate-400"></i> Housekeeping & Maintenance</a>
+            <a href="../Hotel_management/events_n_conference.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar w-4 text-slate-400"></i> Events & Conference</a>
+          </div>
+        </details>
+
+        <!-- RESTAURANT MANAGEMENT GROUP -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-utensils w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">RESTAURANT MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../restaurant_&_management/table_reservation.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-clock w-4"></i> Table Reservation</a>
+            <a href="../restaurant_&_management/menu_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-bars w-4"></i> Menu Management</a>
+            <a href="../restaurant_&_management/orders_POS.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-cash-register w-4"></i> Orders / POS</a>
+            <a href="../restaurant_&_management/kitchen_orders.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-fire w-4"></i> Kitchen Orders (KOT)</a>
+            <a href="../restaurant_&_management/wait_staff_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-user w-4"></i> Wait Staff Management</a>
+          </div>
+        </details>
+
+        <!-- CUSTOMER MANAGEMENT -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-amber-800 bg-amber-50 cursor-pointer transition-side">
+            <i class="fa-regular fa-address-book w-5 text-amber-600"></i>
+            <span class="font-medium">CUSTOMER MANAGEMENT</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-amber-600"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-200">
+            <a href="../Customer_management/customer_relationship.html" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-100/50 text-amber-700 font-medium"><i class="fa-regular fa-handshake w-4 text-amber-600"></i> Customer Relationship (CRM)</a>
+            <a href="../Customer_management/loyalty_rewards.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-star w-4 text-slate-400"></i> Loyalty & Rewards</a>
+            <a href="../Customer_management/customer_feedback&reviews.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-pen-to-square w-4 text-slate-400"></i> Customer Feedback & Reviews</a>
+          </div>
+        </details>
+
+        <!-- OPERATIONS -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-gears w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">OPERATIONS</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../operations/inventory_&_stocks.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-boxes w-4"></i> Inventory & Stock</a>
+            <a href="../operations/billing_and_payments.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-credit-card w-4"></i> Billing & Payments</a>
+            <a href="../operations/payment_gateway.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-wifi w-4"></i> Payment Gateway</a>
+          </div>
+        </details>
+
+        <!-- MARKETING -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-megaphone w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">MARKETING</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../marketing/hotelmarketing_&_promotions.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-gem w-4"></i> Hotel Marketing & Promotions</a>
+            <a href="../marketing/online_ordering_integration.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-cart-shopping w-4"></i> Online Ordering Integration</a>
+          </div>
+        </details>
+
+        <!-- REPORTS & ANALYTICS -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-chart-simple w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">REPORTS & ANALYTICS</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../reports_&_analytics/sales_reports.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-chart-line w-4"></i> Sales Reports</a>
+            <a href="../reports_&_analytics/booking_reports.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-regular fa-calendar w-4"></i> Booking Reports</a>
+            <a href="../reports_&_analytics/analytics_dashboard.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-chart-pie w-4"></i> Analytics Dashboard</a>
+          </div>
+        </details>
+
+        <!-- SYSTEM -->
+        <details class="group" open>
+          <summary class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 cursor-pointer">
+            <i class="fa-solid fa-computer w-5 text-slate-400 group-open:text-amber-600"></i>
+            <span class="font-medium">SYSTEM</span>
+            <i class="fa-solid fa-chevron-right dropdown-arrow ml-auto text-xs text-slate-400"></i>
+          </summary>
+          <div class="ml-6 mt-1 space-y-1 pl-3 border-l-2 border-amber-100">
+            <a href="../system/channel_management.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-code-branch w-4"></i> Channel Management</a>
+            <a href="../system/door_lock_integration.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-lock w-4"></i> Door Lock Integration</a>
+            <a href="../system/settings.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 hover:bg-amber-50"><i class="fa-solid fa-sliders w-4"></i> Settings</a>
+          </div>
+        </details>
+
+        <!-- logout -->
+        <div class="border-t border-slate-200 pt-3 mt-3">
+          <a href="#" onclick="handleLogout(event)" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-700">
+            <i class="fa-solid fa-arrow-right-from-bracket w-5"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="flex-1 p-5 lg:p-8 overflow-y-auto bg-white">
+
+      <!-- header with title and date -->
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h1 class="text-2xl lg:text-3xl font-light text-slate-800">Customer Relationship (CRM)</h1>
+          <p class="text-sm text-slate-500 mt-0.5">manage customer profiles, preferences, and communication history</p>
+        </div>
+        <div class="flex gap-3 text-sm relative">
+          <span class="bg-white border rounded-full px-4 py-2 flex items-center gap-2 shadow-sm"><i class="fa-regular fa-calendar text-slate-400"></i> <span id="currentDate"></span></span>
+          <div class="relative">
+            <button onclick="toggleNotifications()" class="bg-white border rounded-full px-4 py-2 shadow-sm hover:bg-slate-50 relative">
+              <i class="fa-regular fa-bell"></i>
+              <span id="notificationBadge" class="notification-badge hidden">3</span>
+            </button>
+            
+            <!-- Notification Panel -->
+            <div id="notificationPanel" class="hidden notification-panel">
+              <div class="p-3 border-b border-slate-200 flex justify-between items-center">
+                <h3 class="font-semibold">Notifications</h3>
+                <button onclick="markAllAsRead()" class="text-xs text-amber-600 hover:text-amber-700">Mark all as read</button>
+              </div>
+              <div id="notificationList" class="max-h-96 overflow-y-auto">
+                <!-- Notifications will be populated here -->
+              </div>
+              <div class="p-2 border-t border-slate-200 text-center">
+                <button onclick="clearAllNotifications()" class="text-xs text-slate-500 hover:text-slate-700">Clear all</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== STATS CARDS ===== -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Total customers</p>
+          <p class="text-2xl font-semibold">1,284</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Active this month</p>
+          <p class="text-2xl font-semibold">342</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">VIP customers</p>
+          <p class="text-2xl font-semibold text-amber-600">48</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">New this week</p>
+          <p class="text-2xl font-semibold text-green-600">23</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500">Retention rate</p>
+          <p class="text-2xl font-semibold">76%</p>
+        </div>
+      </div>
+
+      <!-- ===== ACTION BAR ===== -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 mb-6 flex flex-wrap gap-3 items-center justify-between">
+        <div class="flex gap-2 flex-wrap">
+          <button onclick="openAddCustomerModal()" class="bg-amber-600 text-white px-4 py-2 rounded-xl text-sm hover:bg-amber-700 transition">+ add customer</button>
+        </div>
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input type="text" id="searchInput" onkeyup="searchCustomers()" placeholder="search customers..." class="border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-sm w-64 focus:ring-1 focus:ring-amber-500 outline-none">
+        </div>
+      </div>
+
+      <!-- Filter Panel -->
+      <div id="filterPanel" class="hidden bg-white rounded-2xl border border-slate-200 p-4 mb-6">
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="font-semibold">Filter Customers</h3>
+          <button onclick="closeFilterPanel()" class="text-slate-400 hover:text-slate-600">
+            <i class="fa-solid fa-times"></i>
+          </button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <select id="filterTier" class="border rounded-lg p-2 text-sm">
+            <option value="">All Tiers</option>
+            <option value="platinum">Platinum</option>
+            <option value="gold">Gold</option>
+            <option value="silver">Silver</option>
+            <option value="bronze">Bronze</option>
+          </select>
+          <select id="filterStays" class="border rounded-lg p-2 text-sm">
+            <option value="">All Stays</option>
+            <option value="10+">10+ stays</option>
+            <option value="5-9">5-9 stays</option>
+            <option value="1-4">1-4 stays</option>
+          </select>
+          <input type="date" id="filterDate" class="border rounded-lg p-2 text-sm">
+          <div class="flex gap-2">
+            <button onclick="applyFilters()" class="bg-amber-600 text-white px-4 py-2 rounded-lg text-sm">Apply</button>
+            <button onclick="clearFilters()" class="border px-4 py-2 rounded-lg text-sm">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== CUSTOMER LIST TABLE ===== -->
+      <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden mb-8">
+        <div class="p-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+          <h2 class="font-semibold flex items-center gap-2"><i class="fa-regular fa-address-book text-amber-600"></i> customer directory</h2>
+          <div class="flex gap-2">
+            <button onclick="toggleFilterPanel()" class="text-sm text-amber-700 border border-amber-600 px-3 py-1 rounded-lg hover:bg-amber-50 transition">filter</button>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm" id="customerTable">
+            <thead class="text-slate-500 text-xs border-b">
+              <tr>
+                <td class="p-3 cursor-pointer" onclick="sortTable(0)">Customer <i class="fa-solid fa-sort text-slate-300 ml-1"></i></td>
+                <td class="p-3">Contact</td>
+                <td class="p-3 cursor-pointer" onclick="sortTable(2)">Last stay <i class="fa-solid fa-sort text-slate-300 ml-1"></i></td>
+                <td class="p-3 cursor-pointer" onclick="sortTable(3)">Total stays <i class="fa-solid fa-sort text-slate-300 ml-1"></i></td>
+                <td class="p-3 cursor-pointer" onclick="sortTable(4)">Tier <i class="fa-solid fa-sort text-slate-300 ml-1"></i></td>
+                <td class="p-3">Preferences</td>
+                <td class="p-3">Actions</td>
+              </tr>
+            </thead>
+            <tbody class="divide-y" id="customerTableBody">
+              <!-- Table rows will be populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+        <div class="p-4 border-t border-slate-200 flex items-center justify-between">
+          <span class="text-xs text-slate-500" id="paginationInfo">Showing 1-5 of 1,284 customers</span>
+          <div class="flex gap-2" id="paginationControls">
+            <button onclick="previousPage()" class="border border-slate-200 px-3 py-1 rounded-lg text-sm hover:bg-slate-50 transition">Previous</button>
+            <button onclick="goToPage(1)" class="bg-amber-600 text-white px-3 py-1 rounded-lg text-sm pagination-button">1</button>
+            <button onclick="goToPage(2)" class="border border-slate-200 px-3 py-1 rounded-lg text-sm pagination-button">2</button>
+            <button onclick="goToPage(3)" class="border border-slate-200 px-3 py-1 rounded-lg text-sm pagination-button">3</button>
+            <button onclick="goToPage(4)" class="border border-slate-200 px-3 py-1 rounded-lg text-sm pagination-button">4</button>
+            <button onclick="goToPage(5)" class="border border-slate-200 px-3 py-1 rounded-lg text-sm pagination-button">5</button>
+            <button onclick="nextPage()" class="border border-slate-200 px-3 py-1 rounded-lg text-sm hover:bg-slate-50 transition">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customer Details Modal -->
+      <div id="customerDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-semibold" id="modalCustomerName">Customer Details</h3>
+            <button onclick="closeCustomerModal()" class="text-slate-400 hover:text-slate-600">
+              <i class="fa-solid fa-times text-xl"></i>
+            </button>
+          </div>
+          <div id="customerDetailsContent" class="space-y-4">
+            <!-- Details will be populated dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Add Customer Modal -->
+      <div id="addCustomerModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full">
+          <h3 class="text-xl font-semibold mb-4">Add New Customer</h3>
+          <form id="addCustomerForm" onsubmit="addCustomer(event)">
+            <div class="space-y-3">
+              <input type="text" id="customerName" placeholder="Full Name" class="w-full border rounded-xl p-2" required>
+              <input type="email" id="customerEmail" placeholder="Email" class="w-full border rounded-xl p-2" required>
+              <input type="tel" id="customerPhone" placeholder="Phone" class="w-full border rounded-xl p-2" required>
+              <select id="customerTier" class="w-full border rounded-xl p-2">
+                <option value="bronze">Bronze</option>
+                <option value="silver">Silver</option>
+                <option value="gold">Gold</option>
+                <option value="platinum">Platinum</option>
+              </select>
+              <input type="text" id="customerPreferences" placeholder="Preferences" class="w-full border rounded-xl p-2">
+            </div>
+            <div class="flex gap-2 mt-4">
+              <button type="submit" class="bg-amber-600 text-white px-4 py-2 rounded-xl flex-1">Add Customer</button>
+              <button type="button" onclick="closeAddCustomerModal()" class="border px-4 py-2 rounded-xl flex-1">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // Sample customer data
+    let customers = [
+      { id: '#G10234', name: 'Mia Cruz', initials: 'MC', email: 'mia.c@email.com', phone: '+63 917 555 1234', lastStay: '2025-05-15', totalStays: 12, tier: 'gold', preferences: 'High floor, extra pillows', color: 'amber' },
+      { id: '#G10235', name: 'John Doe', initials: 'JD', email: 'john.d@email.com', phone: '+63 917 555 5678', lastStay: '2025-05-10', totalStays: 8, tier: 'silver', preferences: 'Quiet room, late check-out', color: 'slate' },
+      { id: '#G10236', name: 'Anna Reyes', initials: 'AR', email: 'anna.r@email.com', phone: '+63 917 555 9012', lastStay: '2025-05-05', totalStays: 24, tier: 'platinum', preferences: 'Ocean view, welcome drink, spa', color: 'purple' },
+      { id: '#G10237', name: 'Robert Tan', initials: 'RT', email: 'robert.t@email.com', phone: '+63 917 555 3456', lastStay: '2025-04-28', totalStays: 5, tier: 'bronze', preferences: 'Extra towel, king bed', color: 'amber' },
+      { id: '#G10238', name: 'Lisa Santos', initials: 'LS', email: 'lisa.s@email.com', phone: '+63 917 555 7890', lastStay: '2025-04-20', totalStays: 15, tier: 'gold', preferences: 'Allergic to feathers, late check-out', color: 'amber' },
+      { id: '#G10239', name: 'Michael Chen', initials: 'MC', email: 'michael.c@email.com', phone: '+63 917 555 4321', lastStay: '2025-04-15', totalStays: 7, tier: 'silver', preferences: 'Connecting room', color: 'slate' },
+      { id: '#G10240', name: 'Sofia Garcia', initials: 'SG', email: 'sofia.g@email.com', phone: '+63 917 555 8765', lastStay: '2025-04-10', totalStays: 3, tier: 'bronze', preferences: 'Early check-in', color: 'amber' }
+    ];
+
+    let currentPage = 1;
+    let itemsPerPage = 5;
+    let filteredCustomers = [...customers];
+    let currentSort = { column: null, ascending: true };
+    
+    // Notifications data
+    let notifications = [
+      { id: 1, message: 'New customer signup: Maria Santos', time: '5 min ago', read: false },
+      { id: 2, message: 'VIP customer John Doe checked in', time: '1 hour ago', read: false },
+      { id: 3, message: 'Pending review from Anna Reyes', time: '2 hours ago', read: false },
+      { id: 4, message: 'Customer feedback received', time: '3 hours ago', read: true },
+      { id: 5, message: 'Birthday reminder: Robert Tan', time: '5 hours ago', read: true }
+    ];
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      updateDate();
+      renderCustomerTable();
+      updatePaginationButtons();
+      renderNotifications();
+    });
+
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type === 'success' ? 'bg-green-500' : 'bg-blue-500'}`;
+      toast.textContent = message;
+      document.getElementById('toastContainer').appendChild(toast);
+      
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+
+    function updateDate() {
+      const date = new Date();
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('currentDate').textContent = date.toLocaleDateString('en-US', options);
+    }
+
+    // Customer table functions
+    function renderCustomerTable() {
+      const start = (currentPage - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const paginatedCustomers = filteredCustomers.slice(start, end);
+      
+      let html = '';
+      paginatedCustomers.forEach(customer => {
+        const tierColors = {
+          platinum: 'bg-purple-100 text-purple-700',
+          gold: 'bg-amber-100 text-amber-700',
+          silver: 'bg-slate-100 text-slate-600',
+          bronze: 'bg-amber-100 text-amber-800'
+        };
+        
+        html += `<tr>
+          <td class="p-3">
+            <div class="flex items-center gap-2">
+              <div class="h-8 w-8 rounded-full bg-${customer.color}-200 flex items-center justify-center font-bold text-xs">${customer.initials}</div>
+              <div>
+                <span class="font-medium">${customer.name}</span>
+                <p class="text-xs text-slate-400">ID: ${customer.id}</p>
+              </div>
+            </div>
+          </td>
+          <td class="p-3">${customer.email}<br><span class="text-xs">${customer.phone}</span></td>
+          <td class="p-3">${formatDate(customer.lastStay)}</td>
+          <td class="p-3">${customer.totalStays}</td>
+          <td class="p-3"><span class="${tierColors[customer.tier]} px-2 py-0.5 rounded-full text-xs capitalize">${customer.tier}</span></td>
+          <td class="p-3">${customer.preferences}</td>
+          <td class="p-3">
+            <button onclick="viewCustomer('${customer.id}')" class="text-amber-700 text-xs hover:underline">view details</button>
+          </td>
+        </tr>`;
+      });
+      
+      document.getElementById('customerTableBody').innerHTML = html;
+      document.getElementById('paginationInfo').textContent = `Showing ${start+1}-${Math.min(end, filteredCustomers.length)} of ${filteredCustomers.length} customers`;
+    }
+
+    function formatDate(dateStr) {
+      return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function searchCustomers() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      filteredCustomers = customers.filter(customer => 
+        customer.name.toLowerCase().includes(searchTerm) || 
+        customer.email.toLowerCase().includes(searchTerm) ||
+        customer.phone.includes(searchTerm) ||
+        customer.id.toLowerCase().includes(searchTerm)
+      );
+      currentPage = 1;
+      renderCustomerTable();
+      updatePaginationButtons();
+      if (searchTerm) {
+        showToast(`Found ${filteredCustomers.length} customers matching "${searchTerm}"`);
+      }
+    }
+
+    function sortTable(column) {
+      const ascending = currentSort.column === column ? !currentSort.ascending : true;
+      currentSort = { column, ascending };
+      
+      filteredCustomers.sort((a, b) => {
+        let valA, valB;
+        
+        if (column === 0) { valA = a.name; valB = b.name; }
+        else if (column === 2) { valA = new Date(a.lastStay); valB = new Date(b.lastStay); }
+        else if (column === 3) { valA = a.totalStays; valB = b.totalStays; }
+        else if (column === 4) { valA = a.tier; valB = b.tier; }
+        
+        if (ascending) {
+          return valA > valB ? 1 : -1;
+        } else {
+          return valA < valB ? 1 : -1;
+        }
+      });
+      
+      renderCustomerTable();
+    }
+
+    // Filter functions
+    function toggleFilterPanel() {
+      const panel = document.getElementById('filterPanel');
+      panel.classList.toggle('hidden');
+    }
+
+    function closeFilterPanel() {
+      document.getElementById('filterPanel').classList.add('hidden');
+    }
+
+    function applyFilters() {
+      const tier = document.getElementById('filterTier').value;
+      const stays = document.getElementById('filterStays').value;
+      const date = document.getElementById('filterDate').value;
+      
+      filteredCustomers = customers.filter(customer => {
+        let match = true;
+        
+        if (tier && customer.tier !== tier) match = false;
+        if (stays) {
+          if (stays === '10+' && customer.totalStays < 10) match = false;
+          if (stays === '5-9' && (customer.totalStays < 5 || customer.totalStays > 9)) match = false;
+          if (stays === '1-4' && (customer.totalStays < 1 || customer.totalStays > 4)) match = false;
+        }
+        if (date && customer.lastStay < date) match = false;
+        
+        return match;
+      });
+      
+      currentPage = 1;
+      renderCustomerTable();
+      updatePaginationButtons();
+      closeFilterPanel();
+      showToast(`Filters applied: ${filteredCustomers.length} customers match`);
+    }
+
+    function clearFilters() {
+      document.getElementById('filterTier').value = '';
+      document.getElementById('filterStays').value = '';
+      document.getElementById('filterDate').value = '';
+      filteredCustomers = [...customers];
+      currentPage = 1;
+      renderCustomerTable();
+      updatePaginationButtons();
+      showToast('Filters cleared');
+    }
+
+    // Pagination
+    function previousPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        renderCustomerTable();
+        updatePaginationButtons();
+      }
+    }
+
+    function nextPage() {
+      const maxPage = Math.ceil(filteredCustomers.length / itemsPerPage);
+      if (currentPage < maxPage) {
+        currentPage++;
+        renderCustomerTable();
+        updatePaginationButtons();
+      }
+    }
+
+    function goToPage(page) {
+      currentPage = page;
+      renderCustomerTable();
+      updatePaginationButtons();
+    }
+
+    function updatePaginationButtons() {
+      const maxPage = Math.ceil(filteredCustomers.length / itemsPerPage);
+      const pageButtons = document.querySelectorAll('#paginationControls button.pagination-button');
+      
+      // Update page button visibility and active state
+      pageButtons.forEach((btn, index) => {
+        const pageNum = index + 1;
+        if (pageNum <= maxPage) {
+          btn.classList.remove('hidden');
+          if (pageNum === currentPage) {
+            btn.className = 'bg-amber-600 text-white px-3 py-1 rounded-lg text-sm pagination-button';
+          } else {
+            btn.className = 'border border-slate-200 px-3 py-1 rounded-lg text-sm hover:bg-slate-50 transition pagination-button';
+          }
+        } else {
+          btn.classList.add('hidden');
+        }
+      });
+    }
+
+    // Customer operations
+    function openAddCustomerModal() {
+      document.getElementById('addCustomerModal').classList.remove('hidden');
+      document.getElementById('addCustomerModal').classList.add('flex');
+    }
+
+    function closeAddCustomerModal() {
+      document.getElementById('addCustomerModal').classList.add('hidden');
+      document.getElementById('addCustomerModal').classList.remove('flex');
+      document.getElementById('addCustomerForm').reset();
+    }
+
+    function addCustomer(event) {
+      event.preventDefault();
+      
+      const name = document.getElementById('customerName').value;
+      const email = document.getElementById('customerEmail').value;
+      const phone = document.getElementById('customerPhone').value;
+      const tier = document.getElementById('customerTier').value;
+      const preferences = document.getElementById('customerPreferences').value;
+      
+      const lastId = parseInt(customers[customers.length - 1].id.substring(2));
+      const newId = `#C${lastId + 1}`;
+      const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+      
+      const colors = {
+        platinum: 'purple',
+        gold: 'amber',
+        silver: 'slate',
+        bronze: 'amber'
+      };
+      
+      const newCustomer = {
+        id: newId,
+        name: name,
+        initials: initials,
+        email: email,
+        phone: phone,
+        lastStay: new Date().toISOString().split('T')[0],
+        totalStays: 1,
+        tier: tier,
+        preferences: preferences || 'None specified',
+        color: colors[tier]
+      };
+      
+      customers.push(newCustomer);
+      filteredCustomers = [...customers];
+      
+      closeAddCustomerModal();
+      renderCustomerTable();
+      updatePaginationButtons();
+      
+      // Add notification for new customer
+      addNotification(`New customer added: ${name}`);
+      showToast(`Customer ${name} added successfully!`);
+    }
+
+    function viewCustomer(id) {
+      const customer = customers.find(c => c.id === id);
+      if (!customer) return;
+      
+      const modal = document.getElementById('customerDetailsModal');
+      const content = document.getElementById('customerDetailsContent');
+      
+      const tierColors = {
+        platinum: 'bg-purple-100 text-purple-700',
+        gold: 'bg-amber-100 text-amber-700',
+        silver: 'bg-slate-100 text-slate-600',
+        bronze: 'bg-amber-100 text-amber-800'
+      };
+      
+      content.innerHTML = `
+        <div class="flex items-center gap-4 mb-4">
+          <div class="h-16 w-16 rounded-full bg-${customer.color}-200 flex items-center justify-center font-bold text-2xl">${customer.initials}</div>
+          <div>
+            <h4 class="text-2xl font-semibold">${customer.name}</h4>
+            <p class="text-slate-500">${customer.id}</p>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4">
+          <div class="border rounded-lg p-3">
+            <p class="text-xs text-slate-500">Email</p>
+            <p class="font-medium">${customer.email}</p>
+          </div>
+          <div class="border rounded-lg p-3">
+            <p class="text-xs text-slate-500">Phone</p>
+            <p class="font-medium">${customer.phone}</p>
+          </div>
+          <div class="border rounded-lg p-3">
+            <p class="text-xs text-slate-500">Last Stay</p>
+            <p class="font-medium">${formatDate(customer.lastStay)}</p>
+          </div>
+          <div class="border rounded-lg p-3">
+            <p class="text-xs text-slate-500">Total Stays</p>
+            <p class="font-medium">${customer.totalStays}</p>
+          </div>
+          <div class="border rounded-lg p-3">
+            <p class="text-xs text-slate-500">Tier</p>
+            <p><span class="${tierColors[customer.tier]} px-2 py-0.5 rounded-full text-xs capitalize">${customer.tier}</span></p>
+          </div>
+          <div class="border rounded-lg p-3 col-span-2">
+            <p class="text-xs text-slate-500">Preferences</p>
+            <p class="font-medium">${customer.preferences}</p>
+          </div>
+        </div>
+        
+        <div class="mt-4 flex gap-2 justify-end">
+          <button onclick="closeCustomerModal()" class="border px-4 py-2 rounded-lg text-sm">Close</button>
+        </div>
+      `;
+      
+      document.getElementById('modalCustomerName').textContent = customer.name;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeCustomerModal() {
+      document.getElementById('customerDetailsModal').classList.add('hidden');
+      document.getElementById('customerDetailsModal').classList.remove('flex');
+    }
+
+    // Notification functions
+    function renderNotifications() {
+      const list = document.getElementById('notificationList');
+      const unreadCount = notifications.filter(n => !n.read).length;
+      const badge = document.getElementById('notificationBadge');
+      
+      // Update badge
+      if (unreadCount > 0) {
+        badge.textContent = unreadCount;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+      
+      // Render notification items
+      let html = '';
+      notifications.forEach(notification => {
+        html += `
+          <div class="notification-item p-3 border-b border-slate-100 ${!notification.read ? 'unread' : ''}" onclick="markAsRead(${notification.id})">
+            <div class="flex justify-between items-start">
+              <p class="text-sm ${!notification.read ? 'font-semibold' : ''}">${notification.message}</p>
+              ${!notification.read ? '<span class="h-2 w-2 bg-blue-600 rounded-full"></span>' : ''}
+            </div>
+            <p class="text-xs text-slate-400 mt-1">${notification.time}</p>
+          </div>
+        `;
+      });
+      
+      list.innerHTML = html || '<div class="p-4 text-center text-slate-500">No notifications</div>';
+    }
+
+    function toggleNotifications() {
+      const panel = document.getElementById('notificationPanel');
+      panel.classList.toggle('hidden');
+      renderNotifications();
+    }
+
+    function markAsRead(id) {
+      const notification = notifications.find(n => n.id === id);
+      if (notification) {
+        notification.read = true;
+        renderNotifications();
+        showToast('Notification marked as read', 'info');
+      }
+    }
+
+    function markAllAsRead() {
+      notifications.forEach(n => n.read = true);
+      renderNotifications();
+      showToast('All notifications marked as read', 'info');
+    }
+
+    function addNotification(message) {
+      const newNotification = {
+        id: notifications.length + 1,
+        message: message,
+        time: 'just now',
+        read: false
+      };
+      notifications.unshift(newNotification);
+      renderNotifications();
+    }
+
+    function clearAllNotifications() {
+      notifications = [];
+      renderNotifications();
+      document.getElementById('notificationPanel').classList.add('hidden');
+      showToast('All notifications cleared', 'info');
+    }
+
+    // Close notification panel when clicking outside
+    document.addEventListener('click', function(event) {
+      const panel = document.getElementById('notificationPanel');
+      const bell = document.querySelector('.fa-bell').parentElement;
+      
+      if (panel && !panel.contains(event.target) && !bell.contains(event.target)) {
+        panel.classList.add('hidden');
+      }
+    });
+
+    function handleLogout(event) {
+      event.preventDefault();
+      if (confirm('Are you sure you want to logout?')) {
+        showToast('Logging out...', 'info');
+        setTimeout(() => {
+          window.location.href = '/login.html';
+        }, 1000);
+      }
+    }
+  </script>
+</body>
+</html>

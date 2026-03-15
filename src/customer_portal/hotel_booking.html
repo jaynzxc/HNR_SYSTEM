@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lùcas · hotel booking (guest + room)</title>
+  <!-- Tailwind via CDN + Font Awesome 6 + SweetAlert2 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    /* simplified step styles (only 2 steps) */
+    .step-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      flex: 1;
+      min-width: 120px;
+      cursor: pointer;
+    }
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 1.5rem;
+      right: -50%;
+      width: 100%;
+      height: 2px;
+      background: #e5e7eb;
+      z-index: 0;
+    }
+    .step.active:not(:last-child)::after,
+    .step.completed:not(:last-child)::after { background: #d97706; }
+    .step-number {
+      width: 3rem; height: 3rem; border-radius: 9999px; background: #f3f4f6; color: #6b7280;
+      display: flex; align-items: center; justify-content: center; font-weight: 600;
+      margin-bottom: 0.5rem; position: relative; z-index: 1; border: 2px solid #e5e7eb;
+    }
+    .step.active .step-number { background: #d97706; color: white; border-color: #d97706; }
+    .step.completed .step-number { background: #10b981; color: white; border-color: #10b981; }
+    .step-title { font-size: 0.75rem; font-weight: 500; color: #6b7280; text-align: center; }
+    .step.active .step-title { color: #d97706; font-weight: 600; }
+    .step.completed .step-title { color: #10b981; }
+
+    .room-card {
+      border: 2px solid #e5e7eb; border-radius: 1rem; padding: 1rem;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .room-card:hover { border-color: #d97706; transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); }
+    .room-card.selected { border-color: #d97706; background-color: #fffbeb; }
+    .room-price { font-size: 1.5rem; font-weight: 700; color: #1f2937; }
+    .room-price small { font-size: 0.875rem; font-weight: normal; color: #6b7280; }
+    .amenity-tag {
+      background-color: #f3f4f6; padding: 0.25rem 0.75rem; border-radius: 9999px;
+      font-size: 0.75rem; color: #4b5563; display: inline-flex; align-items: center; gap: 0.25rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem; border-radius: 0.75rem; font-size: 0.875rem; font-weight: 500;
+      cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+    .btn-primary { background-color: #d97706; color: white; }
+    .btn-primary:hover { background-color: #b45309; }
+    .btn-outline { background-color: transparent; border: 1px solid #e5e7eb; color: #4b5563; }
+    .btn-outline:hover { background-color: #f9fafb; }
+
+    .progress-bar { height: 0.5rem; background-color: #e5e7eb; border-radius: 9999px; overflow: hidden; margin-bottom: 2rem; }
+    .progress-fill { height: 100%; background-color: #d97706; transition: width 0.3s ease; }
+
+    .required-asterisk { color: #ef4444; margin-left: 0.25rem; }
+  </style>
+</head>
+<body class="bg-slate-50 font-sans antialiased">
+
+<div class="min-h-screen flex flex-col lg:flex-row">
+
+  <!-- ========== SIDEBAR (customer portal) ========== -->
+  <aside class="lg:w-80 bg-white border-r border-slate-200 shadow-sm shrink-0">
+    <div class="px-6 py-7 border-b border-slate-100">
+      <div class="flex items-center gap-2 text-amber-700">
+        <i class="fa-solid fa-utensils text-xl"></i>
+        <i class="fa-solid fa-bed text-xl"></i>
+        <span class="font-semibold text-xl tracking-tight text-slate-800">Lùcas<span class="text-amber-600">.stay</span></span>
+      </div>
+      <p class="text-xs text-slate-500 mt-1">customer portal · hotel booking</p>
+    </div>
+
+    <!-- user summary (blank) -->
+    <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-100 bg-slate-50/80">
+      <div class="h-12 w-12 rounded-full bg-amber-200 flex items-center justify-center text-amber-800 font-bold text-lg" id="userInitials">—</div>
+      <div>
+        <p class="font-medium text-slate-800" id="displayName">Guest</p>
+        <p class="text-xs text-slate-500 flex items-center gap-1"><i class="fa-regular fa-gem text-[11px]"></i> <span id="loyaltyTier">—</span> · <span id="points">0</span> pts</p>
+      </div>
+    </div>
+
+    <!-- navigation (hotel booking active) -->
+    <nav class="p-4 space-y-1.5 text-sm">
+      <a href="./index.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-table-cells-large w-5 text-slate-400"></i>Dashboard</a>
+      <a href="./my_profile.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-user w-5 text-slate-400"></i>My Profile</a>
+      <a href="./hotel_booking.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-amber-50 text-amber-800 font-medium"><i class="fa-solid fa-hotel w-5 text-amber-600"></i>Hotel Booking</a>
+      <a href="./my_reservation.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-calendar-check w-5 text-slate-400"></i>My Reservations</a>
+      <a href="./restaurant_reservation.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-clock w-5 text-slate-400"></i>Restaurant Reservation</a>
+      <a href="./order_food.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-solid fa-bag-shopping w-5 text-slate-400"></i>Menu / Order Food</a>
+      <a href="./payments.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-credit-card w-5 text-slate-400"></i>Payments</a>
+      <a href="./loyalty_rewards.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition"><i class="fa-regular fa-star w-5 text-slate-400"></i>Loyalty Rewards</a>
+      <a href="./Notifications.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-700 hover:bg-amber-50 transition relative"><i class="fa-regular fa-bell w-5 text-slate-400"></i>Notifications<span class="ml-auto bg-amber-100 text-amber-800 text-xs px-1.5 py-0.5 rounded-full">3</span></a>
+      <div class="border-t border-slate-200 pt-3 mt-3">
+        <a href="#" onclick="handleLogout()" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-700 transition"><i class="fa-solid fa-arrow-right-from-bracket w-5"></i>Logout</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- ========== MAIN CONTENT (2-step booking) ========== -->
+  <main class="flex-1 p-5 lg:p-8 overflow-y-auto">
+
+    <!-- header -->
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <h1 class="text-2xl lg:text-3xl font-light text-slate-800">Hotel booking</h1>
+        <p class="text-sm text-slate-500 mt-0.5" id="currentDateTime"></p>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-full px-4 py-2 text-sm flex items-center gap-2 shadow-sm">
+        <i class="fa-regular fa-calendar text-slate-400"></i> <span id="currentDateDisplay"></span>
+      </div>
+    </div>
+
+    <!-- PROGRESS & STEPS (only 2) -->
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 50%"></div>
+    </div>
+
+    <div class="step-indicator">
+      <div class="step active" id="step1" onclick="attemptStepChange(1)">
+        <div class="step-number">1</div>
+        <div class="step-title">Guest details</div>
+      </div>
+      <div class="step" id="step2" onclick="attemptStepChange(2)">
+        <div class="step-number">2</div>
+        <div class="step-title">Select room</div>
+      </div>
+    </div>
+
+    <!-- STEP 1: Guest Details (now first step) -->
+    <div id="step1-content" class="block">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <h2 class="text-xl font-semibold mb-6 flex items-center gap-2"><i class="fa-regular fa-user text-amber-600"></i> Guest Details</h2>
+        <div class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div><label class="block text-xs text-slate-500 mb-1">First name <span class="required-asterisk">*</span></label><input type="text" id="firstName" placeholder="e.g. Maria" value="" class="w-full border p-3 rounded-xl"></div>
+            <div><label class="block text-xs text-slate-500 mb-1">Last name <span class="required-asterisk">*</span></label><input type="text" id="lastName" placeholder="e.g. Santos" value="" class="w-full border p-3 rounded-xl"></div>
+          </div>
+          <div><label class="block text-xs text-slate-500 mb-1">Email <span class="required-asterisk">*</span></label><input type="email" id="email" placeholder="name@example.com" value="" class="w-full border p-3 rounded-xl"></div>
+          <div><label class="block text-xs text-slate-500 mb-1">Phone <span class="required-asterisk">*</span></label><input type="tel" id="phone" placeholder="+63 912 345 6789" value="" class="w-full border p-3 rounded-xl"></div>
+          <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-xs text-slate-500 mb-1">Check-in</label><input type="date" id="step1Checkin" value="" class="w-full border p-3 rounded-xl"></div>
+            <div><label class="block text-xs text-slate-500 mb-1">Check-out</label><input type="date" id="step1Checkout" value="" class="w-full border p-3 rounded-xl"></div>
+          </div>
+          <div><label class="block text-xs text-slate-500 mb-1">Guests</label><select id="step1Guests" class="w-full border p-3 rounded-xl"><option>2 Guests</option><option>1</option><option>3</option><option>4</option></select></div>
+          <div class="flex justify-end">
+            <button onclick="validateStep1()" class="btn btn-primary">Continue to room selection <i class="fa-regular fa-arrow-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: Select Room (redirects to payments) -->
+    <div id="step2-content" class="hidden">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <h2 class="text-xl font-semibold mb-4"><i class="fa-regular fa-bed text-amber-600"></i> Select your room</h2>
+        <div class="space-y-3" id="roomSelectionContainer">
+          <!-- rooms will be added dynamically -->
+        </div>
+        <div class="flex gap-3 mt-6">
+          <button onclick="attemptBackToStep(1)" class="flex-1 btn btn-outline"><i class="fa-regular fa-arrow-left"></i> Back</button>
+          <button onclick="proceedToPayment()" class="flex-1 btn btn-primary">Proceed to payment <i class="fa-regular fa-credit-card"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- bottom hint -->
+    <div class="mt-8 text-center text-xs text-slate-400 border-t pt-4">
+      2‑step booking: guest details → room selection → redirects to payments
+    </div>
+  </main>
+</div>
+
+<!-- Database API -->
+<script src="./js/database.js"></script>
+
+<script>
+  (function() {
+    // ---------- global state ----------
+    let currentStep = 1;
+    let step1Completed = false;
+    let selectedRoomId = null, selectedRoomName = null, selectedRoomPrice = 0;
+    
+    // Room data
+    const availableRooms = [
+      { id: '201', name: 'Deluxe Twin', price: 4200, beds: '2 single beds', view: 'city view', amenity: 'free WiFi' },
+      { id: '202', name: 'Ocean Suite', price: 6900, beds: '1 king bed', view: 'ocean view', amenity: 'jacuzzi' },
+      { id: '203', name: 'Superior Double', price: 3500, beds: 'double bed', view: 'city view', amenity: '' }
+    ];
+
+    // ---------- helpers ----------
+    function updateDateTime() {
+      const now = new Date();
+      document.getElementById('currentDateTime').innerText = now.toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'});
+      document.getElementById('currentDateDisplay').innerText = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+    }
+    updateDateTime(); setInterval(updateDateTime,60000);
+
+    function isValidEmail(e){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+    function showError(m){ Swal.fire({title:'Cannot proceed',text:m,icon:'warning',confirmButtonColor:'#d97706'}); }
+
+    // step navigation
+    window.attemptStepChange = function(targetStep) {
+      if(targetStep===currentStep) return;
+      if(targetStep<currentStep){ goToStep(targetStep); return; }
+      if(targetStep>currentStep){
+        if(!isCurrentStepComplete()){ showError(`Complete step ${currentStep} first`); return; }
+        if(targetStep===currentStep+1) goToStep(targetStep);
+        else showError(`Complete step ${currentStep} first`);
+      }
+    }
+    window.attemptBackToStep = function(t){ if(t<currentStep) goToStep(t); }
+
+    function isCurrentStepComplete(){
+      if(currentStep===1){
+        let f=document.getElementById('firstName')?.value.trim();
+        let l=document.getElementById('lastName')?.value.trim();
+        let e=document.getElementById('email')?.value.trim();
+        let p=document.getElementById('phone')?.value.trim();
+        return f!=='' && l!=='' && isValidEmail(e) && p!=='';
+      }
+      return false; // step2 has no required check before proceeding
+    }
+
+    function goToStep(step){
+      for(let i=1;i<=2;i++) document.getElementById(`step${i}-content`).classList.add('hidden');
+      document.getElementById(`step${step}-content`).classList.remove('hidden');
+      for(let i=1;i<=2;i++){
+        let el=document.getElementById(`step${i}`);
+        el.classList.remove('active','completed');
+        if(i===1 && step1Completed) el.classList.add('completed');
+        if(i===step) el.classList.add('active');
+      }
+      let progress = step === 2 ? 100 : 50;
+      if(step1Completed) progress = step === 1 ? 50 : 100;
+      document.getElementById('progressFill').style.width=progress+'%';
+      currentStep=step;
+    }
+
+    // step 1
+    window.validateStep1 = function(){
+      let f=document.getElementById('firstName').value.trim(); if(!f){ showError('First name required'); return; }
+      let l=document.getElementById('lastName').value.trim(); if(!l){ showError('Last name required'); return; }
+      let e=document.getElementById('email').value.trim(); if(!isValidEmail(e)){ showError('Valid email required'); return; }
+      let p=document.getElementById('phone').value.trim(); if(!p){ showError('Phone required'); return; }
+      step1Completed=true;
+      
+      // Auto-populate dates if empty
+      if(!document.getElementById('step1Checkin').value) {
+        const today = new Date();
+        const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate()+1);
+        const dayAfter = new Date(today); dayAfter.setDate(dayAfter.getDate()+3);
+        document.getElementById('step1Checkin').value = tomorrow.toISOString().split('T')[0];
+        document.getElementById('step1Checkout').value = dayAfter.toISOString().split('T')[0];
+      }
+      
+      // Populate room selection container
+      const container = document.getElementById('roomSelectionContainer');
+      container.innerHTML = availableRooms.map(room => `
+        <div class="room-card" id="room${room.id}" onclick="selectRoom('${room.id}', '${room.name}', ${room.price})">
+          <div class="flex justify-between items-start">
+            <div><span class="text-lg font-semibold">Room ${room.id} · ${room.name}</span> 
+              ${room.amenity ? `<span class="ml-2 amenity-tag"><i class="fa-regular fa-wifi"></i> ${room.amenity}</span>` : ''}
+            </div>
+            <div class="room-price">₱${room.price.toLocaleString()} <small>/night</small></div>
+          </div>
+          <div class="mt-1 text-sm text-gray-600"><span class="mr-4"><i class="fa-regular fa-bed"></i> ${room.beds}</span><span><i class="fa-regular fa-mountain"></i> ${room.view}</span></div>
+        </div>
+      `).join('');
+      
+      goToStep(2);
+    }
+
+    // step2
+    window.selectRoom = function(id,name,price){
+      document.querySelectorAll('.room-card').forEach(el=>el.classList.remove('selected'));
+      document.getElementById(`room${id}`).classList.add('selected');
+      selectedRoomId=id; selectedRoomName=name; selectedRoomPrice=price;
+    }
+    
+    // Proceed to payment page with booking data
+    window.proceedToPayment = function(){
+      if(!selectedRoomId) {
+        showError('Please select a room');
+        return;
+      }
+      
+      // Calculate total amount
+      const checkin = document.getElementById('step1Checkin').value;
+      const checkout = document.getElementById('step1Checkout').value;
+      const nights = Math.max(1, Math.ceil((new Date(checkout)-new Date(checkin))/(1000*60*60*24)));
+      const roomTotal = selectedRoomPrice * nights;
+      const tax = Math.round(roomTotal * 0.12);
+      const totalAmount = roomTotal + tax;
+      
+      // Get guest name
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const guestName = firstName && lastName ? `${firstName} ${lastName}` : 'Guest';
+      
+      // Create booking data object
+      const bookingData = {
+        type: 'hotel',
+        description: `${selectedRoomName} - ${nights} night${nights > 1 ? 's' : ''}`,
+        amount: totalAmount,
+        guestName: guestName,
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        checkin: checkin,
+        checkout: checkout,
+        roomId: selectedRoomId,
+        roomName: selectedRoomName,
+        nights: nights,
+        roomPrice: selectedRoomPrice
+      };
+      
+      // Save to sessionStorage for the payments page to access
+      sessionStorage.setItem('pendingBooking', JSON.stringify(bookingData));
+      
+      // Show loading message
+      Swal.fire({
+        title: 'Preparing payment...',
+        html: 'Redirecting to payments page',
+        timer: 1500,
+        timerProgressBar: true,
+        showConfirmButton: false,
+        willClose: () => {
+          // Redirect to payments page
+          window.location.href = './payments.html';
+        }
+      });
+    }
+
+    // Logout function
+    async function handleLogout() {
+      try {
+        await window.dbAPI.logout();
+      } catch (error) {
+        console.error('Logout error:', error);
+        window.dbAPI.showToast('Failed to logout', 'error');
+      }
+    }
+
+    // Load user data and initialize
+    async function initializeUserData() {
+      try {
+        // Load current user data
+        const currentUser = await window.dbAPI.loadCurrentUserSimple();
+        
+        if (currentUser) {
+          // Update UI with actual user data
+          document.getElementById('userInitials').innerText = window.dbAPI.getUserInitials(currentUser.first_name, currentUser.last_name);
+          document.getElementById('displayName').innerText = `${currentUser.first_name} ${currentUser.last_name}`;
+          document.getElementById('loyaltyTier').innerText = currentUser.membership_tier || 'member';
+          document.getElementById('points').innerText = currentUser.loyalty_points || '0';
+          
+          
+          // Pre-fill form with user data
+          document.getElementById('firstName').value = currentUser.first_name || '';
+          document.getElementById('lastName').value = currentUser.last_name || '';
+          document.getElementById('email').value = currentUser.email || '';
+          document.getElementById('phone').value = currentUser.phone || '';
+        } else {
+          // If no user data, redirect to login
+          window.location.href = '../login-register/login_form.html';
+          return;
+        }
+      } catch (error) {
+        console.error('Failed to load user data:', error);
+        // Show guest mode as fallback
+        document.getElementById('userInitials').innerText = '—';
+        document.getElementById('displayName').innerText = 'Guest';
+        document.getElementById('loyaltyTier').innerText = '—';
+        document.getElementById('points').innerText = '0';
+        document.getElementById('firstName').value = '';
+        document.getElementById('lastName').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('phone').value = '';
+      }
+    }
+
+    // initial setup
+    initializeUserData();
+    
+    // Make functions global
+    window.handleLogout = handleLogout;
+  })();
+</script>
+</body>
+</html>

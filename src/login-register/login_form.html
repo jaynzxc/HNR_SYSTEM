@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login · Lùcas Customer Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    @keyframes slideIn {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .toast { animation: slideIn 0.3s ease-out; }
+  </style>
+</head>
+<body class="bg-slate-50 font-sans antialiased min-h-screen p-4">
+
+  <!-- main card: clean, centered, no side panel -->
+  <div class="min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-md bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
+
+    <!-- brand (simplified) -->
+      <div class="flex justify-center items-center gap-2 text-amber-700 mb-2">
+        <i class="fa-solid fa-utensils text-xl"></i>
+        <i class="fa-solid fa-bed text-xl"></i>
+        <span class="font-semibold text-xl tracking-tight text-slate-800">Lùcas<span class="text-amber-600">.stay</span></span>
+      </div>
+      <p class="text-xs text-slate-500 text-center tracking-wide mb-6">customer portal · sign in</p>
+
+    <!-- title -->
+      <div class="flex mb-2">
+        <h1 class="flex-1 pb-3 text-center text-3xl font-semibold text-slate-800 transition">Log In</h1>
+      </div>
+
+    <!-- LOGIN FORM -->
+      <div id="loginForm" class="transition-opacity">
+        <form id="loginFormElement">
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1">Email</label>
+              <div class="relative">
+                <i class="fa-regular fa-envelope absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input type="email" id="loginEmail" placeholder="you@example.com" class="w-full border border-slate-200 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:ring-1 focus:ring-amber-500 outline-none" required>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+              <div class="relative">
+                <i class="fa-solid fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input type="password" id="loginPassword" placeholder="•••••••" class="w-full border border-slate-200 rounded-xl pl-9 pr-10 py-2.5 text-sm focus:ring-1 focus:ring-amber-500 outline-none" required>
+                <button type="button" class="toggle-password absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                  <i class="fa-regular fa-eye-slash text-sm"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- remember + forgot -->
+          <div class="flex items-center justify-between text-xs">
+            <label class="flex items-center gap-2 text-slate-600 cursor-pointer">
+              <input type="checkbox" id="rememberMe" class="rounded text-amber-600 focus:ring-amber-500">
+              remember me
+            </label>
+            <a href="#" class="text-amber-700 hover:underline">forgot password?</a>
+          </div>
+
+          <!-- submit -->
+          <button type="submit" id="loginBtn" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-3 rounded-xl transition-all duration-200 flex items-center justify-center gap-2">
+            <span id="loginBtnText">Sign In</span>
+            <div id="loginSpinner" class="hidden">
+              <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          </button>
+
+          <!-- register link -->
+          <div class="text-center mt-6">
+            <p class="text-sm text-slate-600">new to lùcas? <a href="register_form.html" class="font-medium text-amber-700 hover:underline">create account</a></p>
+          </div>
+        </form>
+      </div>
+
+      <!-- success message (hidden by default) -->
+      <div id="successMessage" class="hidden">
+        <div class="text-center">
+          <i class="fa-solid fa-circle-check text-green-500 text-4xl mb-4"></i>
+          <h2 class="text-xl font-semibold text-slate-800 mb-2">Login Successful!</h2>
+          <p class="text-sm text-slate-600 mb-4">Redirecting to your dashboard...</p>
+          <div class="w-8 h-8 border-2 border-amber-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+  <script>
+    // Toast notification system
+    function showToast(message, type = 'info', duration = 3000) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      
+      const colors = {
+        success: 'bg-green-500',
+        error: 'bg-red-500',
+        info: 'bg-amber-500',
+        warning: 'bg-orange-500'
+      };
+      
+      const icons = {
+        success: 'fa-circle-check',
+        error: 'fa-circle-exclamation',
+        info: 'fa-bell',
+        warning: 'fa-triangle-exclamation'
+      };
+      
+      toast.className = `toast ${colors[type]} text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-3`;
+      toast.innerHTML = `
+        <i class="fa-regular ${icons[type]}"></i>
+        <span class="text-sm font-medium">${message}</span>
+      `;
+      
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => toast.remove(), 300);
+      }, duration);
+    }
+
+    // Toggle password visibility
+    function setupPasswordToggle() {
+      const toggleBtn = document.querySelector('.toggle-password');
+      const passwordInput = document.getElementById('loginPassword');
+      const icon = toggleBtn.querySelector('i');
+      
+      toggleBtn.addEventListener('click', () => {
+        const isPassword = passwordInput.type === 'password';
+        passwordInput.type = isPassword ? 'text' : 'password';
+        icon.className = isPassword ? 'fa-regular fa-eye text-sm' : 'fa-regular fa-eye-slash text-sm';
+      });
+    }
+
+    // Handle login form submission
+    async function handleLogin(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const rememberMe = document.getElementById('rememberMe').checked;
+      
+      // Validation
+      if (!email) {
+        showToast('Please enter your email', 'error');
+        return;
+      }
+      
+      if (!password) {
+        showToast('Please enter your password', 'error');
+        return;
+      }
+      
+      // Show loading state
+      const loginBtn = document.getElementById('loginBtn');
+      const loginBtnText = document.getElementById('loginBtnText');
+      const loginSpinner = document.getElementById('loginSpinner');
+      
+      loginBtn.disabled = true;
+      loginBtnText.textContent = 'Signing In...';
+      loginSpinner.classList.remove('hidden');
+      
+      try {
+        const response = await fetch('./api/auth/auth.php/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password
+          })
+        });
+        
+        const data = await response.json();
+        
+        console.log('🔍 Full login response:', JSON.stringify(data, null, 2));
+        console.log('🔍 Response structure:', {
+          success: data.success,
+          message: data.message,
+          hasData: !!data.data,
+          dataKeys: data.data ? Object.keys(data.data) : 'no data object',
+          redirectUrl: data.data?.redirect_to,
+          fullResponse: data
+        });
+        
+        if (response.ok && data.success) {
+          // Show success message
+          document.getElementById('loginForm').classList.add('hidden');
+          document.getElementById('successMessage').classList.remove('hidden');
+          
+          // Store session data
+          if (rememberMe) {
+            localStorage.setItem('userEmail', email);
+          }
+          
+          // Redirect based on role
+          setTimeout(() => {
+            console.log('🔍 Starting redirect logic');
+            console.log('🔍 Full response data:', JSON.stringify(data, null, 2));
+            
+            // Extract redirect URL using the same method that worked in debug
+            let redirectUrl = null;
+            
+            // Try the path that worked in debug test
+            if (data && data.data && data.data.redirect_to) {
+              redirectUrl = data.data.redirect_to;
+              console.log('✅ Found redirect URL in data.data.redirect_to:', redirectUrl);
+            }
+            
+            // Fallback if not found
+            if (!redirectUrl) {
+              redirectUrl = '../customer_portal/index.html';
+              console.log('🔄 Using fallback redirect URL:', redirectUrl);
+            }
+            
+            console.log('� Final redirect URL:', redirectUrl);
+            console.log('🔍 URL type:', typeof redirectUrl);
+            console.log('🔍 URL length:', redirectUrl ? redirectUrl.length : 'undefined');
+            
+            // Force redirect immediately
+            if (redirectUrl && redirectUrl !== 'undefined' && redirectUrl !== null && redirectUrl !== '') {
+              console.log('✅ Redirecting to:', redirectUrl);
+              window.location.href = redirectUrl;
+            } else {
+              console.error('❌ Invalid redirect URL, using fallback');
+              window.location.href = '../customer_portal/index.html';
+            }
+          }, 500); // Very short timeout
+          
+        } else {
+          showToast(data.error || 'Login failed', 'error');
+        }
+        
+      } catch (error) {
+        console.error('Login error:', error);
+        showToast('Network error. Please try again.', 'error');
+      } finally {
+        // Reset loading state
+        loginBtn.disabled = false;
+        loginBtnText.textContent = 'Sign In';
+        loginSpinner.classList.add('hidden');
+      }
+    }
+
+    // Check for existing session
+    async function checkExistingSession() {
+      try {
+        const response = await fetch('./api/auth/auth.php/check-session');
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+          // User already logged in, redirect to appropriate dashboard
+          window.location.href = data.data.redirect_to;
+        }
+      } catch (error) {
+        console.log('No existing session found');
+      }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      setupPasswordToggle();
+      document.getElementById('loginFormElement').addEventListener('submit', handleLogin);
+      
+      // Check for existing session on load
+      checkExistingSession();
+      
+      // Load remembered email if exists
+      const rememberedEmail = localStorage.getItem('userEmail');
+      if (rememberedEmail) {
+        document.getElementById('loginEmail').value = rememberedEmail;
+        document.getElementById('rememberMe').checked = true;
+      }
+    });
+  </script>
+</body>
+</html>
